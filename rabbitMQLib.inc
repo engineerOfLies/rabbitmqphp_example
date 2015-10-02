@@ -179,6 +179,10 @@ class rabbitMQClient
 					$this->USER,$this->PASSWORD,$this->VHOST);
 			$channel = $conn->channel();
 
+
+
+
+
 			/*setup response queue*/
 			list($callback_queue, , ) = $channel->queue_declare(
 					"", false, false, true, false);
