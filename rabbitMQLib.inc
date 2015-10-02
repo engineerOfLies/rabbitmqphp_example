@@ -39,10 +39,12 @@ class rabbitMQServer
 	function process_message($msg)
 	{
 		// send the ack to clear the item from the queue
-		$msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);        
+    var_dump($msg);
+//		$msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+    $this->conn_queue->ack($msg->getDeliveryTag());
 		try
 		{
-			if ($msg->get('reply_to'))
+			if ((isset($msg->get)) && ($msg->get('reply_to')))
 			{
 				// message wants a response
 
@@ -83,24 +85,30 @@ class rabbitMQServer
 		try
 		{
 			$this->callback = $callback;
-			$conn = new AMQPConnection($this->BROKER_HOST,
-					$this->BROKER_PORT,$this->USER,$this->PASSWORD,$this->VHOST);
-			$channel = $conn->channel();
-			$channel->queue_declare($this->queue, false, true, false,false);
-			$channel->exchange_declare($this->exchange,$this->exchange_type, true, $this->auto_delete);
-			$channel->queue_bind($this->queue, $this->exchange,$this->routing_key);
-			$channel->basic_qos(0,5,null);
-			$channel->basic_consume($this->queue,"delivery_tag", false, false, false, 
-					false,array($this,'process_message'));
-
-			function shutdown($channel, $connection)
-			{
-				$channel->close();
-				$connection->close();
-			}
-
-			register_shutdown_function('shutdown', $channel,
-					$conn);
+      $params = array();
+      $params['host'] = $this->BROKER_HOST;
+      $params['port'] = $this->BROKER_PORT;
+      $params['login'] = $this->USER;
+      $params['password'] = $this->PASSWORD;
+      $params['vhost'] = $this->VHOST;
+			$conn = new AMQPConnection($params);
+			$conn->connect();
+			echo "connection: ".PHP_EOL;
+			var_dump($conn);
+			$channel = new AMQPChannel($conn);
+			echo "channel: ".PHP_EOL;
+      var_dump($channel);
+			echo "exchange: ".PHP_EOL;
+			$exchange = new AMQPExchange($channel);
+      $exchange->setName($this->exchange);
+      $exchange->setType($this->exchange_type);
+      var_dump($exchange); 
+			$this->conn_queue = new AMQPQueue($channel);
+			$this->conn_queue->setName($this->queue);
+			$this->conn_queue->bind($exchange->getName(),$this->routing_key);
+			echo "queue: ".PHP_EOL;
+			var_dump($this->conn_queue);
+			$this->conn_queue->consume(array($this,'process_message'));
 
 			// Loop as long as the channel has callbacks registered
 			while (count($channel->callbacks))
@@ -131,7 +139,7 @@ class rabbitMQClient
 
 	function __construct($machine, $server = "rabbitMQ")
 	{
-		$this->machine = getMachineInfo(array($machine));
+		$this->machine = getHostInfo(array($machine));
 		$this->BROKER_HOST   = $this->machine[$server]["BROKER_HOST"];
 		$this->BROKER_PORT   = $this->machine[$server]["BROKER_PORT"];
 		$this->USER     = $this->machine[$server]["USER"];
@@ -167,7 +175,7 @@ class rabbitMQClient
 		$json_message = json_encode($message);
 		try
 		{
-			$conn = new AMQPConnection($this->BROKER_HOST, $this->BROKER_PORT,
+      			$conn = new AMQPConnection($this->BROKER_HOST, $this->BROKER_PORT,
 					$this->USER,$this->PASSWORD,$this->VHOST);
 			$channel = $conn->channel();
 
@@ -217,15 +225,30 @@ class rabbitMQClient
 		$json_message = json_encode($message);
 		try
 		{
-			$conn = new AMQPConnection($this->BROKER_HOST, $this->BROKER_PORT,
-					$this->USER,$this->PASSWORD,$this->VHOST);
-			$channel = $conn->channel();
-			$channel->queue_declare($this->queue, false, true, false, false);
-			$channel->exchange_declare($this->exchange,$this->exchange_type, true, false);
-			$channel->queue_bind($this->queue, $this->exchange,$this->routing_key);
-			$msg = new AMQPMessage($json_message, array('content_type' => 'text/plain',
-						'delivery_mode' => 2));
-			$channel->basic_publish($msg, $this->exchange,$this->routing_key);
+      $params = array();
+      $params['host'] = $this->BROKER_HOST;
+      $params['port'] = $this->BROKER_PORT;
+      $params['login'] = $this->USER;
+      $params['password'] = $this->PASSWORD;
+      $params['vhost'] = $this->VHOST;
+			$conn = new AMQPConnection($params);
+			$conn->connect();
+			echo "connection: ".PHP_EOL;
+			var_dump($conn);
+			$channel = new AMQPChannel($conn);
+			echo "channel: ".PHP_EOL;
+      var_dump($channel);
+			echo "exchange: ".PHP_EOL;
+			$exchange = new AMQPExchange($channel);
+      $exchange->setName($this->exchange);
+      $exchange->setType($this->exchange_type);
+      var_dump($exchange); 
+			$this->conn_queue = new AMQPQueue($channel);
+			$this->conn_queue->setName($this->queue);
+			$this->conn_queue->bind($exchange->getName(),$this->routing_key);
+			echo "queue: ".PHP_EOL;
+			var_dump($this->conn_queue);
+			return $exchange->publish($json_message,$this->routing_key);
 			$channel->close();
 			$conn->close();
 		}

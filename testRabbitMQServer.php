@@ -21,7 +21,7 @@ function requestProcessor($request)
     case "login":
       return doLogin($request['username'],$request['password']);
     case "validate_session":
-      return doValidate($request['sessionId'])
+      return doValidate($request['sessionId']);
   }
   return "received request";
 }
@@ -29,5 +29,6 @@ function requestProcessor($request)
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
 $server->process_requests('requestProcessor');
+exit();
 ?>
 
