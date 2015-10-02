@@ -44,7 +44,7 @@ class rabbitMQServer
     $this->conn_queue->ack($msg->getDeliveryTag());
 		try
 		{
-			if ((isset($msg->get)) && ($msg->get('reply_to')))
+			if ($msg->getReplyTo())
 			{
 				// message wants a response
 
@@ -72,7 +72,7 @@ class rabbitMQServer
             echo "error: rabbitMQServer: process_message: exception caught: ".$e;
 		}
 		// message does not require a response, send ack immediately
-		$body = $msg->body;
+		$body = $msg->getBody();
 		$payload = json_decode($body, true);
 		if (isset($this->callback))
 		{
