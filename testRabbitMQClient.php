@@ -10,6 +10,7 @@ $request = array();
 $request['type'] = "Login";
 $request['username'] = "steve";
 $request['password'] = "password";
+$request['message'] = $argv[1];
 $response = $client->publish($request);
 
 echo "response: ".PHP_EOL;
