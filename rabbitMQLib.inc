@@ -39,13 +39,11 @@ class rabbitMQServer
 	function process_message($msg)
 	{
 		// send the ack to clear the item from the queue
-		echo "message routing key: ".$msg->getRoutingKey()."\n";
 		if ($msg->getRoutingKey() !== "*")
     {
       return;
     }
     $this->conn_queue->ack($msg->getDeliveryTag());
-    echo "message received!".PHP_EOL;
 		try
 		{
 			if ($msg->getReplyTo())
@@ -59,7 +57,6 @@ class rabbitMQServer
 				{
 					$response = call_user_func($this->callback,$payload);
 				}
-        echo "messsage processed!".PHP_EOL;
 
       $params = array();
       $params['host'] = $this->BROKER_HOST;
@@ -79,7 +76,6 @@ class rabbitMQServer
 			$replykey = $this->routing_key.".response";
 			$conn_queue->bind($exchange->getName(),$replykey);
 			$exchange->publish(json_encode($response),$replykey,AMQP_NOPARAM,array('correlation_id'=>$msg->getCorrelationId()));
-      echo "Reply Sent\n\n\n";
 
 				return;
 			}
@@ -174,9 +170,7 @@ class rabbitMQClient
 
 	function process_response($response)
 	{
-	  echo "received a response!!!!\n";
 		$uid = $response->getCorrelationId();
-		echo "correlation id: $uid\n\n";
 		if (!isset($this->response_queue[$uid]))
 		{
 		  echo  "unknown uid\n";
@@ -198,7 +192,6 @@ class rabbitMQClient
 		$uid = uniqid();
 
 		$json_message = json_encode($message);
-		echo "sending request expecting a response\n";
 		try
 		{
       $params = array();
@@ -227,13 +220,11 @@ class rabbitMQClient
 			$this->conn_queue->bind($exchange->getName(),$this->routing_key);
 
 			$exchange->publish($json_message,$this->routing_key,AMQP_NOPARAM,array('reply_to'=>$callback_queue->getName(),'correlation_id'=>$uid));
-      echo "request sent!\n\n";
       $this->response_queue[$uid] = "waiting";
 			$callback_queue->consume(array($this,'process_response'));
 
 			$response = $this->response_queue[$uid];
 			unset($this->response_queue[$uid]);
-			echo "response returned!\n";
 			return $response;
 		}
 		catch(Exception $e)
