@@ -3,7 +3,7 @@
 echo "Test PHP BEGIN".PHP_EOL;
 $arr = array();
 $arr[] = 5;
-$arr[] = 'potato';
+$arr[] = 'carrot';
 $arr[] = 8.371;
 $arr['tomato'] = "red";
 $arr[] = "blue";
