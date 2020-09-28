@@ -11,7 +11,7 @@ if (isset($argv[1]))
 }
 else
 {
-  $msg = "test message";
+  $msg = "Do you remember the 21st night of September?";
 }
 
 $request = array();
