@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
-require_once('../lib/path.inc');
-require_once('../lib/get_host_info.inc');
-require_once('../lib/rabbitMQLib.inc');
+require_once('path.inc');
+require_once('get_host_info.inc');
+require_once('rabbitMQLib.inc');
 
-$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+$client = new rabbitMQClient("../lib/RabbitMQ.ini","Authentication");
 if (isset($argv[1]))
 {
   $msg = $argv[1];
@@ -16,7 +16,7 @@ else
 
 $request = array();
 $request['type'] = "Login";
-$request['username'] = "username";
+$request['username'] = "steve";
 $request['password'] = "password";
 $request['message'] = $msg;
 $response = $client->send_request($request);
