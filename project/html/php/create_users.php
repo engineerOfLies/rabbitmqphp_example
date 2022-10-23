@@ -5,7 +5,7 @@ function create_users_table($conn) {
     $sql = "CREATE TABLE users (
         id INT (11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         username VARCHAR(32) NOT NULL,
-        password VARCHAR(32) NOT NULL,
+        password VARCHAR(255) NOT NULL,
         email VARCHAR(255) DEFAULT NULL
     )";
     if ($conn->query($sql) === TRUE) {
@@ -16,8 +16,9 @@ function create_users_table($conn) {
 }
 
 function create_user($conn, $username, $password, $email) {
+    $hidden_password = password_hash($password,PASSWORD_DEFAULT);
     $sql = "INSERT INTO users (username, password, email)
-            VALUES ('$username', '$password', '$email')";
+            VALUES ('$username', '$hidden_password', '$email')";
 
     print($sql);
     if ($conn->query($sql) === TRUE) {
