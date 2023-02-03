@@ -1,31 +1,37 @@
 <?php
-session_start();
+  session_start();
+  require_once 'db_conn.php';
+  $username = $_POST['username'];
+  $password = $_POST['password'];
 
-require_once(__DIR__."/../lib/path.inc");
-require_once(__DIR__."/../lib/get_host_info.inc");
-require_once(__DIR__."/../lib/rabbitMQLib.inc");
-
-$client = new rabbitMQClient("testRabbitMQ.ini", "testServer");
-
-if(!isset($_POST)) {
-    $msg = "INVALID REQUEST";
-    echo json_encode($msg);
-    exit(0);
-}
-
-$request = $_POST;
-$response = "Unsupported request type";
-$arr = array();
-$arr['type'] = $_POST["type"];
-$arr['username'] = $_POST["username"];
-$arr['password'] = $_POST["password"];
-switch($request["type"]) {
-    case "login":
-        $response = "Logged in! RESPONSE FROM LOGIN.PHP ";
-        break;
-}
-// echo json_encode($response);
-
-$send = $client->send_request($arr);
-exit(0);
+  if(isset($_POST['submit'])) {
+	$select = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username' AND password='$password'");
+	var_dump($select);
+	if(mysqli_num_rows($select) == 1) {
+		echo "Logged in";
+		$_SESSION["username"] = $username;
+		header("Location: index.php");
+	}
+	else {
+		echo "Doesn't work";
+	}
+  }
 ?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="index.js"></script>
+    </head>
+    <body>
+        <h1> hello </h1>
+    <form method="post" onsubmit="return sendLoginRequest(this)">
+      Username
+      <input name="username" id="username" required/>
+      Password
+      <input name="password" id="password" required/>
+      <input hidden name="type" value="login" id="type" />
+      <button type="submit" name="submit">Login</button>
+    </form>
+    </body>
+</html>

@@ -14,7 +14,7 @@ function sendLoginRequest(form) {
     }
   };
   request.send(`type=${type}&username=${username}&password=${password}`);
-  return false;
+  return true;
 }
 
 function handleLoginResponse(response) {
