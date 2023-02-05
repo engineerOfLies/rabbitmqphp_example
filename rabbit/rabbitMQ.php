@@ -25,9 +25,9 @@ function dbConnect($request)
 
             $result = $stmt->get_result()->fetch_assoc();
             if($result["user_pass"] == $data["user_pass"] && $result["username"] == $data['username']) {
-                return array("code"=> 0, "message"=> "User found!");
+                return array("code"=> 0, "message"=> $result);
             } else {
-                return 1;
+                return array("code"=> 1, "message"=> $result);
             }      
     }
 }

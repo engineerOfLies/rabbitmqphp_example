@@ -18,4 +18,5 @@ $stmt->execute();
 $result = $stmt->get_result();
 var_dump($result->fetch_assoc());
 
+
 ?>
