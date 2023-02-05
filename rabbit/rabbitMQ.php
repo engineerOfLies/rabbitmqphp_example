@@ -26,10 +26,36 @@ function dbConnect($request)
             $result = $stmt->get_result()->fetch_assoc();
             if($result["user_pass"] == $data["user_pass"] && $result["username"] == $data['username']) {
                 return array("code"=> 0, "message"=> $result);
-            } else {
+            } 
+            else if ($result["user_pass"] != $data["user_pass"] && $result["username"] == $data['username']){
                 return array("code"=> 1, "message"=> $result);
             }      
-    }
+            else if ($result["user_pass"] != $data["user_pass"] && $result["username"] != $data['username']) {
+                return array("code" => 2, "message"=> $result);
+            }
+        case "create":
+            $stmt = mysqli_prepare($db, "SELECT * FROM users");
+            $stmt->execute();
+            if($stmt->errno !== 0) {
+                die("Failed to execute query" . $stmt->error);
+            }
+            $query = "SELECT * FROM users WHERE username = 'test'";
+            $find = mysqli_query($db, $query);
+
+            if(mysqli_num_rows($find) != 0) {
+                return array("code" => 0, "message" => $find);
+            }
+            else {
+                $insert="INSERT INTO users(username, user_pass)
+                VALUES ('it','it')";
+            }
+
+            
+
+
+            
+        }
+        
 }
 
 $server = new rabbitMQServer(__DIR__."/../lib/config/rabbitMQ.ini", "rabbit");
