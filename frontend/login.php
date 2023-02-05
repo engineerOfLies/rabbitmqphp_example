@@ -4,17 +4,17 @@
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  if(isset($_POST['submit'])) {
-	$select = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username' AND password='$password'");
-	var_dump($select);
-	if(mysqli_num_rows($select) == 1) {
-		echo "Logged in";
-		$_SESSION["username"] = $username;
-		header("Location: index.php");
-	}
-	else {
-		echo "Doesn't work";
-	}
+    if(isset($_POST['submit'])) {
+	    $select = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username' AND password='$password'");
+	    var_dump($select);
+	    if(mysqli_num_rows($select) == 1) {
+		    echo "Logged in";
+		    $_SESSION["username"] = $username;
+		    header("Location: index.php");
+	    }
+	    else {
+		    echo "Doesn't work";
+	    }
   }
 ?>
 
