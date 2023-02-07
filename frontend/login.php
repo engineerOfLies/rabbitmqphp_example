@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
   include(__DIR__ . "/../lib/helpers.php");
   include(__DIR__ . "/../rabbit/rabbitmq.php"); 
@@ -35,13 +34,43 @@
         <script src="index.js"></script>
     </head>
     <body>
-    <form method="post" onsubmit="return sendLoginRequest(this)">
-      Username
-      <input name="username" id="username" required/>
-      Password
-      <input name="password" id="password" required/>
-      <input hidden name="type" value="login" id="type" />
-      <button type="submit" name="submit">Login</button>
-    </form>
+    <div class="form">
+      <form method="post" onsubmit="return sendLoginRequest(this)">
+        Username
+        <input name="username" id="username" required/>
+        Password
+        <input name="password" id="password" type =password required/>
+        <input hidden name="type" value="login" id="type" /> <br> <br>
+        <button class="loginb" type="submit" name="submit">Login</button>
+      </form>
+    </div>
     </body>
 </html>
+
+<style>
+
+.loginb {
+  margin: 0 auto;
+  display: block;
+}
+.form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 20px;
+}
+input {
+  margin: 0;
+  padding: 0;
+  width: 200px;
+}
+body {
+  background-image: linear-gradient(to right, #fc5c7d, #6a82fb);
+}
+
+* {
+  font-family: 'Trebuchet MS', sans-serif;
+}
+</style>
