@@ -4,9 +4,10 @@
 
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $type = $_POST['type'];
 
     if (isset($_POST['submit'])) {
-        $data = array('type' => 'create', 'data' => array('username' => $username, 'user_pass' => $password));
+        $data = array('type' => $type, 'data' => array('username' => $username, 'user_pass' => $password));
         $response = send($data, "rabbit");
         var_dump($response);
     }
@@ -23,8 +24,8 @@
       <input name="username" id="username" required/>
       Desired Password
       <input name="password" id="password" required/>
-      <input hidden name="type" value="login" id="type" />
-      <button type="submit" name="create">Create Account</button>
+      <input hidden name="type" value="create" id="type" />
+      <button type="submit" name="submit">Create Account</button>
     </form>
     </body>
 </html>

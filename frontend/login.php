@@ -12,6 +12,7 @@
       if($response["code"] == 0) {
         session_start();
         $_SESSION["username"] = $username;
+        var_dump($response);
         header("Location: index.php");
       }
       else if($response["code"] == 1) {
@@ -19,7 +20,9 @@
       }
       else {
         echo "Invalid credentials, create an account";
+        var_dump($response);
         header("Location: create_account.php");
+        // make button show up to create acc + put error msg
       }
     var_dump($response);
   }

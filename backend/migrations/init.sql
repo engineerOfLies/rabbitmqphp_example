@@ -2,7 +2,7 @@ use it490db;
 
 CREATE TABLE IF NOT EXISTS users (
     id int not null AUTO_INCREMENT,
-    username varchar(255) NOT NULL,
+    username varchar(255) UNIQUE NOT NULL,
     user_pass varchar(255) NOT NULL,
     PRIMARY KEY(id)
 );

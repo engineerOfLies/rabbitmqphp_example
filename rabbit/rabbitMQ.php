@@ -17,7 +17,7 @@ function dbConnect($request)
     $data = $request["data"];
     switch ($request['type']) {
         case "login":
-            $stmt = mysqli_prepare($db, "SELECT * FROM users");
+            $stmt = mysqli_prepare($db, "SELECT * FROM users WHERE username = '{$data['username']}'");
             $stmt->execute();
             if($stmt->errno !== 0) {
                 die("Failed to execute query" . $stmt->error);
@@ -34,24 +34,25 @@ function dbConnect($request)
                 return array("code" => 2, "message"=> $result);
             }
         case "create":
-            $stmt = mysqli_prepare($db, "SELECT * FROM users");
+            $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass)VALUES
+            ('{$data['username']}', '{$data['user_pass']}')");
             $stmt->execute();
-            if($stmt->errno !== 0) {
-                die("Failed to execute query" . $stmt->error);
-            }
-            $query = "SELECT * FROM users WHERE username = 'test'";
-            $find = mysqli_query($db, $query);
+            return array("code"=> 0, "message"=> "WORKSIUJASHTUAISGTYQUIAEWTGQ");
+            // $stmt = mysqli_prepare($db, "SELECT * FROM users");
+            // $stmt->execute();
+            // if($stmt->errno !== 0) {
+            //     die("Failed to execute query" . $stmt->error);
+            // }
+            // $query = "SELECT * FROM users WHERE username = 'test'";
+            // $find = mysqli_query($db, $query);
 
-            if(mysqli_num_rows($find) != 0) {
-                return array("code" => 0, "message" => $find);
-            }
-            else {
-                $insert="INSERT INTO users(username, user_pass)
-                VALUES ('it','it')";
-            }
-
-            
-
+            // if(mysqli_num_rows($find) != 0) {
+            //     return array("code" => 0, "message" => $find);
+            // }
+            // else {
+            //     $insert="INSERT INTO users(username, user_pass)
+            //     VALUES ('it','it')";
+            // }
 
             
         }
