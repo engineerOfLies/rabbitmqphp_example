@@ -4,7 +4,6 @@
 
   $username = $_POST['username'];
   $password = $_POST['password'];
-
   if(isset($_POST['submit'])) {
     $data = array('type' => 'login', 'data' => array('username' => $username, 'user_pass' => $password));
     $response = send($data, "rabbit");
