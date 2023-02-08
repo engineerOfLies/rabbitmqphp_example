@@ -7,12 +7,12 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
 function errorHandler($request) {
     $error_message = $request['error_message'];
 
-    $error_log_file = _DIR_. "/error.log";
+    $error_log_file = __DIR__. "/error.log";
     $timestamp = date("Y-n-d H:i:s");
-    $log_entry = 'Stimestamp; $error_message\n';
+    $log_entry = "$timestamp: $error_message\n";
     file_put_contents($error_log_file. $log_entry, FILE_APPEND);
 
-    return true
+    return true;
 }
 
 $server = new rabbitMQServer(__DIR__."/../lib/config/rabbitMQ.ini", "rabbit");
