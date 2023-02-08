@@ -58,7 +58,9 @@ function dbConnect($request)
                 return array("code" => 0, "message" => "works");
             }
 
-
+        case "api":
+            print_r ($data);
+            return array("code" => 0, "message" => "works");
     }
 
 }
