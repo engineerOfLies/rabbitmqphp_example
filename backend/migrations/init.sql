@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS users (
     PRIMARY KEY(id)
 );
 
-INSERT INTO users(username, user_pass)
-VALUES ("it490","root");
+INSERT INTO users(username, user_pass, email)
+VALUES ("it490","root", "it490@email.com");
 
 /* Basic setup
  * 
