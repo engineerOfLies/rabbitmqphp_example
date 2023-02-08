@@ -18,7 +18,7 @@ function dbConnect($request)
     switch ($request['type']) {
         case "login":
             $stmt = mysqli_prepare($db, "SELECT * FROM users WHERE username = '{$data['username']}'");
-            $stmt->execute();
+             $stmt->execute();
             if($stmt->errno !== 0) {
                 die("Failed to execute query" . $stmt->error);
             }
