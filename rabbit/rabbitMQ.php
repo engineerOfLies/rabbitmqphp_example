@@ -46,25 +46,17 @@ function dbConnect($request)
             }
 
         case "create":
-            $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass)VALUES
-            ('{$data['username']}', '{$data['user_pass']}')");
-            $stmt->execute();
-            return array("code" => 0, "message" => "WORKSIUJASHTUAISGTYQUIAEWTGQ");
-        // $stmt = mysqli_prepare($db, "SELECT * FROM users");
-        // $stmt->execute();
-        // if($stmt->errno !== 0) {
-        //     die("Failed to execute query" . $stmt->error);
-        // }
-        // $query = "SELECT * FROM users WHERE username = 'test'";
-        // $find = mysqli_query($db, $query);
-
-        // if(mysqli_num_rows($find) != 0) {
-        //     return array("code" => 0, "message" => $find);
-        // }
-        // else {
-        //     $insert="INSERT INTO users(username, user_pass)
-        //     VALUES ('it','it')";
-        // }
+            $stmt = mysqli_query($db, "SELECT username FROM users WHERE username = '{$data['username']}'");
+            if (mysqli_num_rows($stmt) != 0) {
+                echo "Username already exists";
+                return array("code" => 1, "message" => "doesnt work");
+            }
+            else {
+                $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass)VALUES
+                ('{$data['username']}', '{$data['user_pass']}')");
+                $stmt->execute();
+                return array("code" => 0, "message" => "works");
+            }
 
 
     }
