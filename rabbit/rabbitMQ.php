@@ -4,7 +4,6 @@ require_once(__DIR__ . "/../lib/config/path.inc");
 require_once(__DIR__ . "/../lib/rabbitMQLib.inc");
 require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
 require_once(__DIR__ . "/../lib/helpers.php");
-
 function dbConnect($request)
 {
     $db_info = parse_ini_file(__DIR__ . "/../backend/database.ini", true);
