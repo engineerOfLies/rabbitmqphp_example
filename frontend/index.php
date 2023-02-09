@@ -12,14 +12,27 @@ Welcome " . $_SESSION["username"]
 
 
 
-$id = $_POST['id'];
-
+$title = $_POST['title'];
 // tt3896198 id
 // f3d054e8 key
+$name = "";
+$poster = "";
 if(isset($_POST['submit'])) {
-  $data = array('type' => 'api', 'data' => array('id' => $id));
+  $data = array('type' => 'api', 'data' => array('title' => $title));
   $response = sendAPI($data, "rabbit");
-  var_dump($response);
+  $count = count($response["message"]["Search"]);
+  echo ($count) . "<br>";
+  for ($i = 0; $i < $count; $i++) {
+    $name = $response["message"]["Search"][$i]["Title"];
+    $poster = $response["message"]["Search"][$i]["Poster"];
+    // echo "$name";
+    // echo "<br>";
+    // echo "$poster";
+    // echo "<br>";
+
+  }
+  // var_dump($response["message"]["Search"]);
+
 }
 
 ?>
@@ -31,24 +44,21 @@ if(isset($_POST['submit'])) {
       <div class="container">
       <form method="post">
       <div class="searchBox">
-      <input class="searchInput" type="search" id="id" name="id" placeholder="Movie Title">
+      <input class="searchInput" type="search" id="title" name="title" placeholder="Movie Title">
         <button type="submit" name="submit" class="searchButton"> Search </button>
       </div>
       </form>
-
+      
       <div class="grid">
           <!-- FOR LOOP PHP -->
-          <?php for($i = 0; $i < 15; $i++) { ?>
+          <?php 
+          for($i = 0; $i < $count; $i++) { 
+            
+          ?>
             <div class="movie-poster"></div>
             <?php } ?>
       </div>
     </div>
-    <!-- <div class="form">
-      <form method="post">
-        <input type="search" name="id" id="id" placeholder="Search" required/>
-        <button type="submit" name="submit">get data</button>
-      </form>
-    </div> -->
     </body>
 </html>
 
@@ -62,6 +72,12 @@ if(isset($_POST['submit'])) {
     margin: 0 auto;
   }
 
+  .movie-poster {
+    height: 300px;
+    width: 100%;
+    border: solid 2px black;
+  }
+
   .grid {
     width: 100%;
     display: grid;
@@ -69,22 +85,6 @@ if(isset($_POST['submit'])) {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
   }
-
-  .movie-poster {
-    height: 300px;
-    width: 100%;
-    border: solid 2px black;
-  }
-
-
-
-
-body {
-  background: #000000;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #434343, #000000);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-}
 
 .searchBox {
     position: absolute;
