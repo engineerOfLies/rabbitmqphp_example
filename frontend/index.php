@@ -2,7 +2,7 @@
 session_start();
 if(isset($_SESSION["username"])) {
 echo "<p style=
-'color: white !important;
+'color: black !important;
 text-transform: uppercase;'
 >
 Welcome " . $_SESSION["username"]
@@ -21,16 +21,16 @@ if(isset($_POST['submit'])) {
   $data = array('type' => 'api', 'data' => array('title' => $title));
   $response = sendAPI($data, "rabbit");
   $count = count($response["message"]["Search"]);
-  echo ($count) . "<br>";
-  for ($i = 0; $i < $count; $i++) {
-    $name = $response["message"]["Search"][$i]["Title"];
-    $poster = $response["message"]["Search"][$i]["Poster"];
-    // echo "$name";
-    // echo "<br>";
-    // echo "$poster";
-    // echo "<br>";
+  // echo ($count) . "<br>";
+  // for ($i = 0; $i < $count; $i++) {
+  //   $name = $response["message"]["Search"][$i]["Title"];
+  //   $poster = $response["message"]["Search"][$i]["Poster"];
+  //   // echo "$name";
+  //   // echo "<br>";
+  //   // echo "$poster";
+  //   // echo "<br>";
 
-  }
+  // }
   // var_dump($response["message"]["Search"]);
 
 }
@@ -53,9 +53,13 @@ if(isset($_POST['submit'])) {
           <!-- FOR LOOP PHP -->
           <?php 
           for($i = 0; $i < $count; $i++) { 
-            
+            $banner = $response["message"]["Search"][$i]["Poster"];
           ?>
-            <div class="movie-poster"></div>
+            <div class="movie-poster">
+              <img src="<?php echo $banner;
+               ?>" 
+               >
+            </div> 
             <?php } ?>
       </div>
     </div>
@@ -73,7 +77,7 @@ if(isset($_POST['submit'])) {
   }
 
   .movie-poster {
-    height: 300px;
+    height: 600px;
     width: 100%;
     border: solid 2px black;
   }
