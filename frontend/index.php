@@ -28,12 +28,21 @@ if(isset($_POST['submit'])) {
     <head>
     </head>
     <body>
-    <form method="post">
-    <div class="searchBox">
-    <input class="searchInput" type="search" id="id" name="id" placeholder="Movie Title">
-      <button type="submit" name="submit" class="searchButton"> Search </button>
+      <div class="container">
+      <form method="post">
+      <div class="searchBox">
+      <input class="searchInput" type="search" id="id" name="id" placeholder="Movie Title">
+        <button type="submit" name="submit" class="searchButton"> Search </button>
+      </div>
+      </form>
+
+      <div class="grid">
+          <!-- FOR LOOP PHP -->
+          <?php for($i = 0; $i < 15; $i++) { ?>
+            <div class="movie-poster"></div>
+            <?php } ?>
+      </div>
     </div>
-    </form>
     <!-- <div class="form">
       <form method="post">
         <input type="search" name="id" id="id" placeholder="Search" required/>
@@ -44,6 +53,30 @@ if(isset($_POST['submit'])) {
 </html>
 
 <style>
+
+  /* Movie Posters Container */
+  .container {
+    width: 100%;
+    /* Adjust this for bigger bounding box */
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .grid {
+    width: 100%;
+    display: grid;
+    /* Adjust minmax value (e.g 350px) to adjust the minimum size of the box */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .movie-poster {
+    height: 300px;
+    width: 100%;
+    border: solid 2px black;
+  }
+
+
 
 
 body {
