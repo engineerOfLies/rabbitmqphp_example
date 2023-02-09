@@ -59,11 +59,18 @@ function dbConnect($request)
             }
 
         case "api":
-            print_r ($data);
-            return array("code" => 0, "message" => "works");
+            print_r ($data['id']);
+            $path = "http://www.omdbapi.com/?i={$data['id']}&apikey=f3d054e8";
+            print_r ($path);
+            $json = file_get_contents($path);
+            return array("code" => 0, "message" => json_decode($json, TRUE));
     }
 
 }
+
+// function eventError($request) {
+//     sendEvent("$request", "rabbit");
+// }
 
 $server = new rabbitMQServer(__DIR__ . "/../lib/config/rabbitMQ.ini", "rabbit");
 echo "Server started..." . PHP_EOL;

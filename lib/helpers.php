@@ -13,7 +13,7 @@ function send(array $req, string $configName)
 
 function sendAPI(array $req, string $configName)
 {
-    $rabbitMQClient = new rabbitMQClient(__DIR__ . "/config/rabbitMQ.ini", "rabbit");
+    $rabbitMQClient = new rabbitMQClient(__DIR__ . "/config/rabbitMQ.ini", "dmz");
     $res = $rabbitMQClient->send_request($req);
     return $res;
 }
