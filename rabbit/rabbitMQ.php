@@ -3,12 +3,22 @@
 require_once(__DIR__ . "/../lib/config/path.inc");
 require_once(__DIR__ . "/../lib/rabbitMQLib.inc");
 require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
-
+require_once(__DIR__ . "/../lib/helpers.php");
 function dbConnect($request)
 {
     $db_info = parse_ini_file(__DIR__ . "/../backend/database.ini", true);
     $db_info = $db_info["database"];
-    $db = mysqli_connect($db_info["HOST_NAME"], $db_info["USERNAME"], $db_info["PASSWORD"], $db_info["DATABASE"]);
+    try{
+
+        $db = mysqli_connect($db_info["HOST_NAME"], $db_info["USERNAME"], $db_info["PASSWORD"], $db_info["DATABASE"]);
+    }
+    catch(Exception $error){
+        send(Var_dump($error),"error");
+
+    }
+    
+
+    
 
 
     if (mysqli_connect_errno() !== 0) {
