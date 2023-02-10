@@ -13,25 +13,12 @@ Welcome " . $_SESSION["username"]
 
 
 $title = $_POST['title'];
-// tt3896198 id
-// f3d054e8 key
 $name = "";
 $poster = "";
 if(isset($_POST['submit'])) {
   $data = array('type' => 'api', 'data' => array('title' => $title));
   $response = sendAPI($data, "rabbit");
-  $count = count($response["message"]["Search"]);
-  // echo ($count) . "<br>";
-  // for ($i = 0; $i < $count; $i++) {
-  //   $name = $response["message"]["Search"][$i]["Title"];
-  //   $poster = $response["message"]["Search"][$i]["Poster"];
-  //   // echo "$name";
-  //   // echo "<br>";
-  //   // echo "$poster";
-  //   // echo "<br>";
-
-  // }
-  // var_dump($response["message"]["Search"]);
+  $count = count($response["message"]);
 
 }
 
@@ -50,17 +37,17 @@ if(isset($_POST['submit'])) {
       </form>
       
       <div class="grid">
-          <!-- FOR LOOP PHP -->
           <?php 
           for($i = 0; $i < $count; $i++) { 
-            $banner = $response["message"]["Search"][$i]["Poster"];
+            for($j = 0; $j < 10; $j++) {
+              $banner = $response["message"][$i]["Search"][$j]["Poster"];
           ?>
             <div class="movie-poster">
               <img src="<?php echo $banner;
                ?>" 
                >
             </div> 
-            <?php } ?>
+            <?php } } ?>
       </div>
     </div>
     </body>
@@ -77,9 +64,8 @@ if(isset($_POST['submit'])) {
   }
 
   .movie-poster {
-    height: 600px;
-    width: 100%;
-    border: solid 2px black;
+    height: 444px;
+    width: 300px;
   }
 
   .grid {
