@@ -44,7 +44,7 @@ if(isset($_POST['submit'])) {
           ?>
             <div class="movie-poster">
               <img src="<?php echo $banner;
-               ?>" 
+               ?>" loading="lazy"
                >
             </div> 
             <?php } } ?>
@@ -69,16 +69,21 @@ if(isset($_POST['submit'])) {
   }
 
   .movie-poster {
-    height: 444px;
+    max-height: 444px;
+    height: 100%;
     width: 300px;
   }
+  img {
+    height: 100%;
+    width: 100%;
 
+  }
   .grid {
     width: 100%;
     display: grid;
     /* Adjust minmax value (e.g 350px) to adjust the minimum size of the box */
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
+    gap: 30px;
   }
 
 .searchBox {

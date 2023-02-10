@@ -17,7 +17,7 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
             return array("code" => 0, "message" => $phparr);
         }
         // this should be $pages but i dont feel like crashing my vm
-        for($i = 1; $i <= 10; $i++) {
+        for($i = 1; $i <= $pages; $i++) {
             $newPath = "http://www.omdbapi.com/?s={$data['title']}&type=movie&apikey=f3d054e8&page=$i";
             $jsonNew = file_get_contents($newPath);
             $newArr = json_decode($jsonNew, TRUE);
