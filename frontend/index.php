@@ -13,8 +13,6 @@ Welcome " . $_SESSION["username"]
 
 
 $title = $_POST['title'];
-$name = "";
-$poster = "";
 if(isset($_POST['submit'])) {
   $data = array('type' => 'search', 'data' => array('title' => $title));
   $response = sendAPI($data, "rabbit");
@@ -25,13 +23,14 @@ if(isset($_POST['submit'])) {
 if(isset($_POST['grabID'])) {
   $sendID = $_POST['grabID'];
   $data = array('type' => 'fetch', 'data' => array('id' => $sendID));
-  $response = sendAPI($data, "rabbit");
+  $imdb_response = sendAPI($data, "rabbit");
 }
 
 ?>
 <!DOCTYPE html>
 <html>
     <head>
+      <script src="create_page.js"></script>
     </head>
     <body>
       <div class="container">
@@ -53,6 +52,7 @@ if(isset($_POST['grabID'])) {
               <img src="<?php echo $banner;
                ?>" loading="lazy"
                >
+               <!-- convert this to a link -->
                <form method="post">
                 <input type="submit" value=<?php
                 echo $id; ?> name="grabID"> 

@@ -3,7 +3,8 @@
 require_once(__DIR__ . "/../lib/config/path.inc");
 require_once(__DIR__ . "/../lib/rabbitMQLib.inc");
 require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
-
+    // NEED TO CHECK IF NO RESULTS ARE FOUND 
+    // viewing movie page check if no results generated 
     function add($request) {
         $data = $request["data"];
         switch ($request['type']) {
@@ -18,7 +19,7 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
                 if($pages == 1) {
                     return array("code" => 0, "message" => $phparr);
                 }
-                // this should be $pages but i dont feel like crashing my vm
+                // change the amount of times it loops from $pages to some small number so u arent waiting 100 years for a response
                 for($i = 1; $i <= 2; $i++) {
                     $newPath = "http://www.omdbapi.com/?s={$data['title']}&type=movie&apikey=f3d054e8&page=$i";
                     $jsonNew = file_get_contents($newPath);
@@ -27,32 +28,17 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
                 }
                 return array("code" => 0, "message" => $allResults);
             case "fetch":
-                echo $data['id'];
-                return array("code" => 0, "message" => "hello");
+                $omdbID = $data['id'];
+                $imdbData = "http://www.omdbapi.com/?i=$omdbID&apikey=f3d054e8&plot=full";
+                $json = file_get_contents($imdbData);
+                $imdbArr = json_decode($json, TRUE);
+                echo $imdbArr['Plot'];
+                // incase i forget
+                // grab id -> fetch imdb data -> send shit back -> creates new page -> lets user view
+                return array("code" => 0, "message" => $imdbArr);
     }
 
 }
-
-
-
-        // for($i = 0; $i < $count; $i++) {
-
-        // }
-        // print_r ($phparr);
-
-
-
-
-        // $count = count($phparr["Search"]);
-        // var_dump($count);
-        // $titles = array(
-        // );
-        // for ($i = 0; $i < $count; $i++) {
-        //     $titles[$i] = $phparr["Search"][$i];
-        // }
-
-        // return array("code" => 0, "message" => $phparr);
-
 
 
 $server = new rabbitMQServer(__DIR__ . "/../lib/config/rabbitMQ.ini", "dmz");
