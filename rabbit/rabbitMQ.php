@@ -57,13 +57,6 @@ function dbConnect($request)
                 $stmt->execute();
                 return array("code" => 0, "message" => "works");
             }
-
-        case "api":
-            print_r ($data['id']);
-            $path = "http://www.omdbapi.com/?i={$data['id']}&apikey=f3d054e8";
-            print_r ($path);
-            $json = file_get_contents($path);
-            return array("code" => 0, "message" => json_decode($json, TRUE));
     }
 
 }

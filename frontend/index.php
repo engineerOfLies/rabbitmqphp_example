@@ -16,10 +16,16 @@ $title = $_POST['title'];
 $name = "";
 $poster = "";
 if(isset($_POST['submit'])) {
-  $data = array('type' => 'api', 'data' => array('title' => $title));
+  $data = array('type' => 'search', 'data' => array('title' => $title));
   $response = sendAPI($data, "rabbit");
   $count = count($response["message"]);
 
+}
+
+if(isset($_POST['grabID'])) {
+  $sendID = $_POST['grabID'];
+  $data = array('type' => 'fetch', 'data' => array('id' => $sendID));
+  $response = sendAPI($data, "rabbit");
 }
 
 ?>
@@ -41,11 +47,15 @@ if(isset($_POST['submit'])) {
           for($i = 0; $i < $count; $i++) { 
             for($j = 0; $j < 10; $j++) {
               $banner = $response["message"][$i]["Search"][$j]["Poster"];
+              $id = $response["message"][$i]["Search"][$j]["imdbID"];
           ?>
             <div class="movie-poster">
               <img src="<?php echo $banner;
                ?>" loading="lazy"
                >
+               <form method="post">
+                <input type="submit" value=<?php
+                echo $id; ?> name="grabID"> 
             </div> 
             <?php } } ?>
       </div>

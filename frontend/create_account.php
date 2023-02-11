@@ -22,7 +22,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="index.js"></script>
+        <script src="create_page.js"></script>
     </head>
     <body>
     <div class="form">
