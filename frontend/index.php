@@ -15,7 +15,7 @@ Welcome " . $_SESSION["username"]
 $title = $_POST['title'];
 if(isset($_POST['submit'])) {
   $data = array('type' => 'search', 'data' => array('title' => $title));
-  $response = sendAPI($data, "rabbit");
+  $response = send($data, "dmz");
   $count = count($response["message"]);
 
 }
@@ -23,7 +23,7 @@ if(isset($_POST['submit'])) {
 if(isset($_POST['grabID'])) {
   $sendID = $_POST['grabID'];
   $data = array('type' => 'fetch', 'data' => array('id' => $sendID));
-  $imdb_response = sendAPI($data, "rabbit");
+  $imdb_response = send($data, "dmz");
 }
 
 ?>
@@ -48,14 +48,21 @@ if(isset($_POST['grabID'])) {
               $banner = $response["message"][$i]["Search"][$j]["Poster"];
               $id = $response["message"][$i]["Search"][$j]["imdbID"];
           ?>
-            <div class="movie-poster">
+          <div class="movie-poster">
+            <!-- the 'id' parameter is what we'll check on the 
+            'new-page.php' that we're linking the poster to
+          -->
+          <a href="new-page.php?id=<?php echo $id?>">
+            
               <img src="<?php echo $banner;
                ?>" loading="lazy"
                >
                <!-- convert this to a link -->
-               <form method="post">
-                <input type="submit" value=<?php
-                echo $id; ?> name="grabID"> 
+               <a href="new-page.php?id=<?php echo $id?>"> <?php echo $id?></a>
+               <!-- <form method="post">
+                <input type="submit" value= ?> name="grabID">  -->
+           
+            </a>
             </div> 
             <?php } } ?>
       </div>
@@ -86,7 +93,7 @@ if(isset($_POST['grabID'])) {
   img {
     height: 100%;
     width: 100%;
-
+    
   }
   .grid {
     width: 100%;
