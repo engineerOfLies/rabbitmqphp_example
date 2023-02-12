@@ -9,8 +9,7 @@ Welcome " . $_SESSION["username"]
  . "</p";
 }
   include(__DIR__ . "/../lib/helpers.php");
-
-
+  include (__DIR__."/components/navbar.php");
 
 $title = $_POST['title'];
 if(isset($_POST['submit'])) {
