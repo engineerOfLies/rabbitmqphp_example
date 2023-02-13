@@ -18,8 +18,8 @@ function dbConnect($request)
 
     }
     if (mysqli_connect_errno() !== 0) {
-        // $errorMsg = mysqli_connect_error();
-       // send(array("data" => array("error" => $errorMsg)), "error");
+        $errorMsg = mysqli_connect_error();
+       send(array("data" => array("error" => $errorMsg)), "error");
     }
     $data = $request["data"];
     switch ($request['type']) {
