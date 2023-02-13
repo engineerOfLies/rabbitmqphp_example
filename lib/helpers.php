@@ -11,5 +11,4 @@ function send(array $req, string $configName)
 
 }
 
-
 ?>

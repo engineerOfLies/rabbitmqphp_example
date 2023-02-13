@@ -3,23 +3,30 @@
 require_once(__DIR__ . "/../lib/config/path.inc");
 require_once(__DIR__ . "/../lib/rabbitMQLib.inc");
 require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
-
+require_once(__DIR__ . "/../lib/helpers.php");
 function dbConnect($request)
 {
     $db_info = parse_ini_file(__DIR__ . "/../backend/database.ini", true);
     $db_info = $db_info["database"];
-    $db = mysqli_connect($db_info["HOST_NAME"], $db_info["USERNAME"], $db_info["PASSWORD"], $db_info["DATABASE"]);
+    try {
+        $db = mysqli_connect($db_info["HOST_NAME"], $db_info["USERNAME"], $db_info["PASSWORD"], $db_info["DATABASE"]);
+    }catch (Exception $e) {
+        $date = date('m/d/Y h:i:s a', time());
+        $errorMsg = $date . " : " . $e;
+        $payload = array("data" => array("error" => $errorMsg), "type"=>"Database");
+        send($payload, "error");
 
-
+    }
     if (mysqli_connect_errno() !== 0) {
-        die("MYSQL Connection error: " . mysqli_connect_error());
+        // $errorMsg = mysqli_connect_error();
+       // send(array("data" => array("error" => $errorMsg)), "error");
     }
     $data = $request["data"];
     switch ($request['type']) {
         case "login":
             $stmt = mysqli_prepare($db, "SELECT * FROM users WHERE username = '{$data['username']}'");
             $stmt->execute();
-            if ($stmt->errno !== 0) {
+            if($stmt->errno !== 0) {
                 die("Failed to execute query" . $stmt->error);
             }
 
