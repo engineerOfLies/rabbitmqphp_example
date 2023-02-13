@@ -4,25 +4,26 @@
 
   $username = $_POST['username'];
   $password = $_POST['password'];
+  $message = -99;
   if(isset($_POST['submit'])) {
     $data = array('type' => 'login', 'data' => array('username' => $username, 'user_pass' => $password));
     $response = send($data, "rabbit");
       if($response["code"] == 0) {
         session_start();
         $_SESSION["username"] = $username;
-        var_dump($response);
+        // var_dump($response);
         header("Location: index.php");
       }
       else if($response["code"] == 1) {
-        echo "Invalid password, account exists";
+        $message = $response["code"];
       }
       else {
-        echo "Invalid credentials, create an account";
-        var_dump($response);
-        header("Location: create_account.php");
-        // make button show up to create acc + put error msg
+        $message = $response["code"];
+        // echo "Invalid credentials, create an account";
+        // var_dump($response);
+        $message = 2;
       }
-    var_dump($response);
+    // var_dump($response);
   }
 ?>
 
@@ -35,23 +36,41 @@
     <body>
     <div class="form">
       <form method="post" onsubmit="return sendLoginRequest(this)">
+      <?php if($message == 2) {
+        echo "<p class='message'> <a class='message' href='create_account.php'> Create an account </a></p>";
+        } 
+        else if($message == 1) {
+        echo "<p class='message'> Wrong password </p>";
+        }
+        ?>
         Username
         <input name="username" id="username" required/>
         Password
         <input name="password" id="password" type =password required/>
         <input hidden name="type" value="login" id="type" /> <br> <br>
-        <button class="loginb" type="submit" name="submit">Login</button>
+        <button class="loginb" type="submit" name="submit" onclick=>Login</button>
       </form>
     </div>
     </body>
 </html>
 
+
 <style>
 
+.message {
+  text-align: center;
+  color: white !important;
+}
 .loginb {
   margin: 0 auto;
   display: block;
+  background: transparent;
+  width: 180px;
+  height: 60px;
+  color: white;
+  font-size: 20px;
 }
+
 .form {
   position: fixed;
   top: 50%;
@@ -66,7 +85,9 @@ input {
   width: 200px;
 }
 body {
-  background-image: linear-gradient(to right, #fc5c7d, #6a82fb);
+background-color: #FF3CAC;
+background-image: linear-gradient(225deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
+
 }
 
 * {
