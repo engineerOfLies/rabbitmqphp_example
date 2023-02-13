@@ -10,11 +10,5 @@ function send(array $req, string $configName)
 
 
 }
-function sendEvent(array $req, string $configName)
-{
-    $rabbitMQClient = new rabbitMQClient(__DIR__ . "/config/rabbitMQ.ini", "rabbit");
-    $res = $rabbitMQClient->send_request($req);
-    return $res;
-}
 
 ?>

@@ -2,13 +2,14 @@ use it490db;
 
 CREATE TABLE IF NOT EXISTS users (
     id int not null AUTO_INCREMENT,
+    email varchar(255) UNIQUE NOT NULL,
     username varchar(255) UNIQUE NOT NULL,
     user_pass varchar(255) NOT NULL,
     PRIMARY KEY(id)
 );
 
-INSERT INTO users(username, user_pass)
-VALUES ("it490","root");
+INSERT INTO users(username, user_pass, email)
+VALUES ("it490","root", "it490@email.com");
 
 /* Basic setup
  * 
