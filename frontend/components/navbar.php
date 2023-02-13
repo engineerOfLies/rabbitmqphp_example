@@ -2,8 +2,9 @@
 session_start();
 $isLoggedIn = false;
 $username = "";
-if (isset($_SESSION["user"])) {
-    $username = $_SESSION["user"];
+if (isset($_SESSION["username"])) {
+    $username = $_SESSION["username"];
+    $isLoggedIn = true;
 }
 ?>
 
