@@ -20,7 +20,7 @@ if(!isset($user) || $user["logged"] != 1){
 <body>
     <div class="container">
     <h1>Logged in as: <?= $user["email"] ?>
-    <a href="logout.php" class="btn btn-danger">Logout</a>
+    <a href="auth/logout.php" class="btn btn-danger">Logout</a>
     </div>
     
 </body>
