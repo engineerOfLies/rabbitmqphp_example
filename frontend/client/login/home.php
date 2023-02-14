@@ -1,8 +1,8 @@
 <?php 
 session_start(); 
 $user = $_SESSION["user"];
-if(!isset($user["logged"]) || $user["logged"] == 1){
-    header("Location: index.html");
+if(!isset($user) || $user["logged"] != 1){
+    header("Location: index.php");
 }
 
 ?>
@@ -18,6 +18,10 @@ if(!isset($user["logged"]) || $user["logged"] == 1){
     <title>Home</title>
 </head>
 <body>
+    <div class="container">
     <h1>Logged in as: <?= $user["email"] ?>
+    <a href="logout.php" class="btn btn-danger">Logout</a>
+    </div>
+    
 </body>
 </html>

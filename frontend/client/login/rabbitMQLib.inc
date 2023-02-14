@@ -116,7 +116,7 @@ class rabbitMQServer
 			$exchange->setType($this->exchange_type);
 
 			$this->conn_queue = new AMQPQueue($channel);
-			$this->conn_queue->setName($this->queue);
+			$this->conn_queue->setName($this->queue); //Connects to toDatabaseQueue
 			$this->conn_queue->bind($exchange->getName(),$this->routing_key);
 
 			$this->conn_queue->consume(array($this,'process_message'));

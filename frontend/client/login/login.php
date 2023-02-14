@@ -14,17 +14,12 @@ $request["password"] = $_POST["password"];;
 
 $response = $client->send_request($request);
 
-$res_obj = json_decode($response);
+$res_obj = json_decode($response, true);
 
-if($res_obj["logged"] == 1 ){
+if(intval($res_obj["logged"]) == 1){
     $_SESSION["user"] = $res_obj;
     header("Location: home.php");
-} else {
-    header("Location: index.html");
 }
-
-
-
 
 
 ?>
