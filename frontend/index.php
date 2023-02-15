@@ -1,5 +1,8 @@
 <?php
 session_start();
+include(__DIR__ . "/../lib/helpers.php");
+include (__DIR__."/components/navbar.php");
+$count = 0;
 if(isset($_SESSION["username"])) {
 echo "<p style=
 'color: black !important;
@@ -8,11 +11,11 @@ text-transform: uppercase;'
 Welcome " . $_SESSION["username"]
  . "</p";
 }
-  include(__DIR__ . "/../lib/helpers.php");
-  include (__DIR__."/components/navbar.php");
 
-$title = $_POST['title'];
+
+
 if(isset($_POST['submit'])) {
+  $title = $_POST['title'];
   $data = array('type' => 'search', 'data' => array('title' => $title));
   $response = send($data, "dmz");
   $count = count($response["message"]);
@@ -51,13 +54,13 @@ if(isset($_POST['grabID'])) {
             <!-- the 'id' parameter is what we'll check on the 
             'new-page.php' that we're linking the poster to
           -->
-          <a href="new-page.php?id=<?php echo $id?>">
+          <a href="movie.php?id=<?php echo $id?>">
             
               <img src="<?php echo $banner;
                ?>" loading="lazy"
                >
                <!-- convert this to a link -->
-               <a href="new-page.php?id=<?php echo $id?>"> <?php echo $id?></a>
+               <a href="movie.php?id=<?php echo $id?>"> <?php echo $id?></a>
                <!-- <form method="post">
                 <input type="submit" value= ?> name="grabID">  -->
            
@@ -155,5 +158,5 @@ if(isset($_POST['grabID'])) {
     padding: 0 6px;
 }
 
-
+}
 </style>
