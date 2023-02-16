@@ -28,6 +28,7 @@ function dbConnect($request)
             $stmt->execute();
             if($stmt->errno !== 0) {
                 die("Failed to execute query" . $stmt->error);
+                send(array("data" => array("error" => $stmt->error)), "error");
             }
 
             $result = $stmt->get_result()->fetch_assoc();
