@@ -5,6 +5,8 @@ require_once(__DIR__ . "/../lib/rabbitMQLib.inc");
 require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
     // NEED TO CHECK IF NO RESULTS ARE FOUND 
     // viewing movie page check if no results generated 
+
+
     function add($request) {
         $data = $request["data"];
         switch ($request['type']) {
@@ -29,13 +31,22 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
                 return array("code" => 0, "message" => $allResults);
             case "fetch":
                 $omdbID = $data['id'];
+                if(!str_contains($omdbID, 'tt')) {
+                    $fetchOMDBid = "https://api.themoviedb.org/3/movie/$id?api_key=03c07d3da47475c86c83bcbcec8516d2&language=en-US";
+                    $getContents = file_get_contents($fetchOMDBid);
+                    $omdbID = $getContents['imdb_id'];
+                    echo "hello";
+                }
                 $imdbData = "http://www.omdbapi.com/?i=$omdbID&apikey=f3d054e8&plot=full";
                 $json = file_get_contents($imdbData);
                 $imdbArr = json_decode($json, TRUE);
                 echo $imdbArr['Plot'];
-                // incase i forget
-                // grab id -> fetch imdb data -> send shit back -> creates new page -> lets user view
                 return array("code" => 0, "message" => $imdbArr);
+            case "onload":
+                $getPopular = "https://api.themoviedb.org/3/movie/popular?api_key=03c07d3da47475c86c83bcbcec8516d2&language=en-US&page=1";
+                $json = file_get_contents($getPopular);
+                $tmdbArr = json_decode($json, TRUE);
+                return array("code" => 0, "message" => $tmdbArr);
     }
 
 }

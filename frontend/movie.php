@@ -10,6 +10,7 @@ if (isset($_GET['id'])) {
     if ($code == 0) {
         $data = $result["message"];
     }
+    echo $data['id'];
 }
 ?>
 
