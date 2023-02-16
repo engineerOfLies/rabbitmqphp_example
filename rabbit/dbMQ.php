@@ -27,7 +27,6 @@ function dbConnect($request)
             $stmt = mysqli_prepare($db, "SELECT * FROM users WHERE username = '{$data['username']}'");
             $stmt->execute();
             if($stmt->errno !== 0) {
-                die("Failed to execute query" . $stmt->error);
                 send(array("data" => array("error" => $stmt->error)), "error");
             }
 
@@ -55,6 +54,9 @@ function dbConnect($request)
 
         case "create":
             $stmt = mysqli_query($db, "SELECT username FROM users WHERE username = '{$data['username']}'");
+            if($stmt->errno !== 0) {
+                send(array("data" => array("error" => $stmt->error)), "error");
+            }
             if (mysqli_num_rows($stmt) != 0) {
                 echo "Username already exists";
                 return array("code" => 1, "message" => "doesnt work");
@@ -62,6 +64,9 @@ function dbConnect($request)
             else {
                 $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass)VALUES
                 ('{$data['username']}', '{$data['user_pass']}')");
+                    if($stmt->errno !== 0) {
+                        send(array("data" => array("error" => $stmt->error)), "error");
+                    }
                 $stmt->execute();
                 return array("code" => 0, "message" => "works");
             }
