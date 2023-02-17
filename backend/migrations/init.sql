@@ -12,18 +12,18 @@ CREATE TABLE IF NOT EXISTS users (
     PRIMARY KEY(id)
 );
 
-INSERT INTO users(username, user_pass, email)
-VALUES ("it490","root", "it490@email.com");
+-- INSERT INTO users(username, user_pass, email)
+-- VALUES ("it490","root", "it490@email.com");
 
 CREATE TABLE IF NOT EXISTS bookmarks (
     bookmark_id int not null AUTO_INCREMENT,
-    user_id int, 
+    username varchar(255), 
     movie_id varchar(255),
     title varchar(255),
     poster varchar(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(username) REFERENCES users(username),
     PRIMARY KEY(bookmark_id)
 )
 /* Basic setup

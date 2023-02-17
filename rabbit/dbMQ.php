@@ -64,6 +64,17 @@ function dbConnect($request)
                 $stmt->execute();
                 return array("code" => 0, "message" => "works");
             }
+        case "checkBookmark": 
+
+            $stmt = mysqli_query($db, "SELECT * FROM bookmarks WHERE username = '{$data['username']}' AND movie_id = '{$data['movie_id']}'");
+            if(mysqli_num_rows($stmt) != 0) {
+                echo "Already bookmarked";
+                return array("code" => 0, "message" => true);
+            } else {
+                return array("code" => 0, "message" => false);
+            }
+      
+
     }
 
 }
