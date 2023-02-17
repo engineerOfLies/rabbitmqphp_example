@@ -18,6 +18,7 @@ VALUES ("it490","root", "it490@email.com");
 CREATE TABLE IF NOT EXISTS bookmarks (
     bookmark_id int not null AUTO_INCREMENT,
     user_id int, 
+    movie_id varchar(255),
     title varchar(255),
     poster varchar(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
