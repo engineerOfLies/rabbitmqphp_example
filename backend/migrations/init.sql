@@ -2,15 +2,30 @@ use it490db;
 
 CREATE TABLE IF NOT EXISTS users (
     id int not null AUTO_INCREMENT,
-    email varchar(255) UNIQUE NOT NULL,
+    email varchar(255),
     username varchar(255) UNIQUE NOT NULL,
     user_pass varchar(255) NOT NULL,
+    is_private BOOLEAN default false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
     PRIMARY KEY(id)
 );
 
-INSERT INTO users(username, user_pass, email)
-VALUES ("it490","root", "it490@email.com");
+-- INSERT INTO users(username, user_pass, email)
+-- VALUES ("it490","root", "it490@email.com");
 
+CREATE TABLE IF NOT EXISTS bookmarks (
+    bookmark_id int not null AUTO_INCREMENT,
+    username varchar(255), 
+    movie_id varchar(255),
+    title varchar(255),
+    poster varchar(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY(username) REFERENCES users(username),
+    PRIMARY KEY(bookmark_id)
+)
 /* Basic setup
  * 
  * 1. Open your terminal and enter into mysql (`sudo mysql`)
