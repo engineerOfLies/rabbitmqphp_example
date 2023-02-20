@@ -1,5 +1,4 @@
 <?php
-session_start();
 $isLoggedIn = false;
 $username = "";
 if (isset($_SESSION["username"])) {
@@ -10,7 +9,7 @@ if (isset($_SESSION["username"])) {
 
 <nav class="container">
     <div class="navbar-container">
-        <a>MovieSite</a>
+        <a href="/frontend/index.php">MovieSite</a>
         <ul>
             <li>Movies</li>
             <li>TV Shows</li>
@@ -30,8 +29,9 @@ if (isset($_SESSION["username"])) {
     .container {
         width: 100%;
         max-width: 1440px;
-        margin: 0;
+        margin: 0 auto;
         color:white;
+        padding: 1rem;
         
     }
     ul {

@@ -1,5 +1,8 @@
 <?php
 session_start();
+include(__DIR__ . "/../lib/helpers.php");
+include (__DIR__."/components/navbar.php");
+$count = 0;
 if(isset($_SESSION["username"])) {
 echo "<p style=
 'color: black !important;
@@ -8,11 +11,10 @@ text-transform: uppercase;'
 Welcome " . $_SESSION["username"]
  . "</p";
 }
-  include(__DIR__ . "/../lib/helpers.php");
-  include (__DIR__."/components/navbar.php");
 
-$title = $_POST['title'];
+
 if(isset($_POST['submit'])) {
+  $title = $_POST['title'];
   $data = array('type' => 'search', 'data' => array('title' => $title));
   $response = send($data, "dmz");
   $count = count($response["message"]);
@@ -29,7 +31,19 @@ if(isset($_POST['grabID'])) {
 <!DOCTYPE html>
 <html>
     <head>
-      <script src="create_page.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #272727;
+            color: white;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
       <div class="container">
@@ -51,13 +65,13 @@ if(isset($_POST['grabID'])) {
             <!-- the 'id' parameter is what we'll check on the 
             'new-page.php' that we're linking the poster to
           -->
-          <a href="new-page.php?id=<?php echo $id?>">
+          <a href="movie.php?id=<?php echo $id?>">
             
               <img src="<?php echo $banner;
                ?>" loading="lazy"
                >
                <!-- convert this to a link -->
-               <a href="new-page.php?id=<?php echo $id?>"> <?php echo $id?></a>
+               <a href="movie.php?id=<?php echo $id?>"></a>
                <!-- <form method="post">
                 <input type="submit" value= ?> name="grabID">  -->
            
@@ -71,10 +85,8 @@ if(isset($_POST['grabID'])) {
 
 <style>
   body {
-    background: #5D4157;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #A8CABA, #5D4157);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #A8CABA, #5D4157); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+            background-color: #272727;
+            color: white;
   }
   /* Movie Posters Container */
   .container {
@@ -155,5 +167,5 @@ if(isset($_POST['grabID'])) {
     padding: 0 6px;
 }
 
-
+}
 </style>

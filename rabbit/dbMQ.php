@@ -55,15 +55,26 @@ function dbConnect($request)
         case "create":
             $stmt = mysqli_query($db, "SELECT username FROM users WHERE username = '{$data['username']}'");
             if (mysqli_num_rows($stmt) != 0) {
-                echo "Username already exists";
+                echo "Username or email already exists";
                 return array("code" => 1, "message" => "doesnt work");
             }
             else {
-                $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass)VALUES
-                ('{$data['username']}', '{$data['user_pass']}')");
+                $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass, email)VALUES
+                ('{$data['username']}', '{$data['user_pass']}', '{$data['email']}')");
                 $stmt->execute();
                 return array("code" => 0, "message" => "works");
             }
+        case "checkBookmark": 
+
+            $stmt = mysqli_query($db, "SELECT * FROM bookmarks WHERE username = '{$data['username']}' AND movie_id = '{$data['movie_id']}'");
+            if(mysqli_num_rows($stmt) != 0) {
+                echo "Already bookmarked";
+                return array("code" => 0, "message" => true);
+            } else {
+                return array("code" => 0, "message" => false);
+            }
+      
+
     }
 
 }
