@@ -55,12 +55,12 @@ function dbConnect($request)
         case "create":
             $stmt = mysqli_query($db, "SELECT username FROM users WHERE username = '{$data['username']}'");
             if (mysqli_num_rows($stmt) != 0) {
-                echo "Username already exists";
+                echo "Username or email already exists";
                 return array("code" => 1, "message" => "doesnt work");
             }
             else {
                 $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass)VALUES
-                ('{$data['username']}', '{$data['user_pass']}')");
+                ('{$data['username']}', '{$data['user_pass']}', '{$data['email']}')");
                 $stmt->execute();
                 return array("code" => 0, "message" => "works");
             }

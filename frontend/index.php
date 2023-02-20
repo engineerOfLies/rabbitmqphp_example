@@ -31,6 +31,19 @@ if(isset($_POST['grabID'])) {
 <!DOCTYPE html>
 <html>
     <head>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #272727;
+            color: white;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
       <div class="container">
@@ -72,10 +85,8 @@ if(isset($_POST['grabID'])) {
 
 <style>
   body {
-    background: #5D4157;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #A8CABA, #5D4157);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #A8CABA, #5D4157); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+            background-color: #272727;
+            color: white;
   }
   /* Movie Posters Container */
   .container {

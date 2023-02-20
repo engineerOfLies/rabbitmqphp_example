@@ -32,9 +32,10 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
             case "fetch":
                 $omdbID = $data['id'];
                 if(!str_contains($omdbID, 'tt')) {
-                    $fetchOMDBid = "https://api.themoviedb.org/3/movie/$id?api_key=03c07d3da47475c86c83bcbcec8516d2&language=en-US";
+                    $fetchOMDBid = "https://api.themoviedb.org/3/movie/$omdbID?api_key=03c07d3da47475c86c83bcbcec8516d2&language=en-US";
                     $getContents = file_get_contents($fetchOMDBid);
-                    $omdbID = $getContents['imdb_id'];
+                    $decode = json_decode($getContents, TRUE);
+                    $omdbID = $decode['imdb_id'];
                     echo "hello";
                 }
                 $imdbData = "http://www.omdbapi.com/?i=$omdbID&apikey=f3d054e8&plot=full";

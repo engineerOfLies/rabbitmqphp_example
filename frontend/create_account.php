@@ -4,11 +4,12 @@
 
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $email = $_POST['email'];
     $type = $_POST['type'];
     $message = -99;
 
     if (isset($_POST['submit'])) {
-        $data = array('type' => $type, 'data' => array('username' => $username, 'user_pass' => $password));
+        $data = array('type' => $type, 'data' => array('username' => $username, 'user_pass' => $password, 'email' => $email));
         $response = send($data, "rabbit");
         if($response["code"] == 0) {
             $message = 0;
@@ -31,11 +32,13 @@
         echo "<p class='message'> Account created. <a class='message' href='login.php'>Login here</a></p>";
         } 
         else if($message == 1) {
-        echo "<p class='message'> Username already exists </p>";
+        echo "<p class='message'> Username or email already exists </p>";
         }
         ?>
+        Desired Email
+        <input name="email" id="email" required/> <br>
         Desired Username
-        <input name="username" id="username" required/>
+        <input name="username" id="username" required/> <br>
         Desired Password
         <input name="password" id="password" required/>
         <input hidden name="type" value="create" id="type" /> <br> <br>
