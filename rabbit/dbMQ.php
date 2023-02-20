@@ -59,7 +59,7 @@ function dbConnect($request)
                 return array("code" => 1, "message" => "doesnt work");
             }
             else {
-                $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass)VALUES
+                $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass, email)VALUES
                 ('{$data['username']}', '{$data['user_pass']}', '{$data['email']}')");
                 $stmt->execute();
                 return array("code" => 0, "message" => "works");
