@@ -10,16 +10,16 @@ if (isset($_GET['id'])) {
     // $result = send($data, "dmz");
     // TO SAVE FETCHING FROM DATABASE WHEN DEVELOPING LOCALLY
     $result = array("code" => 0, "message" => array("Title" => "Harry Potter and the Deathly Hallows: Part 2", "Year" => "2011", "Rated" => "PG-13", "Released" => "15 Jul 2011", "Runtime" => "130 min", "Genre" => "Adventure, Family, Fantasy", "Director" => "David Yates", "Writer" => "Steve Kloves, J.K. Rowling", "Actors" => "Daniel Radcliffe, Emma Watson, Rupert Grint", "Plot" => "Harry Daniel Radcliffe, Ron Rupert Grint, and Hermione Emma Watson continue their quest of finding and destroying Voldemort's Ralph Fiennes' three remaining Horcruxes, the magical items responsible for his immortality. But as the mystical Deathly Hallows are uncovered, and Voldemort finds out about their mission, the biggest battle begins, and life as they know it will never be the same again.", "Language" => "English, Latin", "Country" => "United Kingdom, United States", "Awards" => "Nominated for 3 Oscars. 47 wins & 94 nominations total", "Poster" => "https://m.media-amazon.com/images/M/MV5BMGVmMWNiMDktYjQ0Mi00MWIxLTk0N2UtN2ZlYTdkN2IzNDNlXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg"));
-        $data = $result["message"];
+    $data = $result["message"];
     // if ($code == 0) {
     //     $data = $result["message"];
     // }
     echo $data['id'];
 }
 
-if(isset($_SESSION["username"])) {
+if (isset($_SESSION["username"])) {
     $username =  $_SESSION["username"];
-}   
+}
 ?>
 
 <html>
@@ -80,26 +80,29 @@ if(isset($_SESSION["username"])) {
         <?php } else {
             echo "<h1>Page not Found.</h1>";
         } ?>
-        <input hidden id="username" value="<?php echo $username?>" />
+        <input hidden id="username" value="<?php echo $username; ?>" />
+        <input hidden id="poster" value="<?php echo $data["Poster"]; ?>" />
+        <input hidden id="title" value="<?php echo $data["Title"]; ?>" />
     </div>
 
     <script>
         const btn = document.getElementById("bookmark");
         const input = document.getElementById("isBookmarked");
-        
-        (function checkBookmark() {
-
-            const params = new Proxy(new URLSearchParams(window.location.search), {
+        const params = new Proxy(new URLSearchParams(window.location.search), {
                 get: (seachParams, prop) => seachParams.get(prop)
             });
             const id = params.id;
+        // IIFE
+        (function checkBookmark() {
+
+          
             const req = new XMLHttpRequest();
             const username = document.getElementById("username").value;
             req.open("POST", "functions/checkBookmark.php", true);
             req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             req.onprogress = () => {
                 btn.innerText = "Loading...";
-             
+
             }
 
             req.onload = () => {
@@ -113,17 +116,17 @@ if(isset($_SESSION["username"])) {
                         btn.classList.add("bg-orange-700");
                         btn.classList.add("hover:bg-orange-600");
                         btn.classList.add("transition-colors");
-                        
+
                     } else {
                         btn.innerText = "Bookmark";
                     }
-                   
+
                 }
             }
             const reqBody = {
                 movie_id: id,
                 username,
-                
+
             }
 
             req.send(JSON.stringify(reqBody));
@@ -131,9 +134,44 @@ if(isset($_SESSION["username"])) {
 
         // TODO: Add request to bookmark item
         const handleClick = () => {
-            console.log(Boolean(btn.dataset.status));
-        
+            const title = document.getElementById("title").value;
+            const poster = document.getElementById("poster").value;
+            const status = Boolean(btn.dataset.status)
+            const username = document.getElementById("username").value;
 
+            const req = new XMLHttpRequest();
+            const reqBody = {
+                movie_id: id,
+                username,
+                title, 
+                poster,
+                type: status ? "removeBookmark" : "addBookmark",
+            }
+            console.log(reqBody)
+            req.open("POST", "functions/addBookmark.php", true);
+            req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            req.onprogress = () => {
+                btn.innerText = "Loading...";
+                btn.setAttribute("disabled", "disabled");
+            }
+
+            req.onload = () => {
+                if (req.readyState == 4 && req.status == 200) {
+
+                    console.log(req.responseText);
+                    const res = JSON.parse(req.responseText);
+                    if (res.code == 0) {
+                        btn.innerText = "Remove bookmark";
+                        btn.classList.remove("bg-blue-700");
+                        btn.classList.add("bg-orange-700");
+                        btn.classList.add("hover:bg-orange-600");
+                        btn.classList.add("transition-colors");
+                    } else {
+                        btn.innerText = "Bookmark";
+                    }
+                }
+            }
+            req.send(JSON.stringify(reqBody));
         }
         btn.addEventListener("click", handleClick)
     </script>
