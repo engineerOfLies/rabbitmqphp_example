@@ -14,10 +14,7 @@ Welcome " . $_SESSION["username"]
 
 $data = array('type' => 'onload', 'data' => array('message' => "does this work"));
 $response = send($data, "dmz");
-var_dump($response['message']['results'][0]['poster_path']);
-echo "image.tmdb.org/t/p/w500" . $response['message']['results'][0]['poster_path'];
 $count = count($response['message']['results']);
-var_dump($count);
 ?>
 <!DOCTYPE html>
 <html>

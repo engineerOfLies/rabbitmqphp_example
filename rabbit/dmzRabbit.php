@@ -16,8 +16,15 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
                 $phparr = json_decode($json, TRUE);
                 $allResults = array();
                 // print_r ($phparr['Search'][0]['imdbID']);
-                $totalResults = $phparr['totalResults'];
-                $pages = ceil($totalResults / 10);
+                if($phparr["Response"] == "False") {
+                    // echo "false";
+                    return array("code" => 1, "message" => $phparr);
+                }
+                else {
+                    $totalResults = $phparr['totalResults'];
+                    $pages = ceil($totalResults / 10);
+                    // echo "true";
+                }
                 if($pages == 1) {
                     return array("code" => 0, "message" => $phparr);
                 }
@@ -36,7 +43,6 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
                     $getContents = file_get_contents($fetchOMDBid);
                     $decode = json_decode($getContents, TRUE);
                     $omdbID = $decode['imdb_id'];
-                    echo "hello";
                 }
                 $imdbData = "http://www.omdbapi.com/?i=$omdbID&apikey=f3d054e8&plot=full";
                 $json = file_get_contents($imdbData);

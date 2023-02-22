@@ -9,7 +9,7 @@ if (isset($_SESSION["username"])) {
 
 <nav class="container">
     <div class="navbar-container">
-        <a href="/frontend/index.php">MovieSite</a>
+        <a href="/frontend/recommendedTest.php">MovieSite</a>
         <ul>
             <li>Movies</li>
             <li>TV Shows</li>
