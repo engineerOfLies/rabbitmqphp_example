@@ -74,6 +74,9 @@ if(isset($_POST['grabID'])) {
 </html>
 
 <style>
+  html {
+    box-sizing: border-box;
+  }
   body {
             background-color: #272727;
             color: white;
@@ -107,9 +110,14 @@ if(isset($_POST['grabID'])) {
 .searchBox {
     top: 0;
     background: #2f3640;
-    height: 40px;
-    border-radius: 40px;
-    padding: 10px;
+    height: auto;
+    border-radius: 999px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    gap: 16px;
+    padding: 6px;
 
 }
 
@@ -120,8 +128,17 @@ if(isset($_POST['grabID'])) {
     padding: 0;
     color: white;
     font-size: 12px;
-    width: 50%;
+    width: 100%;
+    margin: 0 16px;
 
+}
+
+.searchButton {
+  font-size: 14px;
+  padding: 8px;
+  margin: 0 16px;
+  background-color: #4b5666;
+  border-radius: 6px;
 }
 
 </style>
