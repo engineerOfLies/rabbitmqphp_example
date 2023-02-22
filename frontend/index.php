@@ -115,7 +115,7 @@ if(isset($_POST['grabID'])) {
     width: 80%;
     display: flex;
     align-items: center;
-    margin: 0 auto;
+    margin: 24px auto;
     gap: 16px;
     padding: 6px;
 
