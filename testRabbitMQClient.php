@@ -14,6 +14,11 @@ $request['name'] = $name;
 $request['username'] = $username;
 $request['password'] = $password;
 
+/*$request = array();
+$request['type'] = "Login";
+$request['username'] = $username;
+$request['password'] = $password;*/
+
 $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 $response = $client->send_request($request);
 
