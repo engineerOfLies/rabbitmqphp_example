@@ -26,6 +26,9 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
                     $newArr = json_decode($jsonNew, TRUE);
                     array_push($allResults, $newArr);
                 }
+                if($stmt->errno !== 0) {
+                    send(array("data" => array("error" => $stmt->error)), "error");
+                }
                 return array("code" => 0, "message" => $allResults);
             case "fetch":
                 $omdbID = $data['id'];
