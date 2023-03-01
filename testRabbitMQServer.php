@@ -4,37 +4,58 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
-function doLogin($username,$password)
+function registerUser($name, $username, $password)
 {
-    // lookup username in databas
-    // check password
-    return true;
-    //return false if not valid
+    // connect to MySQL database
+    $db = mysqli_connect("localhost", "user490", "it490", "userData");
+
+    // check connection
+    if (!$db) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    echo "DB Connected Successfully";
+
+    // prepare query
+    $query = "INSERT INTO users (id, name, username, password) VALUES ('1', '$name', '$username', '$password')";
+
+    // execute query
+    if (mysqli_query($db, $query)) {
+        return true;
+    } else {
+      echo "query failed";  
+      return false;
+    }
+
+    // close database connection
+    mysqli_close($db);
 }
 
 function requestProcessor($request)
 {
-  echo "received request".PHP_EOL;
-  var_dump($request);
-  if(!isset($request['type']))
-  {
-    return "ERROR: unsupported message type";
-  }
-  switch ($request['type'])
-  {
-    case "login":
-      return doLogin($request['username'],$request['password']);
-    case "validate_session":
-      return doValidate($request['sessionId']);
-  }
-  return array("returnCode" => '0', 'message'=>"Server received request and processed");
+    if (!isset($request['type'])) {
+        return "ERROR: unsupported message type";
+    }
+
+    switch ($request['type']) {
+        case "Registration":
+          echo "received registration request\n\n";
+          return registerUser($request['name'], $request['username'], $request['password']);
+          break;
+        
+        case "Login":
+          echo "received login request\n\n";
+          return;
+    }
+
+    return array("returnCode" => '0', 'message' => "Server received request and processed");
 }
 
-$server = new rabbitMQServer("testRabbitMQ.ini","testServer");
+$server = new rabbitMQServer("testRabbitMQ.ini", "testServer");
 
-echo "testRabbitMQServer BEGIN".PHP_EOL;
+echo "testRabbitMQServer BEGIN" . PHP_EOL;
 $server->process_requests('requestProcessor');
-echo "testRabbitMQServer END".PHP_EOL;
+echo "testRabbitMQServer END" . PHP_EOL;
 exit();
-?>
 
+?>
