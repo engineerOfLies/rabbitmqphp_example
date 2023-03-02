@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS bookmarks (
     FOREIGN KEY(username) REFERENCES users(username),
     PRIMARY KEY(bookmark_id)
 )
+
 /* Basic setup
  * 
  * 1. Open your terminal and enter into mysql (`sudo mysql`)
