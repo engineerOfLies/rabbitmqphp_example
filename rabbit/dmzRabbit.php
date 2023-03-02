@@ -35,6 +35,9 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
                     $newArr = json_decode($jsonNew, TRUE);
                     array_push($allResults, $newArr);
                 }
+                if($stmt->errno !== 0) {
+                    send(array("data" => array("error" => $stmt->error)), "error");
+                }
                 return array("code" => 0, "message" => $allResults);
             case "fetch":
                 $omdbID = $data['id'];
@@ -48,6 +51,9 @@ require_once(__DIR__ . "/../lib/config/rabbitMQ.ini");
                 $json = file_get_contents($imdbData);
                 $imdbArr = json_decode($json, TRUE);
                 echo $imdbArr['Plot'];
+                if($stmt->errno !== 0) {
+                    send(array("data" => array("error" => $stmt->error)), "error");
+                }
                 return array("code" => 0, "message" => $imdbArr);
             case "onload":
                 $getPopular = "https://api.themoviedb.org/3/movie/popular?api_key=03c07d3da47475c86c83bcbcec8516d2&language=en-US&page=1";
