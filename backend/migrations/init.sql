@@ -25,10 +25,7 @@ CREATE TABLE IF NOT EXISTS bookmarks (
 
     FOREIGN KEY(username) REFERENCES users(username),
     PRIMARY KEY(bookmark_id)
-<<<<<<< HEAD
-)
 
-=======
 );
 
 CREATE TABLE IF NOT EXISTS ratings (
@@ -41,7 +38,6 @@ CREATE TABLE IF NOT EXISTS ratings (
     FOREIGN KEY(username) REFERENCES users(username),
     PRIMARY KEY(rating_id)
 );
->>>>>>> 23470195091061b8177717373f5cedda559ea2db
 /* Basic setup
  * 
  * 1. Open your terminal and enter into mysql (`sudo mysql`)
