@@ -1,22 +1,20 @@
 <?php
+session_start();
 include(__DIR__ . "/../lib/helpers.php");
 include (__DIR__."/components/navbar.php");
 $count = 0;
-
-if(isset($_POST['submit'])) {
-  $title = $_POST['title'];
-  $data = array('type' => 'search', 'data' => array('title' => $title));
-  $response = send($data, "dmz");
-  $count = count($response["message"]);
-
+if(isset($_SESSION["username"])) {
+echo "<p style=
+'color: black !important;
+text-transform: uppercase;'
+>
+Welcome " . $_SESSION["username"]
+ . "</p";
 }
 
-if(isset($_POST['grabID'])) {
-  $sendID = $_POST['grabID'];
-  $data = array('type' => 'fetch', 'data' => array('id' => $sendID));
-  $imdb_response = send($data, "dmz");
-}
-
+$data = array('type' => 'onload', 'data' => array('message' => "does this work"));
+$response = send($data, "dmz");
+$count = count($response['message']['results']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,23 +31,16 @@ if(isset($_POST['grabID'])) {
             color: white;
         }
     </style>
-    <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
       <div class="container">
-      <form method="post">
-      <div class="searchBox">
-      <input class="searchInput" type="search" id="title" name="title" autocomplete="off" placeholder="Movie Title">
-        <button type="submit" name="submit" class="searchButton"> Search </button>
-      </div>
-      </form>
       
       <div class="grid">
           <?php 
           for($i = 0; $i < $count; $i++) { 
-            for($j = 0; $j < 10; $j++) {
-              $banner = $response["message"][$i]["Search"][$j]["Poster"];
-              $id = $response["message"][$i]["Search"][$j]["imdbID"];
+              $banner = $response["message"]["results"][$i]["poster_path"];
+              $id = $response["message"]["results"][$i]['id'];
           ?>
           <div class="movie-poster">
             <!-- the 'id' parameter is what we'll check on the 
@@ -57,7 +48,7 @@ if(isset($_POST['grabID'])) {
           -->
           <a href="movie.php?id=<?php echo $id?>">
             
-              <img src="<?php echo $banner;
+              <img src="https://image.tmdb.org/t/p/original<?php echo $banner;
                ?>" loading="lazy"
                >
                <!-- convert this to a link -->
@@ -67,20 +58,13 @@ if(isset($_POST['grabID'])) {
            
             </a>
             </div> 
-            <?php } } ?>
+            <?php } ?>
       </div>
     </div>
     </body>
 </html>
 
 <style>
-  html {
-    box-sizing: border-box;
-  }
-  body {
-            background-color: #272727;
-            color: white;
-  }
   /* Movie Posters Container */
   .container {
     width: 100%;
@@ -106,39 +90,5 @@ if(isset($_POST['grabID'])) {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
   }
-
-.searchBox {
-    top: 0;
-    background: #2f3640;
-    height: auto;
-    border-radius: 999px;
-    width: 80%;
-    display: flex;
-    align-items: center;
-    margin: 24px auto;
-    gap: 16px;
-    padding: 6px;
-
-}
-
-.searchInput {
-    border:none;
-    background: none;
-    outline:none;
-    padding: 0;
-    color: white;
-    font-size: 12px;
-    width: 100%;
-    margin: 0 16px;
-
-}
-
-.searchButton {
-  font-size: 14px;
-  padding: 8px;
-  margin: 0 16px;
-  background-color: #4b5666;
-  border-radius: 6px;
-}
 
 </style>

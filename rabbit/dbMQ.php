@@ -58,18 +58,29 @@ function dbConnect($request)
                 send(array("data" => array("error" => $stmt->error)), "error");
             }
             if (mysqli_num_rows($stmt) != 0) {
-                echo "Username already exists";
+                echo "Username or email already exists";
                 return array("code" => 1, "message" => "doesnt work");
             }
             else {
-                $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass)VALUES
-                ('{$data['username']}', '{$data['user_pass']}')");
-                    if($stmt->errno !== 0) {
-                        send(array("data" => array("error" => $stmt->error)), "error");
-                    }
+                $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass, email)VALUES
+                ('{$data['username']}', '{$data['user_pass']}', '{$data['email']}')");
                 $stmt->execute();
+                  if($stmt->errno !== 0) {
+                        send(array("data" => array("error" => $stmt->error)), "error");
+                   }
                 return array("code" => 0, "message" => "works");
             }
+        case "checkBookmark": 
+
+            $stmt = mysqli_query($db, "SELECT * FROM bookmarks WHERE username = '{$data['username']}' AND movie_id = '{$data['movie_id']}'");
+            if(mysqli_num_rows($stmt) != 0) {
+                echo "Already bookmarked";
+                return array("code" => 0, "message" => true);
+            } else {
+                return array("code" => 0, "message" => false);
+            }
+      
+
     }
 
 }
