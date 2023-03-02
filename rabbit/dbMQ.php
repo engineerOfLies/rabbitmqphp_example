@@ -10,16 +10,15 @@ function dbConnect($request)
     $db_info = $db_info["database"];
     try {
         $db = mysqli_connect($db_info["HOST_NAME"], $db_info["USERNAME"], $db_info["PASSWORD"], $db_info["DATABASE"]);
-    }catch (Exception $e) {
+    } catch (Exception $e) {
         $date = date('m/d/Y h:i:s a', time());
         $errorMsg = $date . " : " . $e;
-        $payload = array("data" => array("error" => $errorMsg), "type"=>"Database");
+        $payload = array("data" => array("error" => $errorMsg), "type" => "Database");
         send($payload, "error");
-
     }
     if (mysqli_connect_errno() !== 0) {
         $errorMsg = mysqli_connect_error();
-       send(array("data" => array("error" => $errorMsg)), "error");
+        send(array("data" => array("error" => $errorMsg)), "error");
     }
     $data = $request["data"];
     switch ($request['type']) {
@@ -36,20 +35,19 @@ function dbConnect($request)
             if (array($result)[0] !== NULL) {
                 if ($result["user_pass"] == $data["user_pass"] && $result["username"] == $data['username']) {
                     // echo and var_dump on terminal
-                    echo "USER FOUND!".PHP_EOL;
+                    echo "USER FOUND!" . PHP_EOL;
                     var_dump($request);
                     return array("code" => 0, "message" => $result);
                 } else {
                     // If first (if statement) fails, automatically fail since we don't want to show which one was wrong.
-                    echo "INVALID Credentials!".PHP_EOL;
+                    echo "INVALID Credentials!" . PHP_EOL;
                     var_dump($request);
                     return array("code" => 1, "message" => "Invalid Credentials");
                 }
             } else {
-                echo "USER NOT FOUND".PHP_EOL;
+                echo "USER NOT FOUND" . PHP_EOL;
                 var_dump($request);
                 return array("code" => 2, "message" => "Account not found.");
-
             }
 
         case "create":
@@ -60,8 +58,7 @@ function dbConnect($request)
             if (mysqli_num_rows($stmt) != 0) {
                 echo "Username or email already exists";
                 return array("code" => 1, "message" => "doesnt work");
-            }
-            else {
+            } else {
                 $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass, email)VALUES
                 ('{$data['username']}', '{$data['user_pass']}', '{$data['email']}')");
                 $stmt->execute();
@@ -70,19 +67,27 @@ function dbConnect($request)
                    }
                 return array("code" => 0, "message" => "works");
             }
-        case "checkBookmark": 
+        case "checkBookmark":
 
             $stmt = mysqli_query($db, "SELECT * FROM bookmarks WHERE username = '{$data['username']}' AND movie_id = '{$data['movie_id']}'");
-            if(mysqli_num_rows($stmt) != 0) {
+            if (mysqli_num_rows($stmt) != 0) {
                 echo "Already bookmarked";
                 return array("code" => 0, "message" => true);
             } else {
                 return array("code" => 0, "message" => false);
             }
-      
+        case "addBookmark":
 
+            $stmt = mysqli_prepare($db, "INSERT INTO bookmarks (username, movie_id, title, poster) VALUES ('{$data['username']}','{$data['movie_id']}','{$data['title']}', '{$data['poster']}')");
+            try {
+                $stmt->execute();
+
+                return array("code" => 0, "message" => "Successfully Added");
+            } catch (Exception $e) {
+                send(array("data" => array("error" => $e)), "error");
+                return array("code" => 1, "message" => $e);
+            }
     }
-
 }
 
 // function eventError($request) {
