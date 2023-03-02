@@ -1,17 +1,7 @@
 <?php
-session_start();
 include(__DIR__ . "/../lib/helpers.php");
 include (__DIR__."/components/navbar.php");
 $count = 0;
-if(isset($_SESSION["username"])) {
-echo "<p style=
-'color: black !important;
-text-transform: uppercase;'
->
-Welcome " . $_SESSION["username"]
- . "</p";
-}
-
 
 if(isset($_POST['submit'])) {
   $title = $_POST['title'];
@@ -49,7 +39,7 @@ if(isset($_POST['grabID'])) {
       <div class="container">
       <form method="post">
       <div class="searchBox">
-      <input class="searchInput" type="search" id="title" name="title" placeholder="Movie Title">
+      <input class="searchInput" type="search" id="title" name="title" autocomplete="off" placeholder="Movie Title">
         <button type="submit" name="submit" class="searchButton"> Search </button>
       </div>
       </form>
@@ -84,6 +74,9 @@ if(isset($_POST['grabID'])) {
 </html>
 
 <style>
+  html {
+    box-sizing: border-box;
+  }
   body {
             background-color: #272727;
             color: white;
@@ -115,57 +108,37 @@ if(isset($_POST['grabID'])) {
   }
 
 .searchBox {
-    position: absolute;
     top: 0;
-    right: 0;
     background: #2f3640;
-    height: 40px;
-    border-radius: 40px;
-    padding: 10px;
-
-}
-
-.searchBox:hover > .searchInput {
-    width: 240px;
-    padding: 0 6px;
-}
-
-.searchBox:hover > .searchButton {
-  color : white;
-}
-
-.searchButton {
-    color: white;
-    float: right;
-    width: 40px;
-    height: 40px;
-    border: transparent;
-    background: #2f3640;
+    height: auto;
+    border-radius: 999px;
+    width: 80%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    transition: 0.4s;
+    margin: 24px auto;
+    gap: 16px;
+    padding: 6px;
+
 }
 
 .searchInput {
     border:none;
     background: none;
     outline:none;
-    float:left;
     padding: 0;
     color: white;
     font-size: 12px;
-    transition: 0.4s;
-    line-height: 40px;
-    width: 0px;
+    width: 100%;
+    margin: 0 16px;
 
 }
 
-@media screen and (max-width: 620px) {
-.searchBox:hover > .searchInput {
-    width: 150px;
-    padding: 0 6px;
+.searchButton {
+  font-size: 14px;
+  padding: 8px;
+  margin: 0 16px;
+  background-color: #4b5666;
+  border-radius: 6px;
 }
 
-}
 </style>

@@ -25,8 +25,8 @@ function dbConnect($request)
         case "login":
             $stmt = mysqli_prepare($db, "SELECT * FROM users WHERE username = '{$data['username']}'");
             $stmt->execute();
-            if ($stmt->errno !== 0) {
-                die("Failed to execute query" . $stmt->error);
+            if($stmt->errno !== 0) {
+                send(array("data" => array("error" => $stmt->error)), "error");
             }
 
             $result = $stmt->get_result()->fetch_assoc();
@@ -52,6 +52,9 @@ function dbConnect($request)
 
         case "create":
             $stmt = mysqli_query($db, "SELECT username FROM users WHERE username = '{$data['username']}'");
+            if($stmt->errno !== 0) {
+                send(array("data" => array("error" => $stmt->error)), "error");
+            }
             if (mysqli_num_rows($stmt) != 0) {
                 echo "Username or email already exists";
                 return array("code" => 1, "message" => "doesnt work");
@@ -59,6 +62,9 @@ function dbConnect($request)
                 $stmt = mysqli_prepare($db, "INSERT INTO users(username, user_pass, email)VALUES
                 ('{$data['username']}', '{$data['user_pass']}', '{$data['email']}')");
                 $stmt->execute();
+                  if($stmt->errno !== 0) {
+                        send(array("data" => array("error" => $stmt->error)), "error");
+                   }
                 return array("code" => 0, "message" => "works");
             }
         case "checkBookmark":

@@ -1,0 +1,55 @@
+---------------------------------------------------
+Database:02/16/2023 12:34:42 pm : mysqli_sql_exception: No such file or directory in /home/jk259/git/it490-spring2023/rabbit/dbMQ.php:12
+Stack trace:
+#0 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(12): mysqli_connect()
+#1 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(58): dbConnect()
+#2 [internal function]: rabbitMQServer->process_message()
+#3 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(122): AMQPQueue->consume()
+#4 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(83): rabbitMQServer->process_requests()
+#5 {main}
+---------------------------------------------------
+:No such file or directory
+---------------------------------------------------
+Database:02/16/2023 12:36:45 pm : mysqli_sql_exception: No such file or directory in /home/jk259/git/it490-spring2023/rabbit/dbMQ.php:12
+Stack trace:
+#0 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(12): mysqli_connect()
+#1 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(58): dbConnect()
+#2 [internal function]: rabbitMQServer->process_message()
+#3 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(122): AMQPQueue->consume()
+#4 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(83): rabbitMQServer->process_requests()
+#5 {main}
+---------------------------------------------------
+:No such file or directory
+---------------------------------------------------
+Database:02/16/2023 12:37:46 pm : mysqli_sql_exception: No such file or directory in /home/jk259/git/it490-spring2023/rabbit/dbMQ.php:12
+Stack trace:
+#0 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(12): mysqli_connect()
+#1 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(58): dbConnect()
+#2 [internal function]: rabbitMQServer->process_message()
+#3 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(122): AMQPQueue->consume()
+#4 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(83): rabbitMQServer->process_requests()
+#5 {main}
+---------------------------------------------------
+:No such file or directory
+---------------------------------------------------
+Database:02/16/2023 12:52:53 pm : mysqli_sql_exception: Access denied for user 'it490'@'localhost' (using password: YES) in /home/jk259/git/it490-spring2023/rabbit/dbMQ.php:12
+Stack trace:
+#0 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(12): mysqli_connect()
+#1 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(58): dbConnect()
+#2 [internal function]: rabbitMQServer->process_message()
+#3 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(122): AMQPQueue->consume()
+#4 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(83): rabbitMQServer->process_requests()
+#5 {main}
+---------------------------------------------------
+:Access denied for user 'it490'@'localhost' (using password: YES)
+---------------------------------------------------
+Database:02/16/2023 12:56:49 pm : mysqli_sql_exception: Access denied for user 'it490'@'localhost' to database 'it490db' in /home/jk259/git/it490-spring2023/rabbit/dbMQ.php:12
+Stack trace:
+#0 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(12): mysqli_connect()
+#1 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(58): dbConnect()
+#2 [internal function]: rabbitMQServer->process_message()
+#3 /home/jk259/git/it490-spring2023/lib/rabbitMQLib.inc(122): AMQPQueue->consume()
+#4 /home/jk259/git/it490-spring2023/rabbit/dbMQ.php(83): rabbitMQServer->process_requests()
+#5 {main}
+---------------------------------------------------
+:Access denied for user 'it490'@'localhost' to database 'it490db'

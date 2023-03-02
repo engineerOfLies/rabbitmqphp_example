@@ -1,6 +1,5 @@
 <?php
   include(__DIR__ . "/../lib/helpers.php");
-  include(__DIR__ . "/../rabbit/rabbitmq.php"); 
 
   $username = $_POST['username'];
   $password = $_POST['password'];
