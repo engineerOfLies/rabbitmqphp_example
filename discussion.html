@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Discussion Forum</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header>
+      <h1>Discussion Forum</h1>
+      <nav>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="profile.html">Profile</a></li>
+          <li><a href="custom-shoe-stream.html">Custom Shoe Stream</a></li>
+          <li><a href="design.html">Design</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="post-form-section">
+        <h2>Post a Message</h2>
+        <form id="post-form">
+          <div>
+            <label for="name">Username:</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+          <div>
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit">Post</button>
+        </form>
+      </section>
+
+      <section id="message-board-section">
+        <h2>Message Board</h2>
+        <div id="message-board">
+          <!-- existing messages will be displayed here -->
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // get a reference to the form and the message board
+      const form = document.getElementById('post-form');
+      const messageBoard = document.getElementById('message-board');
+
+      // add an event listener to the form submission
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        // get the form data
+        const formData = new FormData(form);
+
+        // send a POST request to the server to save the message
+        fetch('post-message.php', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+          // create a new message element with the data and add it to the message board
+          const messageElement = document.createElement('div');
+          messageElement.classList.add('message');
+          messageElement.innerHTML = `
+            <h3>${data.name}</h3>
+            <p>${data.message}</p>
+            <span class="date">${new Date(data.timestamp * 1000).toLocaleString()}</span>
+          `;
+          messageBoard.appendChild(messageElement);
+
+          // clear the form inputs
+          form.reset();
+
+          // save the message to local storage
+          const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+          messages.push(data);
+          localStorage.setItem('messages', JSON.stringify(messages));
+        });
+      });
+
+      // populate the message board with saved messages from local storage
+      const savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
+      savedMessages.forEach(data => {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+        messageElement.innerHTML = `
+          <h3>${data.name}</h3>
+          <p>${data.message}</p>
+          <span class="date">${new Date(data.timestamp * 1000).toLocaleString()}</span>
+        `;
+        messageBoard.appendChild(messageElement);
+      });
+    </script>
+  </body>
+</html>
