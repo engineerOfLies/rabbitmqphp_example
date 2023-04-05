@@ -31,9 +31,46 @@ function registerUser($name, $username, $password)
     mysqli_close($db);
 }
 
+function loginUser($username, $password)
+{
+    // connect to MySQL database
+    $db = mysqli_connect("localhost", "user490", "it490", "userData");
+
+    // check connection
+    if (!$db) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    echo "DB Connected Successfully\n\n";
+
+    // prepare query
+    //echo "Hitting this point before the query";
+    $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+    //echo "Hitting this point after the query";
+
+    // execute query
+    $result = mysqli_query($db, $query);  
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);  
+    $count = mysqli_num_rows($result);  
+    echo $count;
+    //echo "Hitting this echo";
+          
+	if($count == 1)
+	{
+    echo "Login successful!\n\n";
+    return array(true);
+  }else{
+    echo "Login failed! homie\n\n";
+    return array(false);
+  }
+
+    
+}
+
 function requestProcessor($request)
 {
-    if (!isset($request['type'])) {
+  var_dump($request);  
+  if (!isset($request['type'])) {
         return "ERROR: unsupported message type";
     }
 
@@ -45,7 +82,8 @@ function requestProcessor($request)
         
         case "Login":
           echo "received login request\n\n";
-          return;
+          return loginUser($request['username'], $request['password']);
+          break;
     }
 
     return array("returnCode" => '0', 'message' => "Server received request and processed");
