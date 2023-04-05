@@ -1,0 +1,152 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+  }
+  
+  h1, h2, h3 {
+    font-weight: normal;
+  }
+  
+  a {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  ul {
+    list-style: none;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Header Styles */
+  header {
+    background-color: #fff;
+    padding: 20px 0;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  nav ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  nav ul li a {
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  nav ul li a:hover {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  nav ul li.login a,
+  nav ul li.profile a {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+  }
+  
+  nav ul li.login a:hover,
+  nav ul li.profile a:hover {
+    background-color: #fff;
+    color: #333;
+  }
+  
+  nav ul li.profile {
+    position: relative;
+  }
+  
+  nav ul li.profile:hover .profile-popup {
+    display: block;
+  }
+  
+  /* Profile Popup Styles */
+  .profile-popup {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
+  
+  .profile-popup h2 {
+    font-size: 24px;
+    margin: 20px 0;
+  }
+  
+  .profile-popup form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-popup label {
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: block;
+    text-align: left;
+  }
+  
+  .profile-popup input[type="text"],
+  .profile-popup input[type="number"],
+  .profile-popup textarea {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .profile-popup input[type="file"] {
+    margin-bottom: 30px;
+  }
+  
+  .profile-popup input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .close-button:hover {
+    color: #333;
+  }
+  
+  
+  
