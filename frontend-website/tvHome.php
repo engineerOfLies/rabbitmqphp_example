@@ -48,13 +48,53 @@ if ($response)
     });
 </script>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="discussion.html">Discussion Forum</a></li>
-            </ul>
-        </nav>
-    </header>
+<html>
+  <head>
+    <style>
+      /* CSS for navigation bar */
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      li {
+        float: left;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      li a:hover {
+        background-color: #111;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation bar HTML -->
+    <ul>
+      <li><a href="tvHome.php">Home</a></li>
+      <li><a href="movie.html">Movie Search</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="list.html">My List</a></li>
+      <li><a href="discussion.html">Discussion</a></li>
+    </ul>
+    <!-- Rest of the HTML content -->
+    <div>
+      <h1>Welcome to my website!</h1>
+      <p>Here's some more content...</p>
+    </div>
+  </body>
+</html>
+
+
     
     
     <main id="main"></main>
