@@ -7,10 +7,15 @@ require_once('rabbitMQLib.inc');
 $username = $_POST['username'];
 $password = $_POST['password'];
 
+//Hashed Username & Password
+$salted = "98235iuhf34uhf34ohu23f".$password."30qt83th98ch98ru238r23";
+$peppered = "b87i86v7dc69y8ppn8".$salted."n9887v65c45x3wxertdtfybnuimoipuic65434x";
+$hashed = hash('sha512', $peppered);
+
 $request = array();
 $request['type'] = "Login";
 $request['username'] = $username;
-$request['password'] = $password;
+$request['password'] = $hashed;
 
 $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 $response = $client->send_request($request);
