@@ -29,16 +29,18 @@ if ($response)
 <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js">
         $(document).ready(function(){
           $('.likeBtn').click(function(){         
-            var postid = $(this).attr('data-sName');
+            var showName = $(this).data('sName');
+            var showId = $(this).closest('.movie').attr('id').substring(4);
             //alert (postid);
             $.ajax({
-              type     : 'post',
-              url      : 'addLike.php',
-              data     : {
-                  "sName": postid
+              url: 'addLike.php',
+              method: 'POST',
+              data: {
+                  showId: showId,
+                  showName: showName
               },
-              success : function(data) {
-                 //alert("fuckin worked");
+              success : function(response) {
+                 alert("TV Show added to your list");
               },
               error(){
                 alert("error");
@@ -119,7 +121,7 @@ if ($response)
                     <br>
                 </div>
                 </div>
-                <a href="#" class="likeBtn" data-sName="'.$tvArray['show'.$x]['name'].'" >Like/Unlike</a>
+                <a href="list.html" class="likeBtn" data-sName="'.$tvArray['show'.$x]['name'].'" >Like/Unlike</a>
 ';
     }
     ?>
