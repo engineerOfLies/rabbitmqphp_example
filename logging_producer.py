@@ -2,6 +2,7 @@
 import logging
 import pika
 import logging.config
+import sys
 
 logging.config.fileConfig('/var/www/sample/logging.conf')
 
@@ -23,7 +24,7 @@ channel.queue_declare(queue='logging_queue', durable=True)
 channel.queue_bind(queue='logging_queue', exchange=exchange_name, routing_key=routing_key)
 
 # Publish log message
-channel.basic_publish(exchange=exchange_name, routing_key=routing_key, body='Hello, world! There are no errors to report')
+channel.basic_publish(exchange=exchange_name, routing_key=routing_key, body=sys.argv[1])
 logging.info('Sent log message')
 
 # Close connection
