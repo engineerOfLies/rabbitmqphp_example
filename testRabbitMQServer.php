@@ -269,13 +269,13 @@ function requestProcessor($request)
     switch ($request['type']) {
         case "Registration":
           echo "received registration request\n\n";
-          passthru("python3 logging_producer.py "."User data sent to the database");
+          passthru("python3 logging_producer.py "."'User data sent to the database'");
           return registerUser($request['name'], $request['username'], $request['password']);
           break;
         
         case "Login":
           echo "received login request\n\n";
-          passthru("python3 logging_producer.py "."User logged into website");
+          passthru("python3 logging_producer.py "."'User logged into website'");
           return loginUser($request['username'], $request['password']);
           break;
 
@@ -296,7 +296,7 @@ function requestProcessor($request)
 $server = new rabbitMQServer("testRabbitMQ.ini", "testServer");
 
 echo "testRabbitMQServer BEGIN" . PHP_EOL;
-passthru("python3 logging_producer.py "."Rabbit MQ Server Side Started");
+passthru("python3 logging_producer.py "."'Rabbit MQ Server Side Started'");
 $server->process_requests('requestProcessor');
 echo "testRabbitMQServer END" . PHP_EOL;
 exit();

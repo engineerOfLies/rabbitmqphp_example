@@ -30,6 +30,6 @@ if ($response[0] == 1)
 }
     
     
-echo "Received response: ".PHP_EOL;
+echo "Login Received: ".PHP_EOL;
 print_r($response);
 echo "\n\n";

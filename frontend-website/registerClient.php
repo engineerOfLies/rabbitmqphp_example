@@ -29,6 +29,6 @@ if ($response)
 }
     
     
-echo "Received response: ".PHP_EOL;
+echo "Client Registration Complete".PHP_EOL;
 print_r($response);
 echo "\n\n";
