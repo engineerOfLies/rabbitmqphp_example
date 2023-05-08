@@ -54,7 +54,7 @@ function loginUser($username, $password)
     $result = mysqli_query($db, $query);  
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);  
     $count = mysqli_num_rows($result);  
-    echo $count;
+    //echo $count;
     //echo "Hitting this echo";
           
 	if($count == 1)
