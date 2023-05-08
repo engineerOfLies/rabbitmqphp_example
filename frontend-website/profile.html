@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+
+<html>
+  <head>
+    <style>
+      /* CSS for navigation bar */
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      li {
+        float: left;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      li a:hover {
+        background-color: #111;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation bar HTML -->
+    <ul>
+      <li><a href="tvHome.php">Home</a></li>
+      <li><a href="movie.html">Movie Search</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="list.html">My List</a></li>
+      <li><a href="discussion.html">Discussion</a></li>
+    </ul>
+    <!-- Rest of the HTML content -->
+  </body>
+</html>
+
+<html>
+<head>
+	<title>My Profile and Friends List</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+			padding: 20px;
+		}
+		h1 {
+			text-align: center;
+			margin-top: 0;
+		}
+		form {
+			background-color: white;
+			border-radius: 5px;
+			padding: 20px;
+			margin-bottom: 20px;
+		}
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input[type="submit"] {
+			background-color: #4CAF50;
+			border: none;
+			color: white;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+		li {
+			padding: 10px;
+			border: 1px solid #ddd;
+			margin-bottom: 10px;
+			background-color: white;
+			border-radius: 5px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		li img {
+			max-width: 100px;
+			max-height: 100px;
+			object-fit: contain;
+			margin-right: 20px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Create Your Profile</h1>
+	<form action="save-profile.php" method="POST" enctype="multipart/form-data">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name" required>
+
+		<label for="age">Age:</label>
+		<input type="number" id="age" name="age" min="1" max="120" required>
+
+		<label for="bio">Bio:</label>
+		<textarea id="bio" name="bio" required></textarea>
+
+		<label for="picture">Picture:</label>
+		<input type="file" id="picture" name="picture" accept="image/*" required>
+
+		<input type="submit" value="Save Profile">
+	</form>
+	<br>
+	<h1>User Profile</h1>
+	<a href="display_profile.php">My Profile</a>
+<html>
+
+
+<html>
+  <head>
+    <title>My Friends</title>
+    <style>
+      .friend {
+        border: 1px solid black;
+        margin: 10px;
+        padding: 10px;
+        display: inline-block;
+        width: 200px;
+        text-align: center;
+      }
+      .friend img {
+        max-width: 100%;
+        height: auto;
+      }
+      .friend h3 {
+        font-size: 1.2em;
+        margin-top: 0;
+      }
+      .friend p {
+        font-size: 0.8em;
+      }
+      .add-friend-button {
+        display: block;
+        margin: 20px auto;
+        padding: 10px;
+        font-size: 1.2em;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>My Friends</h1>
+    <div class="friend">
+      <img src="https://via.placeholder.com/150" alt="Friend Photo">
+      <h3>John Doe</h3>
+      <p>Age: 25</p>
+      <p>Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+    <div class="friend">
+      <img src="https://via.placeholder.com/150" alt="Friend Photo">
+      <h3>Jane Smith</h3>
+      <p>Age: 30</p>
+      <p>Bio: Nullam euismod, velit nec tincidunt convallis, dolor nibh aliquet nibh, vitae tincidunt massa turpis eu augue.</p>
+    </div>
+    <div class="friend">
+		<img src="https://via.placeholder.com/150" alt="Friend Photo">
+		<h3>Daniel Jones</h3>
+		<p>Age: 24</p>
+		<p>Bio: Quarterback for the NY Giants. Certified Baller. Got the Bag.</p>
+	</div>
+	<form action="add_friend.php" method="POST">
+		<label for="friend_name">Friend's Name:</label>
+		<input type="text" id="friend_name" name="friend_name" required>
+		<input type="submit" value="Add Friend">
+	</form>
+	<br>
+	<a href="display_friends.php">Friends List</a>
+	
+  </body>
+</html>
+
+
+
+

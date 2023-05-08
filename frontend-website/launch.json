@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Start HTTPS Server",
+            "program": "${workspaceFolder}/node_modules/http-server/bin/http-server",
+            "args": [
+                "-p",
+                "8080",
+                "-S",
+                "-C",
+                "server.crt",
+                "-K",
+                "server.key"
+            ]
+        }
+    ]
+}
