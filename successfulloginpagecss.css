@@ -1,0 +1,53 @@
+/* CSS for successful login page */
+
+
+body{
+	font-family: sans-serif;
+    text-align: center;
+	color: green;
+    background: url(https://img.freepik.com/free-photo/beautiful-tree-middle-field-covered-with-grass-with-tree-line-background_181624-29267.jpg?w=1380&t=st=1696357931~exp=1696358531~hmac=09f5b596649cefc6325bfc8b7ad434ffdb86311970d34c69f54eb156b03f5036) no-repeat;
+	background-size: cover;
+	background-position: center;
+	overflow: hidden;
+}
+
+p{
+    color: white;
+}
+
+a:link {
+    color: green;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  
+  a:visited {
+    color: brown;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: blue;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  
+  a:active {
+    color: white;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+
+.welcome{
+	position: absolute;
+	top: 50%; /*to center it vertically*/
+	left: 50%; /*to center it horizontally*/
+	transform: translate(-50%,-50%);
+	width: 600px; /* form takes up 50% of the width of the page, dynamic*/
+	border-radius: 20px; /*rounds the edges of the form */
+	padding: 40px;
+	box-sizing: border-box;
+	background: black;
+}
+

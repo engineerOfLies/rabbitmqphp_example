@@ -1,0 +1,175 @@
+/* CSS for login/registration page */
+
+
+body{
+	font-family: sans-serif;
+	font: 600px 18px/20px;
+	color: green;
+	background: url(https://img.freepik.com/free-photo/beautiful-tree-middle-field-covered-with-grass-with-tree-line-background_181624-29267.jpg?w=1380&t=st=1696357931~exp=1696358531~hmac=09f5b596649cefc6325bfc8b7ad434ffdb86311970d34c69f54eb156b03f5036) no-repeat;
+	background-size: cover;
+	background-position: center;
+	/*overflow: hidden;*/
+}
+
+.entireform{
+	position: absolute;
+	top: 50%; /*to center it vertically*/
+	left: 50%; /*to center it horizontally*/
+	transform: translate(-50%,-50%);
+	width: 50%; /* form takes up 50% of the width of the page, dynamic*/
+	border-radius: 20px; /*rounds the edges of the form */
+	padding: 40px;
+	box-sizing: border-box;
+	background: black;}
+}
+
+/*??*/
+.options{
+	width:100%;
+	height:100%;
+	position:absolute;
+	padding:90px 70px 50px 70px;
+}
+
+.options .logininfo, .options .sign-up-form{
+	top:15px;
+	left:0;
+	right:0;
+	bottom:0;
+	position:absolute;
+	transform:rotateY(180deg);
+	backface-visibility:hidden;
+	transition:all .4s linear;
+}
+
+.gotologin{
+	text-align:center;
+}
+
+/*placeholder text inside each input field*/
+::placeholder{
+color: gray;
+} 
+
+.options .loginoption, .options .signupoption, .logincard .areaofuserinfo .check{
+	display:none;
+}
+
+/* Makes all the labels on the login form uppercase and bold*/
+.options .anoption, .logincard .areaofuserinfo .label, .logincard .areaofuserinfo .button{
+	text-transform:uppercase;
+	font-weight: bold;
+}
+
+/*formatting for the "Login" and "Sign-Up" tabs */
+.options .anoption{
+	font-size:30px;
+	margin-right:15px;
+	margin-left: 15px;
+	padding-bottom:10px;
+	margin:10px 10px 10px 150px;
+	display:inline-block;
+	border-bottom:4px solid transparent; /*tansparent allows it to not show under the tab that is not clicked on*/
+}
+.options .loginoption:checked + .anoption, .options .signupoption:checked + .anoption{
+	color:#fff;
+	border-color:green;
+}
+.logincard{
+	min-height:370px;
+	position:relative;
+	perspective:1000px;
+	transform-style:preserve-3d;
+}
+
+
+.logincard .areaofuserinfo{
+	margin-bottom:15px;
+}
+.logincard .areaofuserinfo .label, .logincard .areaofuserinfo .input, .logincard .areaofuserinfo .button{
+	width:100%;
+	color:#fff;
+	display:block;
+}
+.logincard .areaofuserinfo .input, .logincard .areaofuserinfo .button{
+	border:none;
+	padding:15px 20px;
+	border-radius:25px;
+	background:rgba(255,255,255,.1);
+}
+.logincard .areaofuserinfo input[data-type="password"]{
+	/*text-security:circle;*/
+	-webkit-text-security:circle;
+}
+.logincard .areaofuserinfo .label{
+	color:#aaa;
+	font-size:13px;
+}
+.logincard .areaofuserinfo .button{
+	background:green;
+}
+
+.logincard .areaofuserinfo label .icon{
+	width:15px;
+	height:15px;
+	border-radius:2px;
+	position:relative;
+	display:inline-block;
+	background:lightyellow ;
+	color: green;
+	font-weight: bold;
+}
+
+
+.logincard .areaofuserinfo label .icon:before, .logincard .areaofuserinfo label .icon:after{
+	content:'';
+	width:10px;
+	height:2px;
+	background:#fff;
+	position:absolute;
+	transition:all .1s ease-in-out 0s; /*how long it takes for the check to form in the checkbox*/
+}
+
+
+
+.logincard .areaofuserinfo label .icon:before{
+	left:3px;
+	width:5px;
+	bottom:6px;
+	transform:scale(0) rotate(0);
+}
+
+.logincard .areaofuserinfo label .icon:after{
+	top:6px;
+	right:0;
+	transform:scale(0) rotate(0);
+}
+
+.logincard .areaofuserinfo .check:checked + label .icon:before{
+	transform:scale(1) rotate(45deg);
+}
+.logincard .areaofuserinfo .check:checked + label .icon:after{
+	transform:scale(1) rotate(-45deg);
+}
+
+/*After checking the checkbox, the test turns white*/
+/*TAKE out*/
+.logincard .areaofuserinfo .check:checked + label{
+	color:#fff;
+}
+
+/*Color of the checkbox if it is checked*/
+.logincard .areaofuserinfo .check:checked + label .icon{
+	background: green;
+}
+
+/* Displays the login form after the flip from signup to login tabs*/
+.options .loginoption:checked + .anoption + .signupoption + .anoption + .logincard .logininfo{
+	transform:rotate(0);
+}
+
+/* Displays the signup form after the flip from login to signup tabs*/
+.options .signupoption:checked + .anoption + .logincard .sign-up-form{
+	transform:rotate(0);
+}
+
