@@ -23,7 +23,7 @@ function doLogin($username,$password)
 	{
 		echo "failed to execute query:".PHP_EOL;
 		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
-		return false;
+		return array("result"=>'0',"msg"=>"Error executing query.");
 	}
     if ($sqlResponse->num_rows == 0){
     	$errmsg = "Username not found.";
@@ -34,7 +34,7 @@ function doLogin($username,$password)
     	$errmsg = "Incorrect password.";
     	return array("result"=>'0',"msg"=>$errmsg);
     }
-    return true;
+    return array("result"=>'1',"uid"=>$row["userid"]);
 }
 function doRegister($username, $password, $email){
 	global $db;
@@ -51,6 +51,55 @@ function doRegister($username, $password, $email){
 	return true;
 }
 
+function createSession($uid, $sessid){
+	global $db;
+	$query = "insert into Sessions (sessionid, userid) values ('{$sessid}','{$uid}');";
+	$sqlResponse = $db->query($query);
+	
+	if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+	
+	return true;
+}
+function validateSession($sessid){
+	global $db;
+	$query = "select * from Sessions where sessionid='{$sessid}';";
+	$sqlResponse = $db->query($query);
+	
+	if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+    if ($sqlResponse->num_rows == 0){
+    	//session does not exist.
+    	return false;
+    }
+	if($row["isactive"] == 0){
+    	//session has already been logged out.
+    	return false;
+    }
+	return true;
+}
+function logout($sessid){
+	global $db;
+	$query = "update Sessions set 'isactive'=0 where sessionid='{$sessid}';";
+	$sqlResponse = $db->query($query);
+	
+	if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+	return true;
+}
+
 function requestProcessor($request)
 {
   echo "received request".PHP_EOL;
@@ -63,15 +112,20 @@ function requestProcessor($request)
   {
     case "login":
       return doLogin($request['username'],$request['password']);
+    case "create_session":
+      return createSession($request['userId'], $request['sessionId']);
     case "validate_session":
-      return doValidate($request['sessionId']);
+      return validateSession($request['sessionId']);
+    case "logout":
+      return logout($request['sessionId']);
     case "register":
       return doRegister($request['username'],$request['password'],$request['email']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
-$server = new rabbitMQServer("testRabbitMQ.ini","testServer");
+$server = new rabbitMQServer("testRabbitMQ.ini","databaseServer");	//For actual running.
+//$server = new rabbitMQServer("testRabbitMQ.ini","testServer");	//For testing on localhost.
 
 $server->process_requests('requestProcessor');
 exit();
