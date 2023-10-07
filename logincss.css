@@ -1,6 +1,6 @@
 /* CSS for login/registration page */
 
-/*
+
 body{
 	font-family: sans-serif;
 	font: 600px 18px/20px;
@@ -9,7 +9,7 @@ body{
 	background-size: cover;
 	background-position: center;
 	/*overflow: hidden;*/
-} */
+} 
 
 .entireform{
 	position: absolute;
