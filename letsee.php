@@ -5,14 +5,47 @@ require_once('rabbitMQLib.inc');
 
 $client = new rabbitMQClient("testRabbitMQ.ini","databaseServer");
 
+
 $request = array();
-$request['type'] = "login";
-$request['username'] = $_POST["username"];
-$request['password'] = $_POST["password"];
-$response = $client->send_request($request);
-//$response = $client->publish($request);
+
+$user = $_POST['loginusername'];
+$pass = $_POST['loginpassword'];
+
+$login = $_POST['loginbutton'];
+
+echo "{$login}";
+
+if (!is_null($login)) {
+    $request['type'] = "login";
+    $request['username'] = $user;
+    $request['password'] = $pass;
+    $response = $client->send_request($request);
+    //$response = $client->publish($request);
+
+    echo "client received username: {$user}".PHP_EOL;
+    echo "client received password: {$pass}".PHP_EOL;
+}
+
+$registeruser = $_POST['registerusername'];
+$registerpass = $_POST['registerpassword'];
+$registerpassconf = $_POST['registerpasswordconfirm'];
+$registeremail = $_POST['registeremail'];
+
+$signup = $_POST['signupbutton'];
+
+if (!is_null($signup)) {
+    $request['type'] = "register";
+    $request['username'] = $registeruser;
+    $request['password'] = $registerpass;
+    $request['email'] = $registeremail;
+    $response = $client->send_request($request);
+
+    echo "client received username: {$registeruser}".PHP_EOL;
+    echo "client received password: {$registerpass}".PHP_EOL;
+}
 
 echo "client received response: ".PHP_EOL;
+
 print_r($response);
 echo "\n\n";
 
