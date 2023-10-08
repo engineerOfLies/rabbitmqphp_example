@@ -31,7 +31,7 @@ body{
 	padding:90px 70px 50px 70px;
 }
 
-.options .logininfo, .options .sign-up-form{
+.options .logincard, .options .signupcard{
 	top:15px;
 	left:0;
 	right:0;
@@ -51,12 +51,12 @@ body{
 color: gray;
 } 
 
-.options .loginoption, .options .signupoption, .logincard .areaofuserinfo .check{
+.options .loginoption, .options .signupoption, .bothformscard .areaofuserinfo .check{
 	display:none;
 }
 
 /* Makes all the labels on the login form uppercase and bold*/
-.options .anoption, .logincard .areaofuserinfo .label, .logincard .areaofuserinfo .button{
+.options .anoption, .bothformscard .areaofuserinfo .label, .bothformscard .areaofuserinfo .button{
 	text-transform:uppercase;
 	font-weight: bold;
 }
@@ -75,7 +75,7 @@ color: gray;
 	color:#fff;
 	border-color:green;
 }
-.logincard{
+.bothformscard{
 	min-height:370px;
 	position:relative;
 	perspective:1000px;
@@ -83,33 +83,33 @@ color: gray;
 }
 
 
-.logincard .areaofuserinfo{
+.bothformscard .areaofuserinfo{
 	margin-bottom:15px;
 }
-.logincard .areaofuserinfo .label, .logincard .areaofuserinfo .input, .logincard .areaofuserinfo .button{
+.bothformscard .areaofuserinfo .label, .bothformscard .areaofuserinfo .input, .bothformscard .areaofuserinfo .button{
 	width:100%;
 	color:#fff;
 	display:block;
 }
-.logincard .areaofuserinfo .input, .logincard .areaofuserinfo .button{
+.bothformscard .areaofuserinfo .input, .bothformscard .areaofuserinfo .button{
 	border:none;
 	padding:15px 20px;
 	border-radius:25px;
 	background:rgba(255,255,255,.1);
 }
-.logincard .areaofuserinfo input[data-type="password"]{
+.bothformscard .areaofuserinfo input[data-type="password"]{
 	/*text-security:circle;*/
 	-webkit-text-security:circle;
 }
-.logincard .areaofuserinfo .label{
+.bothformscard .areaofuserinfo .label{
 	color:#aaa;
 	font-size:13px;
 }
-.logincard .areaofuserinfo .button{
+.bothformscard .areaofuserinfo .button{
 	background:green;
 }
 
-.logincard .areaofuserinfo label .icon{
+.bothformscard .areaofuserinfo label .icon{
 	width:15px;
 	height:15px;
 	border-radius:2px;
@@ -121,7 +121,7 @@ color: gray;
 }
 
 
-.logincard .areaofuserinfo label .icon:before, .logincard .areaofuserinfo label .icon:after{
+.bothformscard .areaofuserinfo label .icon:before, .bothformscard .areaofuserinfo label .icon:after{
 	content:'';
 	width:10px;
 	height:2px;
@@ -132,44 +132,44 @@ color: gray;
 
 
 
-.logincard .areaofuserinfo label .icon:before{
+.bothformscard .areaofuserinfo label .icon:before{
 	left:3px;
 	width:5px;
 	bottom:6px;
 	transform:scale(0) rotate(0);
 }
 
-.logincard .areaofuserinfo label .icon:after{
+.bothformscard .areaofuserinfo label .icon:after{
 	top:6px;
 	right:0;
 	transform:scale(0) rotate(0);
 }
 
-.logincard .areaofuserinfo .check:checked + label .icon:before{
+.bothformscard .areaofuserinfo .check:checked + label .icon:before{
 	transform:scale(1) rotate(45deg);
 }
-.logincard .areaofuserinfo .check:checked + label .icon:after{
+.bothformscard .areaofuserinfo .check:checked + label .icon:after{
 	transform:scale(1) rotate(-45deg);
 }
 
 /*After checking the checkbox, the test turns white*/
 /*TAKE out*/
-.logincard .areaofuserinfo .check:checked + label{
+.bothformscard .areaofuserinfo .check:checked + label{
 	color:#fff;
 }
 
 /*Color of the checkbox if it is checked*/
-.logincard .areaofuserinfo .check:checked + label .icon{
+.bothformscard .areaofuserinfo .check:checked + label .icon{
 	background: green;
 }
 
 /* Displays the login form after the flip from signup to login tabs*/
-.options .loginoption:checked + .anoption + .signupoption + .anoption + .logincard .logininfo{
+.options .loginoption:checked + .anoption + .signupoption + .anoption + .bothformscard .logincard{
 	transform:rotate(0);
 }
 
 /* Displays the signup form after the flip from login to signup tabs*/
-.options .signupoption:checked + .anoption + .logincard .sign-up-form{
+.options .signupoption:checked + .anoption + .bothformscard .signupcard{
 	transform:rotate(0);
 }
 

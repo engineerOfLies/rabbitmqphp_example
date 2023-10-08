@@ -12,8 +12,8 @@
 			<div class="options"> <!-- being able to switch between login and signup cards-->
 				<input id="tab-1" type="radio" name="option" class="loginoption" checked><label for="tab-1" class="anoption">Login</label>
 				<input id="tab-2" type="radio" name="option" class="signupoption"><label for="tab-2" class="anoption">Sign-Up</label>
-				<div class="logincard">
-					<div class="logininfo">
+				<div class="bothformscard">
+					<div class="logincard">
 						<div class="areaofuserinfo">
 							<label for="username" class="label">Username</label>
 							<input id="username" name="loginusername" type="text" class="input"  placeholder="Please enter your username">
@@ -29,9 +29,9 @@
 						<div class="areaofuserinfo">
 							<input type="submit" name="loginbutton" class="button" value="Log In">
 						</div>
-					</div> <!-- end of login card-->
+					</div> <!--Closing "logincard"-->
 					
-					<div class="sign-up-form">
+					<div class="signupcard">
 						<div class="areaofuserinfo">
 							<label for="username" class="label">Username</label>
 							<input id="username" name="registerusername" type="text" class="input" placeholder="Create a Username">
@@ -54,11 +54,11 @@
 						<div class="gotologin">
 							<label for="tab-1">Already a member? Click here to Login</label>
 						</div>
+					</div> <!--CLosing "signupcard"-->
 
-					</div>
-				</div>
-			</div>
-		</div> 
-	</form>
+				</div> <!--CLosing "bothformscard"-->
+			</div> <!--Closing "options"-->
+		</div> <!-- CLosing "entireform"--> 
+	</form> <!--closing form-->
 	</body>
 </html>
