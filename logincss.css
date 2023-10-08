@@ -3,13 +3,11 @@
 
 body{
 	font-family: sans-serif;
-	font: 600px 18px/20px;
 	color: green;
-	background: utl("tree.jpg"), no-repeat;
+	background: url("tree.jpg") no-repeat;
 	background-size: cover;
 	background-position: center;
-	/*overflow: hidden;*/
-} 
+	overflow: hidden;} 
 
 .entireform{
 	position: absolute;
@@ -20,45 +18,15 @@ body{
 	border-radius: 20px; /*rounds the edges of the form */
 	padding: 40px;
 	box-sizing: border-box;
-	background: black;}
-}
+	background: black;
+}}
 
-/*??*/
+/* For the card to flip between login and signup*/
 .options{
 	width:100%;
 	height:100%;
 	position:absolute;
 	padding:90px 70px 50px 70px;
-}
-
-.options .logincard, .options .signupcard{
-	top:15px;
-	left:0;
-	right:0;
-	bottom:0;
-	position:absolute;
-	transform:rotateY(180deg);
-	backface-visibility:hidden;
-	transition:all .4s linear;
-}
-
-.gotologin{
-	text-align:center;
-}
-
-/*placeholder text inside each input field*/
-::placeholder{
-color: gray;
-} 
-
-.options .loginoption, .options .signupoption, .bothformscard .areaofuserinfo .check{
-	display:none;
-}
-
-/* Makes all the labels on the login form uppercase and bold*/
-.options .anoption, .bothformscard .areaofuserinfo .label, .bothformscard .areaofuserinfo .button{
-	text-transform:uppercase;
-	font-weight: bold;
 }
 
 /*formatting for the "Login" and "Sign-Up" tabs */
@@ -71,10 +39,18 @@ color: gray;
 	display:inline-block;
 	border-bottom:4px solid transparent; /*tansparent allows it to not show under the tab that is not clicked on*/
 }
-.options .loginoption:checked + .anoption, .options .signupoption:checked + .anoption{
-	color:#fff;
-	border-color:green;
+
+.options .logincard, .options .signupcard{
+	top:15px;
+	left:0;
+	right:0;
+	bottom:0;
+	position:absolute;
+	transform:rotateY(180deg); /*For the two forms to be separate and flip 180 to switch between them*/
+	backface-visibility:hidden;/*HIdes the other form when one is being viewed*/
+	transition:.6s;
 }
+
 .bothformscard{
 	min-height:370px;
 	position:relative;
@@ -82,69 +58,93 @@ color: gray;
 	transform-style:preserve-3d;
 }
 
+/*placeholder text inside each input field*/
+::placeholder{
+color: gray;
+} 
 
-.bothformscard .areaofuserinfo{
-	margin-bottom:15px;
+.gotologin{
+	text-align:center;
 }
+
+/* To hide the radio button next to login and signup tabs */
+.options .loginoption, .options .signupoption, .bothformscard .areaofuserinfo .check{
+	display:none;
+}
+
+/* Makes all the labels on the login form uppercase and bold*/
+.options .anoption, .bothformscard .areaofuserinfo .label, .bothformscard .areaofuserinfo .button{
+	text-transform:uppercase;
+	font-weight: bold;
+}
+
+/*When you choose either Login or Signup tab, the text will turn white and the line underneath will be green */
+.options .loginoption:checked + .anoption, .options .signupoption:checked + .anoption{
+	color:#fff;
+	border-color:green;
+}
+
+/*Spacing between the input boxes on the forms*/
+.bothformscard .areaofuserinfo{
+	margin-bottom:30px;
+}
+
+/* Formatting for the labels for each text box, the text that the user types, and the text on the green buttons */
 .bothformscard .areaofuserinfo .label, .bothformscard .areaofuserinfo .input, .bothformscard .areaofuserinfo .button{
 	width:100%;
 	color:#fff;
 	display:block;
 }
-.bothformscard .areaofuserinfo .input, .bothformscard .areaofuserinfo .button{
+
+/* Formatting for background of each input text field */
+.bothformscard .areaofuserinfo .input{
 	border:none;
-	padding:15px 20px;
-	border-radius:25px;
-	background:rgba(255,255,255,.1);
+	padding:20px 20px;
+	border-radius:50px;
+	background: rgba(255,255,255,.1);
 }
-.bothformscard .areaofuserinfo input[data-type="password"]{
-	/*text-security:circle;*/
-	-webkit-text-security:circle;
-}
+
+/*Labels for each text field */
 .bothformscard .areaofuserinfo .label{
-	color:#aaa;
-	font-size:13px;
+	color:white;
+	font-size:14px;
 }
+
+/*Login and Signup button */
 .bothformscard .areaofuserinfo .button{
 	background:green;
+	border-radius:50px;
+	padding:20px 20px;
 }
 
+/*Remember Me checkbox  */
 .bothformscard .areaofuserinfo label .icon{
-	width:15px;
-	height:15px;
-	border-radius:2px;
+	width:20px;
+	height:20px;
+	border-radius:5px;
 	position:relative;
 	display:inline-block;
-	background:lightyellow ;
-	color: green;
-	font-weight: bold;
+	background:white ;
 }
 
-
+/* All formatting for the check in the Remember Me checkbox */
 .bothformscard .areaofuserinfo label .icon:before, .bothformscard .areaofuserinfo label .icon:after{
 	content:'';
-	width:10px;
+	width:14px;
 	height:2px;
-	background:#fff;
+	background:white;
 	position:absolute;
-	transition:all .1s ease-in-out 0s; /*how long it takes for the check to form in the checkbox*/
+	transition:all .2s ease-in-out 0s; /*how long it takes for the check to form in the checkbox*/
 }
-
-
-
 .bothformscard .areaofuserinfo label .icon:before{
 	left:3px;
 	width:5px;
-	bottom:6px;
-	transform:scale(0) rotate(0);
+	bottom:8px;
 }
-
 .bothformscard .areaofuserinfo label .icon:after{
-	top:6px;
+	top:8px;
 	right:0;
-	transform:scale(0) rotate(0);
 }
-
 .bothformscard .areaofuserinfo .check:checked + label .icon:before{
 	transform:scale(1) rotate(45deg);
 }
@@ -153,7 +153,6 @@ color: gray;
 }
 
 /*After checking the checkbox, the test turns white*/
-/*TAKE out*/
 .bothformscard .areaofuserinfo .check:checked + label{
 	color:#fff;
 }
@@ -162,6 +161,7 @@ color: gray;
 .bothformscard .areaofuserinfo .check:checked + label .icon{
 	background: green;
 }
+
 
 /* Displays the login form after the flip from signup to login tabs*/
 .options .loginoption:checked + .anoption + .signupoption + .anoption + .bothformscard .logincard{
