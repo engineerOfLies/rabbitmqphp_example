@@ -5,7 +5,7 @@ body{
 	font-family: sans-serif;
 	font: 600px 18px/20px;
 	color: green;
-	background: url('tree.jpg') no-repeat;
+	background: utl("tree.jpg"), no-repeat;
 	background-size: cover;
 	background-position: center;
 	/*overflow: hidden;*/
