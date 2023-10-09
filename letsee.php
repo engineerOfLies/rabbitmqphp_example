@@ -28,6 +28,8 @@ if (!is_null($login)) {
     $request['type'] = "login";
     $request['username'] = $user;
     $request['password'] = $pass;
+    $request['sessionId'] = $id;
+
     $response = $client->send_request($request);
     //$response = $client->publish($request);
 
