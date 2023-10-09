@@ -25,15 +25,15 @@ if (!is_null($login)) {
     $_SESSION['username'] = $user;
     $_SESSION['password'] = $pass;
 
-    //$request['type'] = "login";
-    //$request['username'] = $user;
-    //$request['password'] = $pass;
+    $request['type'] = "login";
+    $request['username'] = $user;
+    $request['password'] = $pass;
     $response = $client->send_request($request);
     //$response = $client->publish($request);
 
     echo "client received username: {$user}".PHP_EOL;
     echo "client received password: {$pass}".PHP_EOL;
-    
+
     session_commit();
 }
 
