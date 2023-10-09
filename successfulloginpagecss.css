@@ -51,3 +51,16 @@ a:link {
 	background: black;
 }
 
+/*Logout button */
+.welcome .returnhomearea .button{
+	background:blue;
+	border-radius:50px;
+	padding:10px 10px;
+}
+
+/*Logout button */
+.welcome .logoutarea .button{
+	background:green;
+	border-radius:50px;
+	padding:10px 10px;
+}
