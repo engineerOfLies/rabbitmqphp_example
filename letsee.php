@@ -8,22 +8,21 @@ $client = new rabbitMQClient("testRabbitMQ.ini","databaseServer");
 
 $request = array();
 
+// LOG IN USER ------  
 $user = $_POST['loginusername'];
 $pass = $_POST['loginpassword'];
-
 $login = $_POST['loginbutton'];
-
 echo "{$login}";
 
 if (!is_null($login)) {
+    session_start();
     $id = session_create_id();
     session_id($id);
     print("id: ".$id);
-    session_start();
 
     $_SESSION['type'] = "login";
     $_SESSION['username'] = $user;
-    $_SESSION['password'] = $pass;
+    $_SESSION['id'] = $id;
 
     $request['type'] = "login";
     $request['username'] = $user;
@@ -39,13 +38,42 @@ if (!is_null($login)) {
     session_commit();
 
     
-if (($response['result']) == '1') {
-    header('location:successfulloginpage.html');
+    // Go to successful login page if login is successful
+    if (($response['result']) == '1') {
+        header('location:successfulloginpage.html');
+        exit;
+    }
+
+}
+
+echo "line 49 reached:";
+
+// LOGOUT USER ---------
+$logout = $_POST['logoutbutton'];
+$request = array();
+
+if (!is_null($logout)) {
+    echo "line56:";
+    session_start();
+    $id = $_SESSION['id'];
+
+
+    $request['type'] = 'logout';
+    $request['sessionId'] = $id;
+  
+    $response = $client->send_request($request);
+    //$response = $client->publish($request);
+  
+    
+  if ($response == 1) {
+    header('location:login.html');
     exit;
+  }  
 }
 
-}
 
+
+// REGISTER NEW USER ------ SIGN UP  
 $registeruser = $_POST['registerusername'];
 $registerpass = $_POST['registerpassword'];
 $registerpassconf = $_POST['registerpasswordconfirm'];
