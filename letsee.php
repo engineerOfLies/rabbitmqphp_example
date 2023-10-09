@@ -16,14 +16,25 @@ $login = $_POST['loginbutton'];
 echo "{$login}";
 
 if (!is_null($login)) {
-    $request['type'] = "login";
-    $request['username'] = $user;
-    $request['password'] = $pass;
+    $id = session_create_id();
+    session_id($id);
+    print("id: ".$id);
+    session_start();
+
+    $_SESSION['type'] = "login";
+    $_SESSION['username'] = $user;
+    $_SESSION['password'] = $pass;
+
+    //$request['type'] = "login";
+    //$request['username'] = $user;
+    //$request['password'] = $pass;
     $response = $client->send_request($request);
     //$response = $client->publish($request);
 
     echo "client received username: {$user}".PHP_EOL;
     echo "client received password: {$pass}".PHP_EOL;
+    
+    session_commit();
 }
 
 $registeruser = $_POST['registerusername'];
