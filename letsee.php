@@ -37,6 +37,13 @@ if (!is_null($login)) {
     echo "client received password: {$pass}".PHP_EOL;
 
     session_commit();
+
+    
+if (($response['result']) == '1') {
+    header('location:successfulloginpage.html');
+    exit;
+}
+
 }
 
 $registeruser = $_POST['registerusername'];
@@ -60,6 +67,8 @@ if (!is_null($signup)) {
 echo "client received response: ".PHP_EOL;
 
 print_r($response);
+
+
 echo "\n\n";
 
 echo $argv[0]." END".PHP_EOL;
