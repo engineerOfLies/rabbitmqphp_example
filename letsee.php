@@ -44,7 +44,13 @@ if (!is_null($login)) {
         exit;
     }
 
+    else {
+      header('location:login.html');
+      exit;
+  }
+
 }
+
 
 echo "line 49 reached:";
 
