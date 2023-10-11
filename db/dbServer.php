@@ -13,7 +13,7 @@ if ($db->errno != 0)
 }
 echo "successfully connected to database".PHP_EOL;
 
-function doLogin($username,$password)
+function doLogin($username,$password,$sessid)
 {
     global $db;
     $query = "select * from Users where username='{$username}';";
@@ -34,7 +34,10 @@ function doLogin($username,$password)
     	$errmsg = "Incorrect password.";
     	return array("result"=>'0',"msg"=>$errmsg);
     }
-    return array("result"=>'1',"uid"=>$row["userid"]);
+    $success = createSession($row["userid"], $sessid);
+    if ($success)
+    	return array("result"=>'1'/*,"uid"=>$row["userid"]*/);
+    return array("result"=>'0',"msg"=>"Error registering session.");
 }
 function doRegister($username, $password, $email){
 	global $db;
@@ -88,7 +91,7 @@ function validateSession($sessid){
 }
 function logout($sessid){
 	global $db;
-	$query = "update Sessions set 'isactive'=0 where sessionid='{$sessid}';";
+	$query = "update Sessions set isactive='0' where sessionid='{$sessid}';";
 	$sqlResponse = $db->query($query);
 	
 	if ($db->errno != 0)
@@ -111,9 +114,9 @@ function requestProcessor($request)
   switch ($request['type'])
   {
     case "login":
-      return doLogin($request['username'],$request['password']);
-    case "create_session":
-      return createSession($request['userId'], $request['sessionId']);
+      return doLogin($request['username'],$request['password'],$request['sessionId']);
+    //case "create_session":
+    //  return createSession($request['userId'], $request['sessionId']);
     case "validate_session":
       return validateSession($request['sessionId']);
     case "logout":
