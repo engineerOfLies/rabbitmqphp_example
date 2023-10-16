@@ -1,8 +1,8 @@
 #!/usr/bin/php
 <?php
-require_once('path.inc');
-require_once('get_host_info.inc');
-require_once('rabbitMQLib.inc');
+require_once(__DIR__.'/../src/include/path.inc');
+require_once(__DIR__.'/../src/include/get_host_info.inc');
+require_once(__DIR__.'/../src/include/rabbitMQLib.inc');
 
 $db = new mysqli('127.0.0.1','dbManager','shackle','mainDB');
 
@@ -127,8 +127,9 @@ function requestProcessor($request)
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
-$server = new rabbitMQServer("testRabbitMQ.ini","databaseServer");	//For actual running.
-//$server = new rabbitMQServer("testRabbitMQ.ini","testServer");	//For testing on localhost.
+$server = new rabbitMQServer(__DIR__.'/../src/include/testRabbitMQ.ini',"databaseServer");	//For actual running.
+
+//$server = new rabbitMQServer(__DIR__.'/../src/include/testRabbitMQ.ini',"testServer");	//For testing on localhost.
 
 $server->process_requests('requestProcessor');
 exit();

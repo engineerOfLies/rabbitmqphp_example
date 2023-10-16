@@ -52,7 +52,7 @@ body{
 }
 
 .bothformscard{
-	min-height:370px;
+	min-height:505px;
 	position:relative;
 	perspective:1000px;
 	transform-style:preserve-3d;
