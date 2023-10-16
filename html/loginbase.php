@@ -1,7 +1,9 @@
 <?php
-require_once('../include/loginbase.php');
+
+require_once('../src/include/loginbase.inc');
 
 $client = new rabbitMQClient("testRabbitMQ.ini","databaseServer");
+
 
 
 $request = array();
@@ -38,7 +40,7 @@ if (!is_null($login)) {
     
     // Go to successful login page if login is successful
     if (($response['result']) == '1') {
-        header('location:successfulloginpage.html');
+        header('location:validlogin.html');
         exit;
     }
 
@@ -70,7 +72,7 @@ if (!is_null($logout)) {
   
     
   if ($response == 1) {
-    header('location:login.html');
+    header('location:home.html');
     exit;
   }  
 }
