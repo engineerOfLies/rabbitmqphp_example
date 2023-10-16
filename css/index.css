@@ -1,0 +1,28 @@
+/* CSS for index page */
+
+
+body{
+	font-family: sans-serif;
+    text-align: center;
+	color: green;
+	background: url("../images/tree.jpg") no-repeat;
+	background-size: cover;
+	background-position: center;
+	/*overflow: hidden;*/
+}
+
+p {
+    color: white;
+}
+
+.welcome{
+	position: absolute;
+	top: 50%; /*to center it vertically*/
+	left: 50%; /*to center it horizontally*/
+	transform: translate(-50%,-50%);
+	width: 500px; /* form takes up 50% of the width of the page, dynamic*/
+	border-radius: 20px; /*rounds the edges of the form */
+	padding: 50px;
+	box-sizing: border-box;
+	background: black;
+}
