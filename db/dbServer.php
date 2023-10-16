@@ -83,6 +83,7 @@ function validateSession($sessid){
     	//session does not exist.
     	return false;
     }
+    $row = $sqlResponse->fetch_assoc();
 	if($row["isactive"] == 0){
     	//session has already been logged out.
     	return false;
@@ -101,6 +102,27 @@ function logout($sessid){
 		return false;
 	}
 	return true;
+}
+
+function steam_setlink($sessid, $steamid){
+	global $db;
+	$query = "select userID from Sessions where sessionid='{$sessid}' and isactive='1';";
+	$sqlResponse = $db->query($query);
+	
+	if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+    if ($sqlResponse->num_rows == 0){
+    	//session does not exist.
+    	return false;
+    }
+    $row = $sqlResponse->fetch_assoc();
+    $uid = $row["userid"];
+    
+    $query = "update Users set steamID='{$steamid}' where userid='{$uid}';";
 }
 
 function requestProcessor($request)
