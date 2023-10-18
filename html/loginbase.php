@@ -96,7 +96,14 @@ if (!is_null($signup)) {
 
     echo "client received username: {$registeruser}".PHP_EOL;
     echo "client received password: {$registerpass}".PHP_EOL;
+
+    if ($response == 1) {
+      header('location:home.html');
+      exit;
+    }
 }
+
+
 
 echo "client received response: ".PHP_EOL;
 
