@@ -1,0 +1,86 @@
+/* CSS for sendsteamid page */
+
+
+body{
+	font-family: sans-serif;
+	color: blue;
+	background: url("../gradient.jpg") no-repeat;
+	background-size: cover;
+	/*background-position: center;*/
+	overflow: hidden;} 
+
+.entireform{
+	position: absolute;
+	top: 50%; /*to center it vertically*/
+	left: 50%; /*to center it horizontally*/
+	transform: translate(-50%,-50%);
+	width: 50%; /* form takes up 50% of the width of the page, dynamic*/
+	border-radius: 20px; /*rounds the edges of the form */
+	padding: 40px;
+	box-sizing: border-box;
+	background: black;
+}}
+
+/*formatting for the "Enter Steam ID" tab */
+.entireform .anoption{
+	font-size:30px;
+	margin-right:15px;
+	margin-left: 15px;
+	padding-bottom:10px;
+	margin:10px 10px 10px 150px;
+	display:inline-block;
+	border-bottom:4px solid transparent; /*tansparent allows it to not show under the tab that is not clicked on*/
+}
+
+
+/*placeholder text inside each input field*/
+::placeholder{
+    color: gray;
+} 
+
+/* To hide the radio button next to login and signup tabs */
+.entireform .enteroption, .entireform .areaofuserinfo .check{
+	display:none;
+}
+
+/* Makes all the labels on the login form uppercase and bold*/
+.entireform .areaofuserinfo .label, .entireform .areaofuserinfo .button{
+	text-transform:uppercase;
+	font-weight: bold;
+}
+
+
+/*Spacing between the input boxes on the forms*/
+.entireform .areaofuserinfo{
+	margin-bottom:30px;
+}
+
+
+/* Formatting for the labels for each text box, the text that the user types, and the text on the green buttons */
+.entireform .areaofuserinfo .label, .entireform .areaofuserinfo .input, .entireform .areaofuserinfo .button{
+	width:100%;
+	color:#fff;
+	display:block;
+}
+
+/* Formatting for background of each input text field */
+.entireform .areaofuserinfo .input{
+	border:none;
+	padding:20px 20px;
+	border-radius:50px;
+	background: rgba(255,255,255,.1);
+}
+
+/*Labels for each text field */
+.entireform .areaofuserinfo .label{
+	color:white;
+	font-size:14px;
+}
+
+/*Enter button */
+.entireform .areaofuserinfo .button{
+	background:blue;
+	border-radius:50px;
+	padding:20px 20px;
+}
+

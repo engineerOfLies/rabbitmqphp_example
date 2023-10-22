@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title> Sending Steam ID to DB</title>
+        <!-- link to css stylesheet, has all the formatting--> 
+		<link rel="stylesheet" href="css/sendsteamid.css">
+	
+    </head>
+
+    <body>
+		<form method="POST" action="steamidbase.php">
+
+	
+		<div class="entireform">
+				<input id="tab-1" type="radio" name="option" class="enteroption" checked><label for="tab-1" class="anoption">Enter Steam ID</label>
+
+					<div class="entersteamidcard">
+						<div class="areaofuserinfo">
+							<label for="username" class="label">Username</label>
+							<input id="username" name="loginusername" type="text" class="input"  placeholder="Please enter your username">
+						</div>
+						<div class="areaofuserinfo">
+							<label for="password" class="label">Password</label>
+							<input id="password" name="loginpassword" type="password" class="input" data-type="password" placeholder="Please enter your password">
+						</div>
+						<div class="areaofuserinfo">
+							<label for="steamid" class="label">SteamID</label>
+							<input id="steamid" name="loginsteamid" type="text" class="input"  placeholder="Please enter your Steam ID">
+						</div>
+						<div class="areaofuserinfo">
+							<input type="submit" name="enterbutton" class="button" value="Enter">
+						</div>
+					</div> <!--Closing "entersteamidcard"-->
+		</div> <!-- CLosing "entireform"--> 
+	</form> <!--closing form-->
+	</body>
+</html>
