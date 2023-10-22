@@ -13,6 +13,8 @@ if ($db->errno != 0)
 }
 echo "successfully connected to database".PHP_EOL;
 
+////	LOGIN/REGISTER FUNCS	////
+
 function doLogin($username,$password,$sessid)
 {
     global $db;
@@ -104,6 +106,8 @@ function logout($sessid){
 	return true;
 }
 
+////	USER STEAM FUNCS	////
+
 function steam_setlink($sessid, $steamid){
 	global $db;
 	$query = "select userID from Sessions where sessionid='{$sessid}' and isactive='1';";
@@ -121,9 +125,68 @@ function steam_setlink($sessid, $steamid){
     }
     $row = $sqlResponse->fetch_assoc();
     $uid = $row["userid"];
+	
+	//check if id is valid
+	$client = new rabbitMQClient("testRabbitMQ.ini","dmzServer");
+	$request = array();
+	$request['type'] = "check_steam_id";
+	$request['id'] = $steamid;
+	$response = $client->send_request($request);
+	
+	if($response = 0)
+		return false;
     
+    //put in database if valid
     $query = "update Users set steamID='{$steamid}' where userid='{$uid}';";
+    $sqlResponse = $db->query($query);
+    
+    if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+	
+	return true;
 }
+
+////	API STEAM FUNCS		////
+
+function refresh_steamtopgames($arr){
+	global $db;
+	$query = "delete from DailySteamTopGames;";
+	$sqlResponse = $db->query($query);
+	
+	if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+	
+	$query = "";
+	foreach($arr as $game){
+		$appid = $arr['appid'];
+		$name = $arr['name'];
+		$developer = $arr['developer'];
+		$price = $arr['price'];
+		$price = $price / 100.0;
+		$genre = $arr['genre'];
+		$tags = $arr['tags'];
+		$query .= "insert into DailySteamTopGames (appid, name, developer, price, genre, tags) values ('{$appid}','{$name}','{$developer}','{$price}','{$genre}','{$tags}'); ";
+	}
+	$sqlResponse = $db->query($query);
+	
+	if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+	return true;
+}
+
+////	BASICS TO RUN	////
 
 function requestProcessor($request)
 {
@@ -145,6 +208,10 @@ function requestProcessor($request)
       return logout($request['sessionId']);
     case "register":
       return doRegister($request['username'],$request['password'],$request['email']);
+    case "set_steam_link":
+    	return steam_setlink($request['sessionId'],$request['steamId']);
+    case "refresh_steamtopgames":
+    	return refresh_steamtopgames($request['games']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
