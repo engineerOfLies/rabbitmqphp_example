@@ -12,6 +12,10 @@ class rabbitMQServer
 	private $VHOST;
 	private $exchange;
 	private $queue;
+
+	private $dmzexchange;
+	private $dmzqueue;
+
 	private $routing_key = '*';
 	private $exchange_type = "topic";
 	private $auto_delete = false;
@@ -34,16 +38,21 @@ class rabbitMQServer
 		}
 		$this->exchange = $this->machine[$server]["EXCHANGE"];
 		$this->queue = $this->machine[$server]["QUEUE"];
+
+		$this->dmzexchange = $this->machine[$server]["DMZEXCHANGE"];
+		$this->dmzqueue = $this->machine[$server]["DMZQUEUE"];		
 	}
 
 	function process_message($msg)
 	{
 		// send the ack to clear the item from the queue
 		if ($msg->getRoutingKey() !== "*")
-    {
-      return;
-    }
-    $this->conn_queue->ack($msg->getDeliveryTag());
+    	{
+      		return;
+    	}
+
+    	$this->conn_queue->ack($msg->getDeliveryTag());
+
 		try
 		{
 			if ($msg->getReplyTo())
@@ -144,6 +153,8 @@ class rabbitMQClient
 	private $VHOST;
 	private $exchange;
 	private $queue;
+	private $dmzexchange;
+	private $dmzqueue;
 	private $routing_key = '*';
 	private $response_queue = array();
 	private $exchange_type = "topic";
@@ -166,6 +177,9 @@ class rabbitMQClient
 		}
 		$this->exchange = $this->machine[$server]["EXCHANGE"];
 		$this->queue = $this->machine[$server]["QUEUE"];
+
+		$this->dmzexchange = $this->machine[$server]["DMZEXCHANGE"];
+		$this->dmzqueue = $this->machine[$server]["DMZQUEUE"];		
 	}
 
 	function process_response($response)
