@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title> Logged in Successfully </title>
+        <!-- link to css stylesheet, has all the formatting--> 
+		<link rel="stylesheet" href="css/validlogin.css">
+    </head>
+
+    <body>
+        <div class = "welcome">
+            <h1> You have successfully logged in, USER</h1>
+            <p> Hope you have a great day</p>
+            <!--<a href="index.html"> Home page</a>-->
+            
+
+            <div class="returnhomearea">
+                <a href="index.html"> 
+                <input type="submit" name="homebutton" class="button" value="Home Page">
+                </a>
+            </div>
+            <br>
+            
+            <form method="POST" action="/html/loginbase.php">
+                <div class="logoutarea">
+                    <input type="submit" name="logoutbutton" class="button" value="Log Out">
+                </div>
+            </form>
+
+        </div>
+    </body>
+
+</html>
