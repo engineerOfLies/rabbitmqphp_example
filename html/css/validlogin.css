@@ -4,10 +4,10 @@
 body{
 	font-family: sans-serif;
   text-align: center;
-	color: green;
-	background: url("images/tree.jpg") no-repeat;
+	color: blue;
+	background: url("../gradient.jpg") no-repeat;
 	background-size: cover;
-	background-position: center;
+	/*background-position: center;*/
 	overflow: hidden;
 }
 
@@ -16,7 +16,7 @@ p{
 }
 
 a:link {
-    color: green;
+    color: blue;
     background-color: transparent;
     text-decoration: underline;
   }
@@ -28,7 +28,7 @@ a:link {
   }
   
   a:hover {
-    color: blue;
+    color: green;
     background-color: transparent;
     text-decoration: underline;
   }
@@ -60,7 +60,7 @@ a:link {
 
 /*Logout button */
 .welcome .logoutarea .button{
-	background:green;
+	background:blue;
 	border-radius:50px;
 	padding:10px 10px;
 }

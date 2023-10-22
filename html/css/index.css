@@ -4,11 +4,11 @@
 body{
 	font-family: sans-serif;
     text-align: center;
-	color: green;
-	background: url("../images/tree.jpg") no-repeat;
+	color: blue;
+	background: url("../gradient.jpg") no-repeat;
 	background-size: cover;
-	background-position: center;
-	/*overflow: hidden;*/
+	/*background-position: center;*/
+	overflow: hidden;
 }
 
 p {
