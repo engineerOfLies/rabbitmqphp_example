@@ -12,10 +12,6 @@ class rabbitMQServer
 	private $VHOST;
 	private $exchange;
 	private $queue;
-
-	private $dmzexchange;
-	private $dmzqueue;
-
 	private $routing_key = '*';
 	private $exchange_type = "topic";
 	private $auto_delete = false;
@@ -153,8 +149,6 @@ class rabbitMQClient
 	private $VHOST;
 	private $exchange;
 	private $queue;
-	private $dmzexchange;
-	private $dmzqueue;
 	private $routing_key = '*';
 	private $response_queue = array();
 	private $exchange_type = "topic";
@@ -176,10 +170,7 @@ class rabbitMQClient
 			$this->auto_delete = $this->machine[$server]["AUTO_DELETE"];
 		}
 		$this->exchange = $this->machine[$server]["EXCHANGE"];
-		$this->queue = $this->machine[$server]["QUEUE"];
-
-		$this->dmzexchange = $this->machine[$server]["DMZEXCHANGE"];
-		$this->dmzqueue = $this->machine[$server]["DMZQUEUE"];		
+		$this->queue = $this->machine[$server]["QUEUE"];		
 	}
 
 	function process_response($response)
