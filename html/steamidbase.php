@@ -1,32 +1,24 @@
 <?php
 
-require_once('../src/include/loginbase.inc'); //??
+require_once('../src/include/loginbase.inc'); 
 
-$client = new rabbitMQClient("testRabbitMQ.ini","databaseServer"); //??
+$client = new rabbitMQClient("testRabbitMQ.ini","databaseServer"); 
 
 $request = array();
 
 // ENTER STEAM ID 
-$user = $_POST['loginusername'];
-$pass = $_POST['loginpassword'];
 $steamId = $_POST['loginsteamid'];
 $enter = $_POST['enterbutton'];
+echo "line12";
 
 
 if (!is_null($enter)) {
     session_start();
-    $id = session_create_id();
-    session_id($id);
-    print("id: ".$id);
+    $id = $_SESSION['id'];
 
-    $_SESSION['type'] = "set_steam_link";
-    $_SESSION['username'] = $user;
-    $_SESSION['id'] = $id;
 
     $request['type'] = "set_steam_link";
-    $request['username'] = $user;
-    $request['password'] = $pass;
-    $request['steamId'] = $sid;
+    $request['steamId'] = $steamId;
     $request['sessionId'] = $id;
 
     $response = $client->send_request($request);
@@ -39,7 +31,7 @@ if (!is_null($enter)) {
 
     
     // Go to index page if successful
-    if (($response['result']) == '1') {
+    if ($response == 1) {
         header('location:index.html');
         exit;
     }
