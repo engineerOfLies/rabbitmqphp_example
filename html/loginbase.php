@@ -44,13 +44,15 @@ if (!is_null($login)) {
         exit;
     }
 
+    // If login is not successful, pop up message then return to login page
     else {
-      header('location:login.html');
-      exit;
+     // echo '<script>alert("Incorrect Username or Password")</script>';
+      echo '<script>if(confirm("Incorrect Username or Password")){document.location.href="home.html"};</script>';
+      //header('location:home.html');
+      //exit;
   }
 
 }
-
 
 echo "line 49 reached:";
 

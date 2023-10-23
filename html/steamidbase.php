@@ -36,10 +36,15 @@ if (!is_null($enter)) {
         exit;
     }
 
+    // If not successful, pop up message then return to steamid page
     else {
-      header('location:sendsteamid.html');
-      exit;
-  }
+      echo '<script>if(confirm("Incorrect Steam ID")){document.location.href="steamid.html"};</script>';
+    }
+  
+  //  else {
+  //   header('location:sendsteamid.html');
+  //  exit;
+  //}
 
 }
 
