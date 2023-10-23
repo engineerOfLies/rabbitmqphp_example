@@ -62,7 +62,7 @@ function check_steam_id($id)
 {
   $apikey = '6F640B29184C9FE8394A82EEAEFC9A8B';  //how tf do I store this securely???
   $steamid = 76561198118290580; //get the steamid from wherever else it's needed
-  $url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=6F640B29184C9FE8394A82EEAEFC9A8B&steamids=$steamid";
+  $url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=6F640B29184C9FE8394A82EEAEFC9A8B&steamids=$id";
 
   $profileData= callAPI($url);
 
@@ -76,18 +76,18 @@ function check_steam_id($id)
         {
             foreach($obj3 as $param=>$passedVal)
             {
-                if(!($param == 'communityvisibilitystate' && $passedVal == 3))
+                if($param == 'communityvisibilitystate' && $passedVal == 3)
                 {
-                  echo "Given STEAM id is invalid or inaccessible, user error".php_EOL;
-                  return false;
+                  echo "Given STEAM id valid, returning true".PHP_EOL;
+                  return true;
                 }
-                echo $passedVal."\n";
+                //echo $passedVal."\n";
             }
         }
     }
   }
-  echo "Given STEAM id valid, returning true".php_EOL;
-	return true;
+  echo "Given STEAM id is invalid or inaccessible, user error".PHP_EOL;
+	return false;
 }
 
 function requestProcessor($request)

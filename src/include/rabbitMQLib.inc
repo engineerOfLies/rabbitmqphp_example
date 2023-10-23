@@ -34,9 +34,6 @@ class rabbitMQServer
 		}
 		$this->exchange = $this->machine[$server]["EXCHANGE"];
 		$this->queue = $this->machine[$server]["QUEUE"];
-
-		$this->dmzexchange = $this->machine[$server]["DMZEXCHANGE"];
-		$this->dmzqueue = $this->machine[$server]["DMZQUEUE"];		
 	}
 
 	function process_message($msg)
