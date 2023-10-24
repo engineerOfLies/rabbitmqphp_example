@@ -193,6 +193,58 @@ function get_app_info($id)
 	return false;
 }
 
+function get_app_news($appId)
+{
+  $apikey = '6F640B29184C9FE8394A82EEAEFC9A8B';  //how tf do I store this securely???
+  $steamid = 76561198118290580; //get the steamid from wherever else it's needed
+  $url = "https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?key=6F640B29184C9FE8394A82EEAEFC9A8B&appid=$appId&count=1";
+
+  $newsArray = array();
+
+  $newsTitle;
+  $newsAuthor;
+  $newsContent;
+
+  $profileData= callAPI($url);
+
+  $profileDecode = json_decode($profileData);
+  //var_dump($profileDecode);
+  foreach($profileDecode as $appnews=>$obj1)
+  {
+    foreach($obj1 as $newsitems=>$obj2)
+    {
+        foreach($obj2 as $gameIndex=>$obj3)
+        {
+          if($param == 'title' && $passedVal != NULL)
+          {
+            $newsTitle = $passedVal;
+            $newsArray[] = $newsTitle;
+          }
+          else if($param == 'author' && $passedVal != NULL)
+          {
+            $newsAuthor = $passedVal;
+            $newsArray[] = $newsAuthor;
+          }
+          else if($param == 'contents' && $passedVal != NULL)
+          {
+            $newsContent = $passedVal;
+            $newsArray[] = $newsContent;
+          }
+        }
+    }
+  }
+
+  if(empty($newsArray))
+  {
+    echo "News array empty, malformed for loop or bad appId".PHP_EOL;
+    return false;
+  }
+
+  echo "Given library was populated, returning array".PHP_EOL;
+	return $newsArray;
+}
+
+
 function requestProcessor($request)
 {
   echo "received request".PHP_EOL;
@@ -213,8 +265,10 @@ function requestProcessor($request)
       return get_steam_avatar($request['id']);
     case "get_user_library":
       return get_user_library($request['id']);
-      case "get_app_info":
-        return get_app_info($request['id']);
+    case "get_app_info":
+      return get_app_info($request['id']);
+    case "get_app_news":
+      return get_app_news($request['id']);
     //case "get_game_news":
       //return get_game_news:($request[])
       //return a collection of news information based on passed in array of idays
