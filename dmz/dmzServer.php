@@ -56,8 +56,6 @@ function callAPI($url)
 }
 
 
-
-
 function check_steam_id($id)
 {
   $apikey = '6F640B29184C9FE8394A82EEAEFC9A8B';  //how tf do I store this securely???
@@ -90,6 +88,111 @@ function check_steam_id($id)
 	return false;
 }
 
+function get_steam_username($id)
+{
+  $apikey = '6F640B29184C9FE8394A82EEAEFC9A8B';  //how tf do I store this securely???
+  $steamid = 76561198118290580; //get the steamid from wherever else it's needed
+  $url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=6F640B29184C9FE8394A82EEAEFC9A8B&steamids=$id";
+
+  $profileData= callAPI($url);
+
+  $profileDecode = json_decode($profileData);
+  //var_dump($profileDecode);
+  foreach($profileDecode as $response=>$obj1)
+  {
+    foreach($obj1 as $players=>$obj2)
+    {
+        foreach($obj2 as $hidden=>$obj3)
+        {
+            foreach($obj3 as $param=>$passedVal)
+            {
+                if($param == 'personaname' && $passedVal != NULL)
+                {
+                  echo "Given username is valid, returning true".PHP_EOL;
+                  return $passedVal;
+                }
+            }
+        }
+    }
+  }
+  echo "Given username is invalid or inaccessible, user error".PHP_EOL;
+	return false;
+}
+
+function get_steam_avatar($id)
+  {
+    $apikey = '6F640B29184C9FE8394A82EEAEFC9A8B';  //how tf do I store this securely???
+    $steamid = 76561198118290580; //get the steamid from wherever else it's needed
+    $url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=6F640B29184C9FE8394A82EEAEFC9A8B&steamids=$id";
+  
+    $profileData= callAPI($url);
+  
+    $profileDecode = json_decode($profileData);
+    //var_dump($profileDecode);
+    foreach($profileDecode as $response=>$obj1)
+    {
+      foreach($obj1 as $players=>$obj2)
+      {
+          foreach($obj2 as $hidden=>$obj3)
+          {
+              foreach($obj3 as $param=>$passedVal)
+              {
+                  if($param == 'avatarmedium' && $passedVal != NULL)
+                  {
+                    echo "Given avatar url is valid, returning true".PHP_EOL;
+                    return $passedVal;
+                  }
+              }
+          }
+      }
+    }
+    echo "Given avatar url is invalid or inaccessible, id error".PHP_EOL;
+    return false;
+}
+
+
+function get_user_library($id)
+{
+  $apikey = '6F640B29184C9FE8394A82EEAEFC9A8B';  //how tf do I store this securely???
+  $steamid = 76561198118290580; //get the steamid from wherever else it's needed
+  $url = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=6F640B29184C9FE8394A82EEAEFC9A8B&include_played_free_games=true&include_free_sub=true&steamid=$id";
+
+  $appidArray = array();
+
+  $profileData= callAPI($url);
+
+  $profileDecode = json_decode($profileData);
+  //var_dump($profileDecode);
+  foreach($profileDecode as $response=>$obj1)
+  {
+    foreach($obj1 as $games=>$obj2)
+    {
+        foreach($obj2 as $gameIndex=>$obj3)
+        {
+          if($param == 'appid' && $passedVal != NULL)
+          {
+            $appidArray[] = $passedVal;
+          }
+        }
+    }
+  }
+
+  if(empty($appidArray))
+  {
+    echo "Library was empty or for loop malformed, error.".PHP_EOL;
+    return false;
+  }
+
+  echo "Given library was populated, returning array".PHP_EOL;
+	return $appidArray;
+}
+
+function get_app_info($id)
+{
+  //Acquire info and tags, Not implemented
+	return false;
+}
+
 function requestProcessor($request)
 {
   echo "received request".PHP_EOL;
@@ -104,6 +207,14 @@ function requestProcessor($request)
   {
 	  case "check_steam_id":
 	    return check_steam_id($request['id']);
+    case "get_steam_username":
+      return get_steam_username($request['id']);
+    case "get_steam_avatar":
+      return get_steam_avatar($request['id']);
+    case "get_user_library":
+      return get_user_library($request['id']);
+      case "get_app_info":
+        return get_app_info($request['id']);
     //case "get_game_news":
       //return get_game_news:($request[])
       //return a collection of news information based on passed in array of idays
