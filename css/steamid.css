@@ -21,6 +21,11 @@ body{
 	background: black;
 }
 
+/* To hide the radio button next to "Enter Steam ID" tab */
+.entireform .enteroption{
+	display:none;
+}
+
 /*formatting for the "Enter Steam ID" tab */
 .entireform .anoption{
 	font-size:30px;
@@ -32,38 +37,20 @@ body{
 	border-bottom:4px solid transparent; /*tansparent allows it to not show under the tab that is not clicked on*/
 }
 
-
-/*placeholder text inside each input field*/
-::placeholder{
-    color: gray;
-} 
-
-/* To hide the radio button next to login and signup tabs */
-.entireform .enteroption, .entireform .areaofuserinfo .check{
-	display:none;
-}
-
-/* Makes all the labels on the login form uppercase and bold*/
+/* Makes all the labels on the form uppercase and bold*/
 .entireform .areaofuserinfo .label, .entireform .areaofuserinfo .button{
 	text-transform:uppercase;
 	font-weight: bold;
 }
 
-
-/*Spacing between the input boxes on the forms*/
-.entireform .areaofuserinfo{
-	margin-bottom:30px;
-}
-
-
-/* Formatting for the labels for each text box, the text that the user types, and the text on the green buttons */
+/* Formatting for the label for the text box, the text that the user types, and the text on the button */
 .entireform .areaofuserinfo .label, .entireform .areaofuserinfo .input, .entireform .areaofuserinfo .button{
 	width:100%;
 	color:#fff;
 	display:block;
 }
 
-/* Formatting for background of each input text field */
+/* Formatting for background of the input text field */
 .entireform .areaofuserinfo .input{
 	border:none;
 	padding:20px 20px;
@@ -71,11 +58,15 @@ body{
 	background: rgba(255,255,255,.1);
 }
 
-/*Labels for each text field */
-.entireform .areaofuserinfo .label{
-	color:white;
-	font-size:14px;
+/*Spacing between the input box and button*/
+.entireform .areaofuserinfo{
+	margin-bottom:30px;
 }
+
+/*placeholder text inside the input field*/
+::placeholder{
+    color: gray;
+} 
 
 /*Enter button */
 .entireform .areaofuserinfo .button{

@@ -15,6 +15,35 @@ p{
     color: white;
 }
 
+.welcome{
+	position: absolute;
+	top: 50%; /*to center it vertically*/
+	left: 50%; /*to center it horizontally*/
+	transform: translate(-50%,-50%);
+	width: 600px; /* form takes up 50% of the width of the page, dynamic*/
+	border-radius: 20px; /*rounds the edges of the form */
+	padding: 40px;
+	box-sizing: border-box;
+	background: black;
+}
+
+/* Aligning the buttons in a straight line */
+.welcome .lineup {
+  display: flex;
+ 
+}
+
+/*All buttons */
+.lineup .returnhomearea .button, .logoutarea .button, .steamarea .button{
+	background:blue;
+  min-width: 100px;
+  min-height: 50px;
+	border-radius:50px;
+  margin: 35px; 
+	padding:10px 10px;
+}
+
+/*
 a:link {
     color: blue;
     background-color: transparent;
@@ -38,23 +67,4 @@ a:link {
     background-color: transparent;
     text-decoration: underline;
   }
-
-.welcome{
-	position: absolute;
-	top: 50%; /*to center it vertically*/
-	left: 50%; /*to center it horizontally*/
-	transform: translate(-50%,-50%);
-	width: 600px; /* form takes up 50% of the width of the page, dynamic*/
-	border-radius: 20px; /*rounds the edges of the form */
-	padding: 40px;
-	box-sizing: border-box;
-	background: black;
-}
-
-/*All buttons */
-.welcome .returnhomearea .button, .logoutarea .button, .steamarea .button{
-	background:blue;
-	border-radius:50px;
-	padding:10px 10px;
-}
-
+*/
