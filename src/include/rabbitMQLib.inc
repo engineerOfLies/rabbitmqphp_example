@@ -177,13 +177,12 @@ class rabbitMQClient
 	function process_response($response)
 	{
 		$uid = $response->getCorrelationId();
-		$this->conn_queue->ack($response->getDeliveryTag());
 		if (!isset($this->response_queue[$uid]))
 		{
 		  echo  "unknown uid\n";
 		  return true;
 		}
-    	//$this->conn_queue->ack($response->getDeliveryTag());
+    	$this->conn_queue->ack($response->getDeliveryTag());
 		$body = $response->getBody();
 		$payload = json_decode($body, true);
 		if (!(isset($payload)))
@@ -201,12 +200,12 @@ class rabbitMQClient
 		$json_message = json_encode($message);
 		try
 		{
-      $params = array();
-      $params['host'] = $this->BROKER_HOST;
-      $params['port'] = $this->BROKER_PORT;
-      $params['login'] = $this->USER;
-      $params['password'] = $this->PASSWORD;
-      $params['vhost'] = $this->VHOST;
+      		$params = array();
+      		$params['host'] = $this->BROKER_HOST;
+      		$params['port'] = $this->BROKER_PORT;
+      		$params['login'] = $this->USER;
+      		$params['password'] = $this->PASSWORD;
+      		$params['vhost'] = $this->VHOST;
 
 			$conn = new AMQPConnection($params);
 			$conn->connect();
@@ -214,12 +213,12 @@ class rabbitMQClient
 			$channel = new AMQPChannel($conn);
 
 			$exchange = new AMQPExchange($channel);
-      $exchange->setName($this->exchange);
-      $exchange->setType($this->exchange_type);
+      		$exchange->setName($this->exchange);
+		    $exchange->setType($this->exchange_type);
 
-      $callback_queue = new AMQPQueue($channel);
-      $callback_queue->setName($this->queue."_response");
-      $callback_queue->declare();
+      		$callback_queue = new AMQPQueue($channel);
+      		$callback_queue->setName($this->queue."_response");
+      		$callback_queue->declare();
 			$callback_queue->bind($exchange->getName(),$this->routing_key.".response");
 
 			$this->conn_queue = new AMQPQueue($channel);
@@ -227,11 +226,18 @@ class rabbitMQClient
 			$this->conn_queue->bind($exchange->getName(),$this->routing_key);
 
 			$exchange->publish($json_message,$this->routing_key,AMQP_NOPARAM,array('reply_to'=>$callback_queue->getName(),'correlation_id'=>$uid));
-      $this->response_queue[$uid] = "waiting";
+      		$this->response_queue[$uid] = "waiting";
+
+			echo "about to consume one way message message".PHP_EOL;
+			
 			$callback_queue->consume(array($this,'process_response'));
+			
+			echo "consume function was presumably called".PHP_EOL;
 
 			$response = $this->response_queue[$uid];
 			unset($this->response_queue[$uid]);
+
+			echo "about to return my response".PHP_EOL;
 			return $response;
 		}
 		catch(Exception $e)
