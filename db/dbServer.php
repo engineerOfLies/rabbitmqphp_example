@@ -39,6 +39,10 @@ function doLogin($username,$password,$sessid)
     $success = createSession($row["userid"], $sessid);
     if ($success)
     	return array("result"=>'1'/*,"uid"=>$row["userid"]*/);
+    /*
+    if($row['steamID'] != NULL){
+    	steam_getUserData($userid, $row['steamID']);
+    }*/
     return array("result"=>'0',"msg"=>"Error registering session.");
 }
 function doRegister($username, $password, $email){
@@ -108,6 +112,34 @@ function logout($sessid){
 
 ////	USER STEAM FUNCS	////
 
+function steam_getUserData($userid, $steamid){
+	global $db;
+	
+	$client = new rabbitMQClient("testRabbitMQ.ini","dmzServer");
+	$request = array();
+	$request['type'] = "check_steam_profile";
+	$request['id'] = $steamid;
+	$response = $client->send_request($request);
+	
+	if($response == 0)
+		return false;
+	
+	$un = $response['username'];
+	$av = $response['avatar'];
+	
+	$query = "insert into SteamUsers (userID, steamName, avatar) values ('{$userid}', '{$un}', '{$av}') on duplicate key update steamName='{$un}', avatar='{$av}'";
+	$sqlResponse = $db->query($query);
+	
+	if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+	
+	return true;
+}
+
 function steam_setlink($sessid, $steamid){
 	global $db;
 	$query = "select userID from Sessions where sessionid='{$sessid}' and isactive='1';";
@@ -121,10 +153,11 @@ function steam_setlink($sessid, $steamid){
 	}
     if ($sqlResponse->num_rows == 0){
     	//session does not exist.
+		echo "Returning false, since it was not a valid sessionID.".PHP_EOL;
     	return false;
     }
     $row = $sqlResponse->fetch_assoc();
-    $uid = $row["userid"];
+    $uid = $row["userID"];
 	
 	//check if id is valid
 	$client = new rabbitMQClient("testRabbitMQ.ini","dmzServer");
@@ -133,8 +166,12 @@ function steam_setlink($sessid, $steamid){
 	$request['id'] = $steamid;
 	$response = $client->send_request($request);
 	
-	if($response = 0)
+	var_dump($response);
+	
+	if($response == 0){
+		echo "Returning false, since it was not a valid SteamID.".PHP_EOL;
 		return false;
+	}
     
     //put in database if valid
     $query = "update Users set steamID='{$steamid}' where userid='{$uid}';";
@@ -146,7 +183,7 @@ function steam_setlink($sessid, $steamid){
 		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
 		return false;
 	}
-	
+	echo "Returning true.".PHP_EOL;
 	return true;
 }
 
@@ -183,6 +220,7 @@ function refresh_steamtopgames($arr){
 		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
 		return false;
 	}
+	echo "Returning true.".PHP_EOL;
 	return true;
 }
 
