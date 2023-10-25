@@ -177,19 +177,40 @@ class rabbitMQClient
 	function process_response($response)
 	{
 		$uid = $response->getCorrelationId();
+
+		echo "Correlation Id retrieved from uid".PHP_EOL;
+
 		if (!isset($this->response_queue[$uid]))
 		{
 		  echo  "unknown uid\n";
 		  return true;
 		}
+
+		echo "Beyond Conditional".PHP_EOL;
+
     	$this->conn_queue->ack($response->getDeliveryTag());
+
+		echo "Attempted to acknowledge for response".PHP_EOL;
+
 		$body = $response->getBody();
+
+		echo "Acquired body of response".PHP_EOL;
+
 		$payload = json_decode($body, true);
+
+		echo "Decoding of json for paylod in body".PHP_EOL;
+
 		if (!(isset($payload)))
 		{
 			$payload = "[empty response]";
+			echo "If that payload wasn't set, filling it with empty response".PHP_EOL;
 		}
+
+		echo "About to set payload to response queue's uid index".PHP_EOL;
+
 		$this->response_queue[$uid] = $payload;
+
+		echo "Set value, going to return false".PHP_EOL;
 		return false;
 	}
 
