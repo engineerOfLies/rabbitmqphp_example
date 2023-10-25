@@ -5,7 +5,7 @@ body{
 	font-family: sans-serif;
     text-align: center;
 	color: blue;
-	background: url("../gradient.jpg") no-repeat;
+	background: url("../../images/gradient.jpg") no-repeat;
 	background-size: cover;
 	/*background-position: center;*/
 	overflow: hidden;
