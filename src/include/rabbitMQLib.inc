@@ -177,40 +177,19 @@ class rabbitMQClient
 	function process_response($response)
 	{
 		$uid = $response->getCorrelationId();
-
-		echo "Correlation Id retrieved from uid".PHP_EOL;
-
 		if (!isset($this->response_queue[$uid]))
 		{
 		  echo  "unknown uid\n";
 		  return true;
 		}
-
-		echo "Beyond Conditional".PHP_EOL;
-
     	$this->conn_queue->ack($response->getDeliveryTag());
-
-		echo "Attempted to acknowledge for response".PHP_EOL;
-
 		$body = $response->getBody();
-
-		echo "Acquired body of response".PHP_EOL;
-
 		$payload = json_decode($body, true);
-
-		echo "Decoding of json for paylod in body".PHP_EOL;
-
 		if (!(isset($payload)))
 		{
 			$payload = "[empty response]";
-			echo "If that payload wasn't set, filling it with empty response".PHP_EOL;
 		}
-
-		echo "About to set payload to response queue's uid index".PHP_EOL;
-
 		$this->response_queue[$uid] = $payload;
-
-		echo "Set value, going to return false".PHP_EOL;
 		return false;
 	}
 
@@ -238,7 +217,7 @@ class rabbitMQClient
 		    $exchange->setType($this->exchange_type);
 
       		$callback_queue = new AMQPQueue($channel);
-      		$callback_queue->setName($this->queue."_response");
+      		$callback_queue->setName($this->queue."_response_").time();
       		$callback_queue->declare();
 			$callback_queue->bind($exchange->getName(),$this->routing_key.".response");
 
@@ -248,17 +227,9 @@ class rabbitMQClient
 
 			$exchange->publish($json_message,$this->routing_key,AMQP_NOPARAM,array('reply_to'=>$callback_queue->getName(),'correlation_id'=>$uid));
       		$this->response_queue[$uid] = "waiting";
-
-			echo "about to consume one way message message".PHP_EOL;
-			
 			$callback_queue->consume(array($this,'process_response'));
-			
-			echo "consume function was presumably called".PHP_EOL;
-
 			$response = $this->response_queue[$uid];
 			unset($this->response_queue[$uid]);
-
-			echo "about to return my response".PHP_EOL;
 			return $response;
 		}
 		catch(Exception $e)
