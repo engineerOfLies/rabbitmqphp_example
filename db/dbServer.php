@@ -39,10 +39,14 @@ function doLogin($username,$password,$sessid)
     $success = createSession($row["userid"], $sessid);
     if ($success)
     	return array("result"=>'1'/*,"uid"=>$row["userid"]*/);
-    /*
+    
     if($row['steamID'] != NULL){
-    	steam_getUserData($userid, $row['steamID']);
-    }*/
+		$importedData = steam_getUserData($uid, $row['steamID']);
+		if($importedData)
+			echo "Successfully imported user info.".PHP_EOL;
+		else
+			echo "Unsuccessfully imported user info.".PHP_EOL;
+    }
     return array("result"=>'0',"msg"=>"Error registering session.");
 }
 function doRegister($username, $password, $email){
@@ -121,6 +125,9 @@ function steam_getUserData($userid, $steamid){
 	$request['id'] = $steamid;
 	$response = $client->send_request($request);
 	
+	//unset($client);
+	
+	
 	if($response == 0)
 		return false;
 	
@@ -166,6 +173,9 @@ function steam_setlink($sessid, $steamid){
 	$request['id'] = $steamid;
 	$response = $client->send_request($request);
 	
+	//unset($client);
+	
+	
 	var_dump($response);
 	
 	if($response == 0){
@@ -184,6 +194,13 @@ function steam_setlink($sessid, $steamid){
 		return false;
 	}
 	echo "Returning true.".PHP_EOL;
+	
+	$importedData = steam_getUserData($uid, $steamid);
+	if($importedData)
+		echo "Successfully imported user info.".PHP_EOL;
+	else
+		echo "Unsuccessfully imported user info.".PHP_EOL;
+		
 	return true;
 }
 
