@@ -36,17 +36,20 @@ function doLogin($username,$password,$sessid)
     	$errmsg = "Incorrect password.";
     	return array("result"=>'0',"msg"=>$errmsg);
     }
-    $success = createSession($row["userid"], $sessid);
-    if ($success)
-    	return array("result"=>'1'/*,"uid"=>$row["userid"]*/);
     
     if($row['steamID'] != NULL){
-		$importedData = steam_getUserData($uid, $row['steamID']);
+		$importedData = steam_getUserData($row['userid'], $row['steamID']);
 		if($importedData)
 			echo "Successfully imported user info.".PHP_EOL;
 		else
 			echo "Unsuccessfully imported user info.".PHP_EOL;
     }
+    $sqlResponse->close();
+    $db->next_result();
+    
+    $success = createSession($row["userid"], $sessid);
+    if ($success)
+    	return array("result"=>'1',"uid"=>$row["userid"]);
     return array("result"=>'0',"msg"=>"Error registering session.");
 }
 function doRegister($username, $password, $email){
@@ -91,13 +94,19 @@ function validateSession($sessid){
 	}
     if ($sqlResponse->num_rows == 0){
     	//session does not exist.
+    	$sqlResponse->close();
+    	$db->next_result();
     	return false;
     }
     $row = $sqlResponse->fetch_assoc();
 	if($row["isactive"] == 0){
     	//session has already been logged out.
+		$sqlResponse->close();
+		$db->next_result();
     	return false;
     }
+    $sqlResponse->close();
+    $db->next_result();
 	return true;
 }
 function logout($sessid){
@@ -119,9 +128,32 @@ function logout($sessid){
 function steam_getUserData($userid, $steamid){
 	global $db;
 	
+	$query = "select lastSync from SteamUsers where userID='{$userid}';";
+	$sqlResponse = $db->query($query);
+	
+	if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+	
+	if($sqlResponse->num_rows > 0){
+		$row = $sqlResponse->fetch_assoc();
+		$sync = strtotime($row['lastSync']);
+		if(time() - $sync < 300){
+			/*echo "Refusing to sync, it has not been 5 minutes.".PHP_EOL;
+			$sqlResponse->close();
+			$db->next_result();
+			return false;*/
+		}
+	}
+    $sqlResponse->close();
+    $db->next_result();
+	
 	$client = new rabbitMQClient("testRabbitMQ.ini","dmzServer");
 	$request = array();
-	$request['type'] = "check_steam_profile";
+	$request['type'] = "get_steam_profile";
 	$request['id'] = $steamid;
 	$response = $client->send_request($request);
 	
@@ -134,7 +166,43 @@ function steam_getUserData($userid, $steamid){
 	$un = $response['username'];
 	$av = $response['avatar'];
 	
-	$query = "insert into SteamUsers (userID, steamName, avatar) values ('{$userid}', '{$un}', '{$av}') on duplicate key update steamName='{$un}', avatar='{$av}'";
+	$query = "insert into SteamUsers (userID, steamName, avatar) values ('{$userid}', '{$un}', '{$av}') on duplicate key update steamName='{$un}', avatar='{$av}';";
+	$sqlResponse = $db->query($query);
+	
+	if ($db->errno != 0)
+	{
+		echo "failed to execute query:".PHP_EOL;
+		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		return false;
+	}
+	if(isset($response['library'])){
+		$gamesAdded = array();
+		$ulib = $response['library'];
+		$query = "";
+		$index = 0;
+		foreach($ulib as $game){
+			$gid = $game['appid'];
+			array_push($gamesAdded, $gid);
+			$pt = $game['playtime'];
+			$query .= "insert into UserGames (userID, gameID, playTime) values ('{$userid}', '{$gid}', '{$pt}') on duplicate key update playTime='{$pt}'; ";
+		}
+		
+		$sqlResponse = $db->multi_query($query);
+		
+		if ($db->errno != 0)
+		{
+			echo "failed to execute query:".PHP_EOL;
+			echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+		}
+		/*foreach($gamesAdded as $game){
+			
+		}*/
+	}
+	return true;
+}
+function steam_giveUserData($userid){
+	global $db;
+	$query = "select steamName, avatar from SteamUsers where userID='{$userid}';";
 	$sqlResponse = $db->query($query);
 	
 	if ($db->errno != 0)
@@ -144,7 +212,17 @@ function steam_getUserData($userid, $steamid){
 		return false;
 	}
 	
-	return true;
+	if ($sqlResponse->num_rows == 0){
+		echo "Invalid userID or user has not set up Steam Link.";
+		$sqlResponse->close();
+		$db->next_result();
+		return false;
+	}
+	$row = $sqlResponse->fetch_assoc();
+	$response = array('steamName' => $row['steamName'], 'avatarLink' => $row['avatar']);
+    $sqlResponse->close();
+    $db->next_result();
+	return $response;
 }
 
 function steam_setlink($sessid, $steamid){
@@ -165,6 +243,8 @@ function steam_setlink($sessid, $steamid){
     }
     $row = $sqlResponse->fetch_assoc();
     $uid = $row["userID"];
+    $sqlResponse->close();
+    $db->next_result();
 	
 	//check if id is valid
 	$client = new rabbitMQClient("testRabbitMQ.ini","dmzServer");
@@ -193,7 +273,6 @@ function steam_setlink($sessid, $steamid){
 		echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
 		return false;
 	}
-	echo "Returning true.".PHP_EOL;
 	
 	$importedData = steam_getUserData($uid, $steamid);
 	if($importedData)
@@ -201,6 +280,8 @@ function steam_setlink($sessid, $steamid){
 	else
 		echo "Unsuccessfully imported user info.".PHP_EOL;
 		
+	echo "Returning true.".PHP_EOL;
+	
 	return true;
 }
 
@@ -265,6 +346,8 @@ function requestProcessor($request)
       return doRegister($request['username'],$request['password'],$request['email']);
     case "set_steam_link":
     	return steam_setlink($request['sessionId'],$request['steamId']);
+    case "get_steam_profile":
+    	return steam_giveUserData($request['userId']);
     case "refresh_steamtopgames":
     	return refresh_steamtopgames($request['games']);
   }
