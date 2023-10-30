@@ -7,6 +7,24 @@
     </head>
 
     <body>
+
+		<div class="navigationbar">
+            <a href="index.html">Welcome</a>
+            <a class="active" href="steamid.html">SteamID</a>
+            <a href="profile.php">Steam Profile</a>
+			<a href="news.php">Game News</a>
+
+
+			<div class="logout">
+                <form method="POST" action="/html/loginbase.php">
+                    <div class="logoutarea">
+                        <input type="submit" name="logoutbutton" class="button" value="Log Out">
+                    </div>
+                </form>
+            </div>
+
+          </div>
+		
 		<form method="POST" action="steamidbase.php">
 
 	

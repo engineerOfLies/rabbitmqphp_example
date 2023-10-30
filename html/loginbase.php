@@ -31,16 +31,19 @@ if (!is_null($login)) {
 
     $response = $client->send_request($request);
     //$response = $client->publish($request);
-
-    echo "client received username: {$user}".PHP_EOL;
+    $uid = $response['uid'];
+    echo "client received username: {$uid}".PHP_EOL;
     echo "client received password: {$pass}".PHP_EOL;
-
-    session_commit();
+    print_r($response);
+    //session_commit();
 
     
     // Go to successful login page if login is successful
     if (($response['result']) == '1') {
         header('location:validlogin.html');
+        $_SESSION['uid'] = $response['uid'];
+        session_commit();
+
         exit;
     }
 

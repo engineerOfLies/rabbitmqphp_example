@@ -6,6 +6,24 @@
     </head>
 
     <body>
+        
+        <div class="navigationbar">
+            <a href="index.html">Welcome</a>
+            <a href="steamid.html">SteamID</a>
+            <a href="profile.php"> Steam Profile</a>
+            <a href="news.php">Game News</a>
+
+
+            <div class="logout">
+                <form method="POST" action="/html/loginbase.php">
+                    <div class="logoutarea">
+                        <input type="submit" name="logoutbutton" class="button" value="Log Out">
+                    </div>
+                </form>
+            </div>
+
+          </div>
+        
         <div class = "welcome">
             <h1> You have successfully logged in, USER</h1>
             <p> Hope you have a great day</p>
@@ -18,11 +36,11 @@
             </div>
             <br>
             
-            <form method="POST" action="/html/loginbase.php">
+      <!--      <form method="POST" action="/html/loginbase.php">
                 <div class="logoutarea">
                     <input type="submit" name="logoutbutton" class="button" value="Log Out">
                 </div>
-            </form>
+            </form> -->
         
             <div class="steamarea">
                 <a href="steamid.html"> 

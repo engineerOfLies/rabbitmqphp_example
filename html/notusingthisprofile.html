@@ -1,0 +1,113 @@
+<html>
+    <head>
+        <title> Welcome to Our Website! </title>
+        <!-- link to css stylesheet, has all the formatting--> 
+		<link rel="stylesheet" href="../css/profile.css">
+	
+    </head>
+
+    <body >
+        <!--onload="getuserinfo()"-->
+
+  <div class="navigationbar">
+    <a href="index.html">Welcome</a>
+    <a href="steamid.html">SteamID</a>
+    <a class="active" href="profile.html">Profile Page</a>
+    <div class="logout">
+        <form method="POST" action="/html/loginbase.php">
+            <div class="logoutarea">
+                <input type="submit" name="logoutbutton" class="button" value="Log Out">
+            </div>
+        </form>
+    </div>
+  </div>
+
+        <div class = "profilebox">
+            <h1> Profile Page</h1>
+            <div class="userinfo">
+                
+                <p> UserName: </p> 
+                    <p id="u"> </p>
+                <p> SteamID: </p>
+                    <p id="sid"> </p> 
+                <p> Avatar: </p> 
+                    <p id="ava"> </p>
+            </div>
+
+            <form method="GET" action="steamidbase.php" onclick="getuserinfo()">
+                <div class="entireform">
+                    <div class="entersteamidcard">
+                        <div class="areaofuserinfo">
+                                    <input type="submit" name = "profilebutton" class="button" value="Load info">
+                                </div>
+                            </div> <!--Closing "entersteamidcard"-->
+                </div> <!-- CLosing "entireform"--> 
+            </form> <!--closing form-->
+
+            <script>
+                // document.getElementById('u').onload = function() {getuserinfo()}; 
+
+                function getuserinfo(){
+                    document.getElementById("u").innerHTML = "Hello"; //$user
+                    document.getElementById("sid").innerHTML = "test"; //$steamName
+                    document.getElementById("ava").innerHTML = "pic"; //avatarLink
+                }
+            </script>
+    </div>
+
+    </body>
+</html>
+
+
+
+
+
+
+
+<form method="GET" action="" onclick="getuserinfo()">
+    <div class="entireform">
+        <div class="entersteamidcard">
+            <div class="areaofuserinfo">
+                        <input type="submit" name = "profilebutton" class="button" value="Load info">
+                    </div>
+                </div> <!--Closing "entersteamidcard"-->
+    </div> <!-- CLosing "entireform"--> 
+</form> <!--closing form-->
+<?php
+require_once('../src/include/loginbase.inc'); 
+
+$client = new rabbitMQClient("testRabbitMQ.ini","databaseServer"); 
+
+//$request = array();
+
+$profile = $_POST['profilebutton'];
+
+if (!is_null($profile)) {
+    session_start();
+    $uid = $_SESSION['uid'];
+  
+    //$request['type'] = "get_steam_profile";
+    //$request['userId'] = $uid;
+  
+    //$response = $client->send_request($request);
+    //$response = $client->publish($request);
+  
+    // session_commit();
+
+    //echo $response['steamName'];
+   // $name = $response['steamName'];
+    
+    // Go to profile page if successful
+ //   if ($response != 0) {
+       // header('location:profiletest.php');
+        
+ //       exit;
+  //  }
+  
+    // If not successful, pop up message then return to steamid page
+//    else {
+  //    echo '<script>if(confirm("User Steam ID not found")){document.location.href="steamid.html"};</script>';
+    //}
+  
+  }
+?>
