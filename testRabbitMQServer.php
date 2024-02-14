@@ -6,14 +6,22 @@ require_once('rabbitMQLib.inc');
 
 function doLogin($username,$password)
 {
-    // lookup username in databas
-    // check password
-    return true;
-    //return false if not valid
+	include "mysqlconnect.php";
+	$query = "SELECT * from accounts WHERE
+		username = '$username' AND password = '$password'";
+	$result = $mydb->query($query);
+	if ($result->num_rows == 1){
+		echo "success";
+		return array ("destination" => 'frontend', 'username' => $username, 'message' => "Account found");
+	}else{
+		echo "failed";
+		return array ("destination" => 'frontend', 'username' => NULL, 'message' => "Account not found");
+	}	
 }
 
 function requestProcessor($request)
 {
+  echo "------------------------".PHP_EOL;
   echo "received request".PHP_EOL;
   var_dump($request);
   if(!isset($request['type']))
@@ -22,7 +30,7 @@ function requestProcessor($request)
   }
   switch ($request['type'])
   {
-    case "login":
+    case "Login":
       return doLogin($request['username'],$request['password']);
     case "validate_session":
       return doValidate($request['sessionId']);
