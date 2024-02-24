@@ -9,6 +9,6 @@ if ($mydb->errno != 0)
 	exit(0);
 }
 
-echo "successfully connected to database".PHP_EOL;
+//echo "successfully connected to database".PHP_EOL;
 
 ?>
