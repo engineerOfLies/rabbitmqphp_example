@@ -9,21 +9,72 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 function doLogin($username,$password)
 {
+
 	include "mysqlconnect.php";
 	$query = "SELECT * from accounts WHERE
 		username = '$username' AND password = '$password'";
 	$result = $mydb->query($query);
 	if ($result->num_rows == 1){
 		echo "\n\n";
+		$token = bin2hex(openssl_random_pseudo_bytes(25));
+		$date = date('Y/m/d h:i:s', time()+1800);
+		$query = "UPDATE accounts
+			 SET sessionToken = '$token', expire = '$date'
+			 WHERE username = '$username' AND password = '$password'";
+			 
+		$result = $mydb->query($query);
 		return array ("destination" => 'frontend', 'username' => $username, 'message' => "Account found");
 	}else{
 		echo "\n\n";
 		return array ("destination" => 'frontend', 'username' => NULL, 'message' => "Account not found");
 	}	
 }
+function doRegister($username, $password, $email)
+{
+	include "mysqlconnect.php";
+	$query = "SELECT * from accounts WHERE
+		username = '$username'";
+		
+	$result = $mydb->query($query);
+	if ($result->num_rows == 1){
+		echo "\n\n";
+		return array ("destination" => 'frontend', 'message' => "Failed");
+	}else{
+		//$token = bin2hex(openssl_random_pseudo_bytes(25));
+		//$expire = null;
+		$query = "INSERT INTO accounts (username, password, email, sessionToken, expire)
+			 VALUES ('$username', '$password', '$email', NULL, NULL)";
+		$result = $mydb->query($query);
+		return array ("destination" => 'frontend', 'message' => "success");
+	}	
+	
+}
 
+function doLogout($username)
+{
+	include "mysqlconnect.php";
+	$null = null;	
+	$query = "UPDATE accounts
+		 SET sessionToken = NULL, expire = NULL
+		 WHERE username = '$username'";
+	$result = $mydb->query($query);
+	return array ("destination" => 'frontend', 'message' => "success");
+	
+}
 
-
+function doAuth($username){
+	include "mysqlconnect.php";
+	$currentTime = time();
+	$query = "SELECT username ,sessionToken, expire from accounts 
+	WHERE username = '$username' AND sessionToken IS NOT NULL AND expire < NOW() ";
+	$result = $mydb->query($query);
+	if ($result->num_rows >= 1){
+		return array ("destination" => 'frontend', 'username' => $username, 'message' => "authed");
+	}else{
+		return array ("destination" => 'frontend', 'username' => $username, 'message' => "not authed");
+	}
+	
+}
 
 
 
@@ -47,9 +98,15 @@ $callback = function ($msg) use ($channel) {
             case "Login":
                 $response = doLogin($request['username'], $request['password']);
                 break;
-            case "register":
+            case "Register":
                 $response = doRegister($request['username'], $request['password'], $request['email']);
                 break;
+            case "Logout":
+            	$response = doLogout($request['username']);
+            	break;
+            case "Auth":
+            	$response = doAuth($request['username']);
+            	break;
             default:
                 $response = ['success' => false, 'message' => "Request type not handled"];
                 break;
