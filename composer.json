@@ -1,7 +1,0 @@
-{
-  "require": {
-      "videlalvaro/php-amqplib": "2.5.*",
-      "monolog/monolog": "^2.0",
-      "guzzlehttp/guzzle": "^7.0"
-  }
-}
