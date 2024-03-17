@@ -12,18 +12,23 @@ function doLogin($username,$password)
 
 	include "mysqlconnect.php";
 	$query = "SELECT * from accounts WHERE
-		username = '$username' AND password = '$password'";
+		username = '$username'";
 	$result = $mydb->query($query);
 	if ($result->num_rows == 1){
-		echo "\n\n";
-		$token = bin2hex(openssl_random_pseudo_bytes(25));
-		$date = date('Y/m/d h:i:s', time()+1800);
-		$query = "UPDATE accounts
-			 SET sessionToken = '$token', expire = '$date'
-			 WHERE username = '$username' AND password = '$password'";
+		$results = $result->fetch_assoc();
+		if (password_verify($password, $results['password'])){
+			echo "\n\n";
+			$token = bin2hex(openssl_random_pseudo_bytes(25));
+			$date = date('Y/m/d h:i:s', time()+1800);
+			$query = "UPDATE accounts
+			 	SET sessionToken = '$token', expire = '$date'
+			 	WHERE username = '$username'";
 			 
-		$result = $mydb->query($query);
-		return array ("destination" => 'frontend', 'username' => $username, 'message' => "Account found");
+			$result = $mydb->query($query);
+			return array ("destination" => 'frontend', 'username' => $username, 'message' => "Account found", "token" => $token);
+		}else{
+			return array ("destination" => 'frontend', 'username' => NULL, 'message' => "Account not found");
+		}
 	}else{
 		echo "\n\n";
 		return array ("destination" => 'frontend', 'username' => NULL, 'message' => "Account not found");
@@ -42,8 +47,9 @@ function doRegister($username, $password, $email)
 	}else{
 		//$token = bin2hex(openssl_random_pseudo_bytes(25));
 		//$expire = null;
+		$hashedP = password_hash($password, PASSWORD_DEFAULT);
 		$query = "INSERT INTO accounts (username, password, email, sessionToken, expire)
-			 VALUES ('$username', '$password', '$email', NULL, NULL)";
+			 VALUES ('$username', '$hashedP', '$email', NULL, NULL)";
 		$result = $mydb->query($query);
 		return array ("destination" => 'frontend', 'message' => "success");
 	}	
@@ -62,11 +68,11 @@ function doLogout($username)
 	
 }
 
-function doAuth($username){
+function doAuth($username, $token){
 	include "mysqlconnect.php";
 	$currentTime = time();
-	$query = "SELECT username ,sessionToken, expire from accounts 
-	WHERE username = '$username' AND sessionToken IS NOT NULL AND expire < NOW() ";
+	$query = "SELECT username ,sessionToken, expire from accounts
+	WHERE username = '$username' AND sessionToken = '$token' AND expire < NOW() ";
 	$result = $mydb->query($query);
 	if ($result->num_rows >= 1){
 		return array ("destination" => 'frontend', 'username' => $username, 'message' => "authed");
@@ -105,7 +111,7 @@ $callback = function ($msg) use ($channel) {
             	$response = doLogout($request['username']);
             	break;
             case "Auth":
-            	$response = doAuth($request['username']);
+            	$response = doAuth($request['username'], $request['token']);
             	break;
             default:
                 $response = ['success' => false, 'message' => "Request type not handled"];
@@ -116,7 +122,6 @@ $callback = function ($msg) use ($channel) {
     }
     
     
-
     $responseMsg = new AMQPMessage(
         json_encode($response),
         array('correlation_id' => $msg->get('correlation_id'))
