@@ -62,7 +62,7 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs'); // For hashing passwords securely
 const app = express();
-const PORT = 5500;
+const PORT = 3000;
 
 // MongoDB connection URI and database name
 const mongoURI = 'mongodb+srv://yf239:1qaz2wsx!QAZ%40WSX*mongo@cluster0.gzq1w7q.mongodb.net/';
