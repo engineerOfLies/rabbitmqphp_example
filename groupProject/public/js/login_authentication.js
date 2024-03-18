@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (data.success) {
           // Display a success message or redirect to another page
           displayMessage('Login successful! Redirecting...', 'success');
-          setTimeout(() => window.location.href = '/dashboard.html', 2000); // Redirect after 2 seconds
+          setTimeout(() => window.location.href = '/welcome.html', 2000); // Redirect after 2 seconds
         } else {
           // Display an error message
           displayMessage('Login failed: ' + data.message, 'error');
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (data.success) {
           // Display a success message or redirect to another page
           displayMessage('Registration successful! Redirecting to login...', 'success');
-          setTimeout(() => window.location.href = '/login.html', 2000); // Redirect after 2 seconds
+          setTimeout(() => window.location.href = '/welcome.html', 2000); // Redirect after 2 seconds
         } else {
           // Display an error message
           displayMessage('Registration failed: ' + data.message, 'error');

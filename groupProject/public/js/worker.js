@@ -1,39 +1,41 @@
-// worker.js
-
 const amqp = require('amqplib');
-const { Pool } = require('pg');
+const { MongoClient } = require('mongodb');
 
 const amqpURI = 'amqp://guest:guest@192.168.191.133:5672';
-const pool = new Pool({
-  // PostgreSQL connection settings
-  user: 'dbuser',
-  host: 'database.server.ip',
-  database: 'mydb',
-  password: 'dbpassword',
-  port: 5432,
-});
+const mongoURI = 'mongodb+srv://yf239:1qaz2wsx!QAZ%40WSX*mongo@cluster0.gzq1w7q.mongodb.net/';
+const dbName = 'Intergraded_Visions';
 
 async function startWorker() {
-  const conn = await amqp.connect(amqpURI);
-  const channel = await conn.createChannel();
+    const conn = await amqp.connect(amqpURI);
+    const channel = await conn.createChannel();
+    await channel.assertQueue('userRequests');
 
-  await channel.assertQueue('userRequests');
+    const client = new MongoClient(mongoURI);
+    await client.connect();
+    console.log("Connected successfully to MongoDB server");
+    const db = client.db(dbName);
 
-  channel.consume('userRequests', async msg => {
-    if (msg !== null) {
-      const content = JSON.parse(msg.content.toString());
-      
-      // Perform the database operation based on the message type
-      if (content.type === 'login') {
-        // ... login logic, checking database for user ...
-      } else if (content.type === 'register') {
-        // ... register logic, inserting user into database ...
-      }
+    channel.consume('userRequests', async msg => {
+        if (msg !== null) {
+            const { action, data } = JSON.parse(msg.content.toString());
 
-      // Acknowledge the message
-      channel.ack(msg);
+            if (action === 'register') {
+                await handleRegister(db, data);
+            }
+            // Acknowledge the message as processed
+            channel.ack(msg);
+        }
+    });
+}
+
+async function handleRegister(db, { firstName, lastName, username, password }) {
+    const collection = db.collection('users');
+    try {
+        const result = await collection.insertOne({ firstName, lastName, username, password });
+        console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    } catch (error) {
+        console.error('Error inserting document:', error);
     }
-  });
 }
 
 startWorker().catch(err => console.error(err));
