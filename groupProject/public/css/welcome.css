@@ -1,0 +1,8 @@
+/* Add your CSS styles here */
+#welcome-message {
+    margin: 20px;
+    padding: 10px;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    text-align: center;
+}
