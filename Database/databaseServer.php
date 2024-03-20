@@ -5,7 +5,149 @@ require_once __DIR__.'/vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
+function insertRating($request)
+{
+	$authed = doAuth($request['username'], $request['token']);
+	if ($authed == "not authed"){
+		return array ("destination" => 'frontend', 'authed' => "not authed");
+	}
+	include "mysqlconnect.php";
+	$username = $request['username'];
+	$query = "SELECT userID from accounts where username = '$username'";
+	$userIDcheck = $mydb->query($query);
+	$userIDarray = $userIDcheck ->fetch_assoc();
+	$userID = $userIDarray['userID'];
+	$recipeID = $request['recipeName'];
+	$rating = $request['rating'];
+	if ($rating == "like"){
+		$rating = 100;
+	}else{
+		$rating = 0;
+	}
+	
+	$query2 = "INSERT INTO recipe_rating (userID, recipeID, rating) VALUES ('$userID', '$recipeID', '$rating')";
+	$result = $mydb->query($query2);
 
+	return array ("destination" => 'frontend', 'message' => "success");
+}
+function getFridgeRecipe($request)
+{
+	$authed = doAuth($request['username'], $request['token']);
+	if ($authed == "not authed"){
+		return array ("destination" => 'frontend', 'authed' => "not authed");
+	}
+	include "mysqlconnect.php";
+	$username = $request['username'];
+	$query = "SELECT userID from accounts where username = '$username'";
+	$userIDcheck = $mydb->query($query);
+	$userIDarray = $userIDcheck ->fetch_assoc();
+	$userID = $userIDarray['userID'];
+	
+	$query2 = "select ingredient_name from ingredients left join fridge on fridge.ingredient_id = ingredients.ingredient_id where fridge.userID = '$userID'";
+	
+	$result = $mydb->query($query2);
+	$fridgelist = [];
+	if ($result->num_rows > 0)
+	{
+		while($rows = $result->fetch_assoc())
+		{
+			$ingredientName = $rows['ingredient_name'];
+			$ingredientName = str_replace(' ', '', $ingredientName) ;
+			array_push($fridgelist, $ingredientName);
+		}
+	}
+	return array ("type" => 'getFridgeRecipe', "destination" => 'dmz', 'ingredients' => $fridgelist);
+	
+	
+	
+	
+}
+
+function getFridge($request) 
+{
+	$authed = doAuth($request['username'], $request['token']);
+	if ($authed == "not authed"){
+		return array ("destination" => 'frontend', 'authed' => "not authed");
+	}
+	include "mysqlconnect.php";
+	$username = $request['username'];
+	$query = "SELECT userID from accounts where username = '$username'";
+	$userIDcheck = $mydb->query($query);
+	$userIDarray = $userIDcheck ->fetch_assoc();
+	$userID = $userIDarray['userID'];
+	
+	$query2 = "select ingredient_name, fridge.quantity from ingredients left join fridge on fridge.ingredient_id = ingredients.ingredient_id where fridge.userID = '$userID'";
+	
+	$result = $mydb->query($query2);
+	$fridgelist = [];
+	if ($result->num_rows > 0)
+	{
+		while($rows = $result->fetch_assoc())
+		{
+			$ingredientName = $rows['ingredient_name'];
+			$quantity = $rows['quantity'];
+			$array = array($ingredientName, $quantity);
+			array_push($fridgelist, $array);
+		}
+	}
+	return array ("destination" => 'frontend', 'message' => $fridgelist);
+}
+
+function addFridge($request)
+{
+	$authed = doAuth($request['username'], $request['token']);
+	if ($authed == "not authed"){
+		return array ("destination" => 'frontend', 'authed' => "not authed");
+	}
+	include "mysqlconnect.php";
+	$username = $request['username'];
+	$ingredient = $request['ingredient'];
+	$quantity = $request['quantity'];
+	
+	$userID = "select userID from accounts where username = '$username'";
+	$userIDresult = $mydb->query($userID);
+	$userIDresults = $userIDresult->fetch_assoc();
+	$ingredientID = "select ingredient_id from ingredients where ingredient_name = '$ingredient'";
+	$ingredientIDresult = $mydb->query($ingredientID);
+	$ingredientIDresults =  $ingredientIDresult->fetch_assoc();
+	$user = $userIDresults['userID'];
+	$ingre = $ingredientIDresults['ingredient_id'];
+	
+	$check = "select * from fridge where userID = '$user' and ingredient_id = '$ingre'";
+	$result = $mydb->query($check);
+	
+	if ($result->num_rows > 0)
+	{
+		return array ("destination" => 'frontend', 'message' => "failed");
+	}else{
+		$query = "INSERT INTO fridge (userID, ingredient_id, quantity) 
+		VALUES ('$user', '$ingre', '$quantity')";
+	
+		$result = $mydb->query($query);
+		return array ("destination" => 'frontend', 'message' => "success");
+	}
+}	
+
+function getIngredientsList($request)
+{
+	$authed = doAuth($request['username'], $request['token']);
+	if ($authed == "not authed"){
+		return array ("destination" => 'frontend', 'authed' => "not authed");
+	}
+	include "mysqlconnect.php";
+	$query = "SELECT * from ingredients";
+	$result = $mydb->query($query);
+	$ingredients = [];
+	if ($result->num_rows > 0)
+	{
+		while($rows = $result->fetch_assoc())
+		{
+			$foodName = $rows['ingredient_name'];
+			array_push($ingredients, $foodName);
+		}
+	}
+	return array ("destination" => 'frontend', 'message' => $ingredients);
+}
 
 function doLogin($username,$password)
 {
@@ -70,14 +212,17 @@ function doLogout($username)
 
 function doAuth($username, $token){
 	include "mysqlconnect.php";
+	echo "\n";
+	echo "AUTHING";
+	echo "\n";
 	$currentTime = time();
 	$query = "SELECT username ,sessionToken, expire from accounts
 	WHERE username = '$username' AND sessionToken = '$token' AND expire < NOW() ";
 	$result = $mydb->query($query);
-	if ($result->num_rows >= 1){
-		return array ("destination" => 'frontend', 'username' => $username, 'message' => "authed");
+	if ($result->num_rows > 0){
+		return "authed";
 	}else{
-		return array ("destination" => 'frontend', 'username' => $username, 'message' => "not authed");
+		return "not authed";
 	}
 	
 }
@@ -112,6 +257,21 @@ $callback = function ($msg) use ($channel) {
             	break;
             case "Auth":
             	$response = doAuth($request['username'], $request['token']);
+            	break;
+            case "getIngredientsList":
+            	$response = getIngredientsList($request);
+            	break;
+            case "addIngredient":
+            	$response = addFridge($request);
+            	break;
+            case "getFridge":
+            	$response = getFridge($request);
+            	break;
+            case "getFridgeRecipe":
+            	$response = getFridgeRecipe($request);
+            	break;
+            case "rating":
+            	$response = insertRating($request);
             	break;
             default:
                 $response = ['success' => false, 'message' => "Request type not handled"];
