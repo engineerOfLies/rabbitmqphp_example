@@ -1,30 +1,36 @@
+#!/usr/bin/php
 <?php
-$db_host = "192.168.191.133";
-$db_username = "TestUser";
-$db_password = "12345";
-$db_name = "form";
+$mydb = new mysqli('127.0.0.1', 'Rukhsar', 'test', 'IT490');
 
-$mq_host = "127.0.0.1";
-$mq_port = "5672";
-$mq_username = "test";
-$mq_password = "test";
-
-// Connect to MySQL
-$conn = mysqli_connect($db_host, $db_username, $db_password, $db_name);
-
-if (!$conn) {
-    die("MySQL connection failed: " . mysqli_connect_error());
-} else {
-    echo "MySQL connected successfully\n";
-    echo "Connection established\n";
+if ($mydb->connect_errno)
+{
+    echo "Failed to connect to MySQL: " . $mydb->connect_error . PHP_EOL;
+    exit(0);
 }
 
-// Connect to RabbitMQ
-$mq_conn = new AMQPStreamConnection($mq_host, $mq_port, $mq_username, $mq_password);
+echo "Successfully connected to MySQL database" . PHP_EOL;
 
-if (!$mq_conn) {
-    die("RabbitMQ connection failed\n");
-} else {
-    echo "RabbitMQ connected successfully\n";
+// Query for Fitness_Pals table
+$query_fitness_pals = "SELECT * FROM Fitness_Pals;";
+$response_fitness_pals = $mydb->query($query_fitness_pals);
+
+if ($mydb->errno != 0)
+{
+    echo "Failed to execute query for Fitness_Pals table:" . PHP_EOL;
+    echo __FILE__ . ':' . __LINE__ . ": error: " . $mydb->error . PHP_EOL;
+    exit(0);
 }
+
+// Query for Login_Credentials table
+$query_login_credentials = "SELECT * FROM Login_Credentials;";
+$response_login_credentials = $mydb->query($query_login_credentials);
+
+if ($mydb->errno != 0)
+{
+    echo "Failed to execute query for Login_Credentials table:" . PHP_EOL;
+    echo __FILE__ . ':' . __LINE__ . ": error: " . $mydb->error . PHP_EOL;
+    exit(0);
+}
+
 ?>
+
