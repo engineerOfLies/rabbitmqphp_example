@@ -17,10 +17,9 @@ $callback = function ($msg) use ($channel) {
   echo ' [x] Received ', $msg->body, "\n";
 
   $loginCreds = json_decode($msg->body, true);
+  //echo $loginCreds['password'], " login password <--";
   $email = $loginCreds['email'];
-  $password = $loginCreds['password'];
-  $password_hash = password_hash($password, PASSWORD_DEFAULT);
-  $sessionID = $loginCreds['session_id'];
+  $loginPassword = $loginCreds['password'];
   $mysqli = require __DIR__ . "/database.php";
 
   //$sql = "INSERT INTO users (uname, email, password_hash)
@@ -31,16 +30,14 @@ $callback = function ($msg) use ($channel) {
   $result = $mysqli->query($sql);
   $user = $result->fetch_assoc();
 
-  if (password_verify($password_hash, $user["password_hash"])) {
-      session_start();      
-      session_regenerate_id();
-            
-      $_SESSION["user_id"] = $user["user_id"];
-      // create a new AMQP message
-      // send to the loginResponseExchange
-     // header("Location: index.php");
-     // exit;  
+  if (password_verify($loginPassword, $user["password_hash"])) {       
+      $response = ["login" => true, "message" => "login successful"];
+  } else {
+      $response = ["login" => false, "message" => "login failed"];
   }
+  $respMsg = json_encode($response);
+  $msg = new AMQPMessage($respMsg);
+  $channel->basic_publish($msg, 'loginResponseExchange', 'user');
 };
 
 $channel->basic_consume('loginSendQueue','', false, true, false, false, $callback);
@@ -50,5 +47,7 @@ try {
     echo $exception->getMessage(), "is this the error", "\n";
 }
 
+$channel->close();
+$connection->close();
 
 ?>
