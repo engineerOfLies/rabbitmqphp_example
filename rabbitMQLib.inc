@@ -34,12 +34,13 @@ class rabbitMQServer
 		}
 		$this->exchange = $this->machine[$server]["EXCHANGE"];
 		$this->queue = $this->machine[$server]["QUEUE"];
+                $this->routing_key = $this->machine[$server]["ROUTING_KEY"];
 	}
 
 	function process_message($msg)
 	{
 		// send the ack to clear the item from the queue
-		if ($msg->getRoutingKey() !== "*")
+		if ($msg->getRoutingKey() !== $this->routing_key)
     {
       return;
     }
@@ -74,6 +75,7 @@ class rabbitMQServer
 			$conn_queue = new AMQPQueue($channel);
 			$conn_queue->setName($msg->getReplyTo());
 			$replykey = $this->routing_key.".response";
+			$conn_queue->declare();
 			$conn_queue->bind($exchange->getName(),$replykey);
 			$exchange->publish(json_encode($response),$replykey,AMQP_NOPARAM,array('correlation_id'=>$msg->getCorrelationId()));
 
@@ -166,6 +168,7 @@ class rabbitMQClient
 		}
 		$this->exchange = $this->machine[$server]["EXCHANGE"];
 		$this->queue = $this->machine[$server]["QUEUE"];
+                $this->routing_key = $this->machine[$server]["ROUTING_KEY"];
 	}
 
 	function process_response($response)
@@ -267,6 +270,7 @@ class rabbitMQClient
 			die("failed to send message to exchange: ". $e->getMessage()."\n");
 		}
 	}
+         
 }
 ?>
 
