@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Hangouts</title>
+</head>
+<body>
+
+    <h2>My Hangouts</h2>
+
+    <p id="message"></p>
+
+    <ul id="hangoutList"></ul>
+
+    <script>
+
+        // Get the session token
+        const session_token = sessionStorage.getItem("session_token");
+
+        // Get the HTML elements
+        const messagebox = document.getElementById("message");
+        const hangoutList = document.getElementById("hangoutList");
+
+        // Check if the session token exists
+        if (!session_token) {
+            messagebox.textContent = "Please log in first.";
+        }
+        else {
+
+            // Load the user's hangouts
+            async function loadHangouts() {
+                try {
+                    const response = await fetch("get_hangouts_handler.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            session_token: session_token
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    // Check if the hangouts loaded successfully
+                    if (!data.success) {
+                        messagebox.textContent = data.message || "Unable to load hangouts.";
+                        return;
+                    }
+
+                    // Check if the user has any hangouts
+                    if (!data.hangouts || data.hangouts.length == 0) {
+                        messagebox.textContent = "You have no hangouts yet.";
+                        return;
+                    }
+
+                    // Display each hangout
+                    data.hangouts.forEach(hangout => {
+
+                        // Create a list item and link
+                        const li = document.createElement("li");
+                        const link = document.createElement("a");
+
+                        // Open the suggestions page for this hangout
+                        link.href = "suggest_vote.html?hangout_id=" + hangout.HangoutID;
+
+                        // Display the hangout information
+                        link.textContent =
+                            hangout.EventName + " - " +
+                            hangout.EventDate + " - " +
+                            hangout.Venue + " - " +
+                            hangout.CreatorName + " - " +
+                            hangout.Response;
+
+                        li.appendChild(link);
+                        hangoutList.appendChild(li);
+                    });
+
+                }
+                catch (error) {
+                    console.error(error);
+                    messagebox.textContent = "Unable to load hangouts.";
+                }
+            }
+
+            // Load the hangouts when the page opens
+            loadHangouts();
+
+        }
+
+    </script>
+
+<!--link to create a new hangout-->
+<p>
+    <a href="create_hangout.html">Create Hangout</a> |
+    <a href="home.php">Home</a>
+</p>
+
+</body>
+</html>
+
+	

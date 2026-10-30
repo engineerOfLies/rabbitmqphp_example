@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Friends</title>
+</head>
+
+<body>
+
+	<!-- to navigate -->
+	<nav>
+		<a href="home.php">Home</a>
+
+	</nav>
+
+	<h1>Friends</h1>
+
+	<!-- this section is for adding friends -->
+	<h2>Add a Friend</h2>
+
+	<form id="addFriendForm">
+		<label for="friendUsername">Username:</label>
+
+		<input
+			type="text"
+			id="friendUsername"
+			placeholder="Enter username"
+			required
+		>
+
+		<button type="submit">Send Friend Request</button>
+	</form>
+
+	<p id="message" role="status"></p>
+
+	<hr>
+
+	<!-- this is where theyll see pending friend request -->
+	<h2>Pending Friend Requests</h2>
+
+	<button id="refreshRequests" type="button">
+		Refresh Requests
+	</button>
+
+	<div id="pendingRequests">
+		Loading friend requests...
+	</div>
+
+	<hr>
+
+	<!-- friend list portion -->
+	<h2> My Friends</h2>
+
+	<button id="refreshFriends" type="button">
+		Refresh Friends
+	</button>
+
+	<div id="friendsList">
+		Loading friends...
+	</div>
+
+	<script>
+		//getting session token from login
+		const token = sessionStorage.getItem("session_token");
+		const message = document.getElementById("message");
+
+		async function friendRequest(type, extraData = {}){
+			if (!token){
+				throw new Error("Please log in first.");
+			}
+
+			const response = await fetch("friends_handler.php", {
+				method: "POST",
+				headers: { "Content-Type": "application/json"},
+				body: JSON.stringify({
+					type: type,
+					session_token: token,
+					...extraData
+				})
+			});
+
+			const data = await response.json();
+
+			if (!response.ok || !data.success){
+				throw new Error(data.message || "Request failed.");
+			}
+			return data;
+		}
+
+		//display messages
+		function showMessage(text){
+			message.textContent = text;
+		}
+
+		//Send a friend request
+		document.getElementById("addFriendForm").addEventListener("submit", async function (event){
+			event.preventDefault();
+
+			const input = document.getElementById("friendUsername");
+
+			const username = input.value.trim();
+
+			if (!username){
+				return;
+			}
+
+			try{
+				const data = await friendRequest("send_friend_request", {
+					friend_username: username
+					}
+				);
+
+				showMessage(data.message);
+
+				input.value = "";
+
+				await loadFriendRequests();
+
+			} catch (error){
+				showMessage(error.message);
+			}
+		});
+		//load friend requests
+		async function loadFriendRequests(){
+			const container = document.getElementById("pendingRequests");
+
+			container.textContent = "Loading requests..."
+
+			try{
+				const data = await friendRequest("get_friend_requests");
+
+				container.replaceChildren();
+
+				if (data.requests.length === 0){
+					container.textContent = "No pending friend requests.";
+					return;
+				}
+
+				data.requests.forEach(requests => {
+					const row = document.createElement("div");
+
+					const username = document.createElement("span");
+					username.textContent = request.username + "";
+
+					const acceptButton = document.createElement("button");
+
+					acceptButton.textContent = "Accept";
+
+					acceptButton.addEventListener("click", () => {
+						respondToRequest(
+							request.FriendID,
+							"accept"
+						);
+					});
+
+					const declineButton = document.createElement("button");
+
+					declineButton.textContent = "Decline";
+
+					declineButton.addEventListener("click", () => {
+						respondToRequest(
+							request.FriendID,
+							"decline"
+						);
+					});
+
+					row.appendChild(username);
+					row.appendChild(acceptButton);
+					row.appendChild(declineButton);
+					row.appendChild(document.createElement("hr"));
+
+					container.appendChild(row)
+				});
+			} catch (error) {
+				container.textContent = error.message;
+			}
+		}
+
+		async function respondToRequest(friendID, action){
+			try{
+				cont data = await friendRequest("respond_friend_request", {
+					friend_id: friendID,
+					action: action
+					}
+				);
+
+				showMessage(data.message);
+
+				await loadFriendRequests();
+				await loadFriends();
+
+			} catch (error) {
+				showMessage(error.message);
+			}
+		}
+
+		async function loadFriends(){
+			const container = document.getElementById("friendsList");
+
+			container.textContent = "Loading friends...";
+
+			try{
+				const data = await friendRequest("get_friends");
+
+				container.replaceChildren();
+
+				if (data.friends.length === 0){
+					container.textContent = "You have no friends added yet.";
+					return;
+				}
+
+				const list = document.createElement("ul");
+
+				data.friends.forEach(friend => {
+					const item = document.createElement("li");
+					item.textContent = friend.username;
+					list.appendChild(item);
+				});
+
+				container.appendChild(list);
+			} catch (error) {
+				container.textContent = error.message;
+			}
+		}
+
+		document.getElementById("refreshRequests").addEventListener("click", loadFriendRequests);
+
+		document.getElementById("refreshFriends").addEventListener("click", loadFriends);
+
+		if (token){
+			loadFriendRequests();
+			loadFriends();
+		} else {
+			showMessage("Please log in to use Friends page.");
+
+			document.getElementById("pendingRequests").textContent = "Please log in.";
+
+			document.getElementById("friendsList").textContent = "Please log in.";
+		}
+	</script>
+</body>
+</html>

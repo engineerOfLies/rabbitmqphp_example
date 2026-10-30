@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Event Recommendations</title>
+</head>
+<body>
+	<nav>
+		<a href="home.php">Home</a> |
+		<a href="recommendations.html">Recommendations</a>
+	</nav>
+
+	<h1>Recommended for You</h1>
+
+	<p>Events based on your previous picks.</p>
+
+	<div id="recommendations">
+		Loading recommendations...
+	</div>
+
+	<script>
+		async function loadRecomendations(){
+			const token = sessionStorage.getItem("session_token");
+
+			const container = document.getElementById("recommendations");
+
+			if (!token){
+				container.textContent = "Please log in first.";
+				return;
+			}
+
+			try{
+				 const response = await fetch(
+					"recommendations_handler.php",{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							session_token: token
+						})
+					}
+				);
+
+				const data = await response.json();
+
+				if (!response.ok || !data.success){
+					container.textContext = data.message || "Unable to load recommendations.";
+					return;
+				}
+
+				container.replaceChildren();
+
+				if (data.recommendations.length === 0){
+					container.textContent = "No recommendations available yet.";
+					return;
+				}
+
+				data.recommendations.forEach(event => {
+					const section = document.createElement("div");
+
+					const heading = document.createElement("h3");
+					heading.textContent = event.EventName;
+
+					const details = document.createElement("p");
+					details.textContent = 
+						`${event.EventDate || "Date TBA"} | ` +
+						`${event.Venue || "Venue TBA"} | ` +
+						`${event.City || "City TBA"}`;
+
+					section.appendChild(heading);
+					section.appendChild(details);
+
+					if (event.TicketURL){
+						const link = document.createElement("a");
+						link.href = event.TicketURL;
+						link.textContent = "View Event";
+						link.target = "_blank";
+						link.rel = "noopener noreferrer";
+						section.appendChild(link);
+					}
+
+					section.appendChild(document.createElement("hr"));
+
+					container.appendChild(section);
+				});
+
+			} catch (error){
+				container.textContent = "Error loading recommendations";
+				console.error(error);
+			}
+		}
+
+		loadRecommendations();
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<h3>Create Hangout</h3>
+<form onsubmit="return validate(this)" method="POST">
+<div>
+    <!-- select event -->    
+    <label for="event_id">Event</label><br>
+    <select id="event_id" name="event_id" required></select><br>    
+
+    <!-- invite user ids  -->    
+    <label for="Invitees">Friend usernames (separated by comma)</label><br>
+    <input type="text" id="Invitees" name="Invitees" placeholder="friend1, friend2" required><br>
+
+    <!-- adding button for creating hangout -->
+    <button type="submit">Create</button>
+</div>
+</form>
+<p id="message"></p>
+<!-- adding link to home page -->
+<p>Go back to home <a href="home.php">Home</a> |
+    <a href="my_hangouts.html"> My Hangouts</a>
+
+</p>
+
+<script> 
+//validating the form values
+    function validate(form) {
+        //read session token
+        let session_token = sessionStorage.getItem("session_token");
+        //dont let them do anything if they are not logged in
+        if (!session_token ) {
+            alert("Please log in first");
+            window.location.href = "login.php";
+           return false;
+        }
+        //read event id
+        let eventID = form.event_id.value.trim();
+        // check if event is not empty
+        if(!eventID) {
+            alert("Please choose an event");
+            return false;
+        }
+
+        // read the usernames
+        let usernames = form.Invitees.value;
+        //separate the usernames courtesy of mdn
+        usernames = usernames.split(",");
+        // trim to remove whitespace from each username
+        usernames.forEach((item, index) => {
+            usernames[index] = item.trim();
+        })
+        // filter out any blank values
+        usernames = usernames.filter(Boolean)
+        // check if usernames are not provided
+        if(usernames.length == 0){
+            alert("Please add the friend's usernames");
+            return false;
+        }
+        
+        sendHangout(session_token, eventID, usernames);
+
+        return false;
+    }
+
+    // This function loads the events into the dropdown
+    async function loadEvents() {
+
+        // get the select element
+        const eventSelect = document.getElementById("event_id");
+
+        // get the message paragraph to display messages to the user
+        const messagebox = document.getElementById("message");
+
+        try {
+            // fetch the events from the handler
+            const response = await fetch("get_events_handler.php");
+
+            // waits for the server reply
+            const data = await response.json();
+
+            // check if the request was successful
+            if (!data.success) {
+                messagebox.textContent = data.message || "Failed to load events";
+                return;
+            }
+
+            // check if there are no events
+            if (!data.events || data.events.length == 0) {
+                messagebox.textContent = "No upcoming events are available";
+                return;
+            }
+
+            // loop through the events and add them to the dropdown
+            data.events.forEach(event => {
+
+                // create an option for the event
+                const option = document.createElement("option");
+
+                // set the event id as the option value
+                option.value = event.EventID;
+
+                // display the event name and date
+                option.textContent = event.EventName + " - " + event.EventDate;
+
+                // add the option to the dropdown
+                eventSelect.appendChild(option);
+
+            });
+
+        } catch (error) {
+            // display an error message to the user
+            messagebox.textContent = "Failed to load events. Please try again";
+            console.error(error);
+        }
+    }
+
+    // load events when the page loads
+    document.addEventListener("DOMContentLoaded", loadEvents);
+
+	
+
+
+    // This function sends the input to the hanngout handler and receives a response
+    async function sendHangout(session_token, eventID, usernames) {
+        
+        //get the message paragraph to be displayed for the user
+        const messagebox = document.getElementById('message');
+        
+        try {
+            const response = await fetch("create_hangout_handler.php", {
+            method: "POST",
+            headers:{
+            //header tells the server the format of the request's body
+            "Content-Type": "application/json"},
+            // converts the session token, event id and usernames into json to use as request body
+            body: JSON.stringify({session_token:session_token, event_id:eventID, invitee_usernames:usernames})
+        });
+        // waits for the server reply 
+        const data = await response.json();
+        
+        // set the reply into paragraph and a message if there is no reply 
+        messagebox.textContent = data.message || "No message about hangout being confirmed";
+        // check if the hangout was actually created
+        if (data.success === true) {
+            //link to suggestions page
+            const link = document.createElement("a");
+            //pass the hangout id to suggestion page
+            link.href = "suggest_vote.html?hangout_id=" + data.hangout_id;
+            //display the text
+            link.textContent = "Suggest events and vote";
+            //link to success message
+            messagebox.appendChild(document.createElement("br"));
+            messagebox.appendChild(link);
+        }
+    
+        } catch (error) {
+            //failure message for user
+            messagebox.textContent = "Creation of hangout failed! Please try again";
+            console.error(error);
+            
+        }
+        
+    }
+</script>
