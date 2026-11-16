@@ -113,20 +113,24 @@
 </head>
 
 <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">AuxTalks</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-l>
+                        <span class="navbar-toggler-icon"></span>
+                </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                        <a class="nav-item nav-link active" href="home.html">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" href="search.html">Search</a>
+                        <a class="nav-item nav-link" href="profile.html">Profile</a>
+                        <a class="nav-item nav-link" href="discussions.html">Discussions</a>
+                </div>
+        </div>
+        </nav>
+
 	<a>Home</a>
 	<button onclick="logout()">Logout</button>
 	<h2 id="welcome">Loading session...</h2>
-	<div>
-		<a href="search.html">Search</a>
-		<a href="profile.html">Profile</a>
-		<a href="discussions.html">Discussions</a>
-
-		<button type="button" onclick="window.location.href='search.html'">Search Music</button>
-		<button type="button" onclick="window.location.href='profile.html'">My Profile</button>
-		<button type="button" onclick="window.location.href='discussions.html'">Discussions</button>
-
-
-	</div>
 	<div>
 		<h3>Suggested For You</h3>
 		<div id="suggestion">Loading suggestion...</div>
