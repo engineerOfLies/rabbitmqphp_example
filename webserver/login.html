@@ -70,6 +70,21 @@
     
     <h2>Login</h2>
 
+	//Form for user input
+	<form onsubmit="sendLogin(event)">
+	        <div class="mb-3">
+	                <label for="uname" class="form-label">Username</label>
+	                <input type="password" class="form-control" id="uname" required>
+	        </div>
+	        <div class="mb-3">
+	                <label for="password" class="form-label">Password</label>
+	                <input type="password" class="form-control" id="password" required>
+	        </div>
+	        <button type="submit" class="btn btn-primary">Submit</button>
+		<p>Need to register? <a href="index.html">Click here</a></p>
+	</form>
+
+	<!--
     <form onsubmit="sendLogin(event)">
         <label>Username</label>
         <input type="text" id="uname" required><br><br>
@@ -79,10 +94,11 @@
 
         <button type="submit">Submit</button>
     </form>
+	-->
 
-    <p>Need to register? <a href="index.html">Click here</a></p>
+    
 </body>
-
+	
 
 
 

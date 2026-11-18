@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="styles.css">
+	<!-- <link rel="stylesheet" href="styles.css"> -->
 	<title>Register</title>
 	<script>
 		//function for when registration is submitted
@@ -63,8 +63,35 @@
 
 	<body>
 		<h2>Register</h2>
-		
+
 		//Form for user input
+		<form onsubmit="sendRegister(event)">
+			<div class="mb-3">
+				<label for="first_name" class="form-label">First Name</label>
+				<input type="text" class="form-control" id="first_name" required>
+			</div>
+			<div class="mb-3">
+				<label for="last_name" class="form-label">Last Name</label>
+				<input type="text" class="form-control" id="last_name" required>
+			</div>
+			<div class="mb-3">
+				<label for="last_name" class="form-label">Email</label>
+				<input type="text" class="form-control" id="email" required>
+			</div>
+			<div class="mb-3">
+				<label for="uname" class="form-label">Username</label>
+				<input type="password" class="form-control" id="uname" required>
+			</div>
+			<div class="mb-3">
+				<label for="password" class="form-label">Password</label>
+				<input type="password" class="form-control" id="password" required>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+			<p>Already have an account? <a href="login.html">Login here</a></p>
+		</form>
+
+
+		<!--
 		<form onsubmit="sendRegister(event)">
 			<label>First Name</label>
 			<input type="text" id="first_name" required><br><br>
@@ -84,8 +111,10 @@
 			<button type="submit">Submit</button>
 
 		</form>
+		-->
+
 		<p id="response"></p>
-		<p>Already have an account? <a href="login.html">Login here</a></p>
+
 	</body>
 </html>
 
